@@ -79,7 +79,6 @@ step = BEAT / 2
 for i in range(int(24.0 / step)):
     t0 = i * step
     if 15.6 <= t0 < 16.0: continue
-    if 21.0 <= t0 < 24.0 and i % 2: continue
     c = CH[chord_at(t0)]; m = c[pat[i % 8]] + 12
     bright = 900 if t0 < 3.5 else (2600 if 10.5 <= t0 < 13.5 else 1700)
     g = 0.11 if t0 < 3.5 else 0.12
@@ -136,8 +135,8 @@ for b in range(int(DUR / BEAT)):
         if t0 == 24.0: place(drums, kick(), t0, 0.55); kicks.append(t0)
         continue
     place(drums, kick(), t0, 0.5); kicks.append(t0)
-    if 5.5 <= t0 < 21.0 and b % 2 == 1: place(drums, clap(), t0, 0.12, 0.1)
-    if 5.5 <= t0 < 21.0:
+    if 5.5 <= t0 < 24.0 and b % 2 == 1: place(drums, clap(), t0, 0.12, 0.1)
+    if 5.5 <= t0 < 24.0:
         place(drums, hat(), t0 + step, 0.07, -0.3)
         place(drums, hat(), t0 + step / 2, 0.03, 0.3); place(drums, hat(), t0 + 3 * step / 2, 0.03, 0.3)
     else:
@@ -167,6 +166,9 @@ i0, i1 = int(15.6 * SR), int(16.0 * SR)
 g = np.ones(N); g[i0:i1] = 0.0; g[i0 - int(.01 * SR):i0] = np.linspace(1, 0, int(.01 * SR)); g[i1:i1 + int(.005 * SR)] = np.linspace(0, 1, int(.005 * SR))
 bed *= g[:, None]; drums *= g[:, None]
 pad_tail = pad.copy(); pad_tail[:i0] = 0; pad_tail[i1:] = 0
+# soft cymbal swell on the resolve (24.0): high-passed noise, slow decay
+cn = int(2.4 * SR); tt = np.arange(cn) / SR; cym = hp(rng.standard_normal(cn), 5000, 2) * np.exp(-tt * 1.6) * 0.05
+place(drums, cym, 24.0, 1.0, -0.2); place(drums, cym[::-1][-int(0.5 * SR):] * 0.6, 23.5, 1.0, 0.2)
 mix = bed + drums + bell + pad_tail * 0.25
 
 # ---- space: short seeded plate-ish reverb on arp/bell/pad bus

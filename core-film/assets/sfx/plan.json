@@ -1,29 +1,164 @@
 [
- ["whoosh", 1.70, 3, "wall collapses into the point"],
- ["whoosh", 3.15, 3, "ring travels to the logo"],
- ["click",  3.50, 2, "letters lock around the ring"],
- ["whoosh", 5.20, 3, "push through the ring"],
- ["click",  5.95, 2, "Documents selected"],
- ["whoosh", 6.30, 2, "camera follows the pulse down"],
- ["pop",    7.75, 3, "Semantic Search ticks"],
- ["whoosh", 8.40, 3, "outputs burst"],
- ["click",  9.50, 3, "AI Agents switches on"],
- ["pop",    9.62, 2, "check lands"],
- ["whoosh", 10.05, 3, "Build once flies forward"],
- ["whoosh", 13.25, 3, "3D to path"],
- ["click",  13.85, 2, "step 01"],
- ["click",  14.35, 2, "step 04"],
- ["click",  14.85, 2, "step 06"],
- ["pop",    15.30, 3, "useful output"],
- ["whoosh", 15.55, 3, "purple field expands"],
- ["ping",   16.40, 2, "shield tick"],
- ["whoosh", 17.62, 3, "field contracts to boundary"],
- ["pop",    19.20, 2, "private model lights"],
- ["click",  19.38, 2, "chip 1"],
- ["click",  19.58, 2, "chip 2"],
- ["click",  19.78, 2, "chip 3"],
- ["whoosh", 20.50, 3, "lines exit, ring lifts"],
- ["whoosh", 23.25, 3, "lines exit to end card"],
- ["click",  24.05, 2, "logo locks"],
- ["click",  25.00, 3, "CTA press"]
+[
+"whoosh",
+1.55,
+3,
+"wall collapses into the point"
+],
+[
+"whoosh",
+3.15,
+3,
+"ring travels to the logo"
+],
+[
+"click",
+3.5,
+1,
+"letters lock around the ring"
+],
+[
+"whoosh",
+5.2,
+3,
+"push through the ring"
+],
+[
+"click",
+5.95,
+1,
+"Documents selected"
+],
+[
+"whoosh",
+6.3,
+2,
+"camera follows the pulse down"
+],
+[
+"pop",
+7.75,
+3,
+"Semantic Search ticks"
+],
+[
+"whoosh",
+8.45,
+3,
+"outputs burst"
+],
+[
+"click",
+9.5,
+1,
+"AI Agents switches on"
+],
+[
+"pop",
+9.62,
+2,
+"check lands"
+],
+[
+"whoosh",
+10.18,
+3,
+"Build once flies forward"
+],
+[
+"whoosh",
+13.25,
+3,
+"3D to path"
+],
+[
+"click",
+13.85,
+1,
+"step 01"
+],
+[
+"click",
+14.35,
+1,
+"step 04"
+],
+[
+"click",
+14.85,
+1,
+"step 06"
+],
+[
+"pop",
+15.3,
+3,
+"useful output"
+],
+[
+"whoosh",
+15.55,
+3,
+"purple field expands"
+],
+[
+"ping",
+16.4,
+1,
+"shield tick"
+],
+[
+"whoosh",
+17.62,
+3,
+"field contracts to boundary"
+],
+[
+"pop",
+19.2,
+2,
+"private model lights"
+],
+[
+"click",
+19.38,
+1,
+"chip 1"
+],
+[
+"click",
+19.58,
+1,
+"chip 2"
+],
+[
+"click",
+19.78,
+1,
+"chip 3"
+],
+[
+"whoosh",
+20.28,
+3,
+"lines exit, ring lifts"
+],
+[
+"whoosh",
+23.2,
+3,
+"lines exit to end card"
+],
+[
+"click",
+24.05,
+1,
+"logo locks"
+],
+[
+"click",
+25.0,
+1,
+"CTA press"
+]
 ]

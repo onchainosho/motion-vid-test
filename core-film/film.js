@@ -11,6 +11,9 @@ const P = (t, a, b, e = 'power2.inOut') => ez(e)(clamp((t - a) / (b - a)));
 const L = (a, b, k) => a + (b - a) * k;
 const vis = (el, on) => { const v = on ? 'visible' : 'hidden'; if (el.style.visibility !== v) el.style.visibility = v; };
 const tf = (el, x = 0, y = 0, s = 1, r = 0, o = 1) => { el.style.transform = `translate3d(${x.toFixed(2)}px,${y.toFixed(2)}px,0) rotate(${r.toFixed(3)}deg) scale(${s.toFixed(5)})`; el.style.opacity = o.toFixed(4); };
+// a headline line enters with a short slide plus a directional reveal; it never crosses the frame edge
+const lineIn = (el, k, sg, o = 0) => { const x = sg * -150 * (1 - k) + sg * 150 * o; el.style.transform = `translate3d(${x.toFixed(2)}px,0,0)`; el.style.opacity = (Math.min(1, k * 1.6) * (1 - o)).toFixed(4);
+  const c = ((1 - k) * 100).toFixed(2); el.style.clipPath = sg > 0 ? `inset(-25% ${c}% -25% -6%)` : `inset(-25% -6% -25% ${c}%)`; };
 const mix = (c1, c2, k) => { const a = c1.match(/\w\w/g).map(h => parseInt(h, 16)), b = c2.match(/\w\w/g).map(h => parseInt(h, 16)); return `rgb(${a.map((v, i) => Math.round(L(v, b[i], k))).join(',')})`; };
 function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 
@@ -51,7 +54,7 @@ function makeLogo(host, h, cx, cy) {
   return out;
 }
 const LOGO3 = makeLogo($('#s3logo'), 150, 540, 760);
-const LOGO12 = makeLogo($('#s12logo'), 130, 540, 700);
+const LOGO12 = makeLogo($('#s12logo'), 168, 540, 720);
 const plate = $('#s3plate'), disc = $('#s3disc');
 { const hx = LOGO3.ringX + 2000, hy = LOGO3.ringY + 2000, hr = LOGO3.ringD / 2 * 0.41;
   const m = `radial-gradient(circle at ${hx}px ${hy}px, transparent ${hr}px, #000 ${hr + 1}px)`; plate.style.webkitMask = m; plate.style.mask = m;
@@ -112,8 +115,8 @@ function sceneCanvas(t) {
   SC[0].style.transform += ` scale(${1 + 0.02 * Math.sin(Math.PI * clamp((t - 5.9) / 0.3))})`;
   SL.forEach((p, i) => { const k = P(t, 5.55 + i * 0.06, 6.35 + i * 0.06, 'power2.inOut'); p.style.strokeDashoffset = p._len * (1 - k); p.style.stroke = i === 0 ? mix('C9B6EC', '8C5BDB', sel) : '#C9B6EC'; });
   // hub
-  const col = P(t, 8.35, 8.8, 'power3.inOut');
-  const hub = $('#hub'); hub.style.transformOrigin = '430px 200px'; hub.style.transform = `scale(${L(1, 0.55, col)})`; hub.style.opacity = 1 - P(t, 8.4, 8.72, 'none');
+  const col = P(t, 8.05, 8.3, 'power2.in');
+  const hub = $('#hub'); hub.style.transformOrigin = '430px 200px'; hub.style.transform = `scale(${L(1, 0.55, col)})`; hub.style.opacity = 1 - P(t, 7.98, 8.16, 'none');
   CP.forEach((el, k) => {
     const flash = Math.max(0, Math.sin(Math.PI * clamp((t - 7.42 - k * 0.05) / 0.3))) * 0.6;
     const on = k === 1 ? P(t, 7.72, 7.85, 'power2.out') : 0;
@@ -123,10 +126,10 @@ function sceneCanvas(t) {
 }
 
 // ---------- S6 outputs ----------
-const OUT = [['cube', 'AI Products', 290, 470], ['chat', 'Assistants', 790, 470], ['search', 'Enterprise<br>Search', 290, 1450], ['flow', 'Workflow<br>Automation', 790, 1450], ['bot', 'AI Agents', 540, 1690, 1]];
+const OUT = [['cube', 'AI Products', 285, 480], ['chat', 'Assistants', 795, 480], ['search', 'Enterprise<br>Search', 285, 1440], ['flow', 'Workflow<br>Automation', 795, 1440], ['bot', 'AI Agents', 540, 1690, 1]];
 const outs = $('#outs'), s6l = $('#s6lines');
 const OC = OUT.map(([ic, n, x, y, hero], i) => {
-  const el = document.createElement('div'); el.className = 'ocard' + (hero ? ' hero' : ''); const w = hero ? 560 : 450, h = hero ? 180 : 150;
+  const el = document.createElement('div'); el.className = 'ocard' + (hero ? ' hero' : ''); const w = hero ? 620 : 470, h = hero ? 200 : 170;
   el.style.left = (x - w / 2) + 'px'; el.style.top = (y - h / 2) + 'px';
   el.innerHTML = `<div class="fill"></div><div class="inner"><div class="badge">${svg(ic)}</div><div class="nm">${n}</div></div>${hero ? `<div class="chk">${svg('check')}</div>` : ''}`;
   outs.appendChild(el);
@@ -136,14 +139,14 @@ const OC = OUT.map(([ic, n, x, y, hero], i) => {
 });
 const agentPath = OC[4].line;
 function sceneOutputs(t) {
-  const push = L(1, 1.03, P(t, 9.0, 10.15, 'sine.inOut')), ex = P(t, 10.08, 10.5, 'power3.in');
+  const push = L(1, 1.04, P(t, 9.0, 10.0, 'sine.inOut')), ex = P(t, 9.9, 10.22, 'power3.in');
   const S = push * L(1, 0.86, ex);
-  $('#s6').style.transformOrigin = '540px 960px'; $('#s6').style.transform = `scale(${S})`; $('#s6').style.opacity = 1 - P(t, 10.15, 10.5, 'none');
-  $('#s6label').style.opacity = P(t, 8.6, 8.9);
+  $('#s6').style.transformOrigin = '540px 960px'; $('#s6').style.transform = `scale(${S})`; $('#s6').style.opacity = 1 - P(t, 9.95, 10.2, 'none');
+  $('#s6label').style.opacity = P(t, 8.4, 8.7);
   OC.forEach((c, i) => {
-    const k = P(t, 8.5 + i * 0.06, 9.0 + i * 0.06, 'expo.out');
-    tf(c.el, (540 - c.x) * (1 - k), (960 - c.y) * (1 - k), L(0.25, 1, k), (i % 2 ? 8 : -8) * (1 - k), clamp(k * 3));
-    c.line.style.strokeDashoffset = c.line._len * (1 - P(t, 8.62 + i * 0.05, 9.05 + i * 0.05));
+    const k = P(t, 8.3 + i * 0.05, 8.8 + i * 0.05, 'expo.out');
+    tf(c.el, (540 - c.x) * (1 - k), (960 - c.y) * (1 - k), L(0.25, 1, k), (i % 2 ? 8 : -8) * (1 - k), clamp((k - 0.35) * 3));
+    c.line.style.strokeDashoffset = c.line._len * (1 - P(t, 8.4 + i * 0.05, 8.85 + i * 0.05));
     if (!c.hero) c.el.style.borderColor = mix('E7E1F3', 'B79BE6', P(t, 9.05 + i * 0.07, 9.25 + i * 0.07));
   });
   const h = OC[4], on = P(t, 9.5, 9.62, 'power2.out');
@@ -182,44 +185,44 @@ const LBL = ['Connected<br>knowledge', 'Governed<br>intelligence', 'Reusable<br>
 const v3 = new THREE.Vector3();
 function scene3D(t) {
   const e = P(t, 10.85, 11.55, 'power2.inOut') * (1 - P(t, 12.65, 13.15, 'power2.inOut'));
-  LAY.forEach((m, i) => m.position.y = m.userData.y + e * i * 0.8);
+  LAY.forEach((m, i) => m.position.y = m.userData.y + e * (i * 0.8 + 0.06 * Math.sin(t * 3.1 + i * 1.3)));
   top.position.y = 1.73 + e * 3 * 0.8;
   const topSurf = top.position.y + 0.17;
   CUBES.forEach((m, i) => { const k = P(t, 12.95 + i * 0.07, 13.35 + i * 0.07, 'power3.out'); m.position.y = topSurf + 0.31 + L(2.6, 0, k); m.visible = k > 0; m.scale.setScalar(L(0.6, 1, k)); m.rotation.y = (1 - k) * 0.8; });
-  const yaw = L(-38, -16, P(t, 10.2, 13.7, 'sine.inOut')) * Math.PI / 180, pitch = L(36, 44, P(t, 10.2, 13.7, 'sine.inOut')) * Math.PI / 180, r = L(25.5, 23.5, P(t, 10.2, 13.7, 'sine.out'));
+  const yaw = L(-44, -6, P(t, 10.2, 13.6, 'power1.inOut')) * Math.PI / 180, pitch = L(36, 44, P(t, 10.2, 13.7, 'sine.inOut')) * Math.PI / 180, r = L(25.5, 23.5, P(t, 10.2, 13.7, 'sine.out'));
   const tgt = new THREE.Vector3(0, (1.3 + e * 1.2) * 0.86, 0);
   cam3.position.set(tgt.x + r * Math.cos(pitch) * Math.sin(yaw), tgt.y + r * Math.sin(pitch), tgt.z + r * Math.cos(pitch) * Math.cos(yaw));
-  cam3.lookAt(tgt); cam3.setViewOffset(1080, 1920, 95, -90, 1080, 1920); cam3.updateMatrixWorld();
+  cam3.lookAt(tgt); cam3.setViewOffset(1080, 1920, 150, -90, 1080, 1920); cam3.updateMatrixWorld();
   R3.render(sc3, cam3);
   // labels from projected anchors (right-front corner of each layer)
   LAY.forEach((m, i) => {
     m.localToWorld(v3.set(2.0, 0, 2.0)); v3.project(cam3);
     const ax = (v3.x * 0.5 + 0.5) * 1080, ay = (-v3.y * 0.5 + 0.5) * 1920;
     const el = LBL[i], o = P(t, 11.2 + i * 0.1, 11.5 + i * 0.1) * (1 - P(t, 12.55, 12.8, 'none'));
-    const pillX = 740, lead = Math.max(10, pillX - ax - 18);
+    const pillX = 715, lead = Math.max(10, pillX - ax - 18);
     el.querySelector('.lead').style.width = lead + 'px';
     tf(el, ax - 9, ay - 60, 1, 0, o);
   });
   const lift = P(t, 13.2, 13.55, 'power3.in');
   $('#s7').style.transform = `translate3d(0,${-360 * lift}px,0)`; $('#s7').style.opacity = 1 - P(t, 13.3, 13.55, 'none');
-  gl.style.opacity = P(t, 10.22, 10.55, 'power1.out');
-  tf($('#s7b'), L(700, 0, P(t, 10.6, 11.05, 'expo.out')), 0, 1, 0, P(t, 10.6, 10.8));
+  gl.style.opacity = P(t, 10.25, 10.6, 'power1.out');
+  lineIn($('#s7b'), P(t, 10.72, 11.2, 'expo.out'), -1);
   $('#s7foot').style.opacity = P(t, 11.0, 11.4);
-  $('#s7a').style.opacity = t >= 10.55 ? 1 : 0;
+  $('#s7a').style.opacity = t >= 10.68 ? 1 : 0;
 }
 
 // ---------- S8 overhead path ----------
-const STEPS = [['01', 'Approved sources', 'db', 90, 100], ['04', 'Check permissions', 'lock', 390, 520], ['06', 'Ground & validate', 'shield', 90, 940], ['', 'Useful output.<br>Human control.', 'check', 240, 1360, 1]];
+const STEPS = [['01', 'Approved sources', 'db', 100, 40], ['04', 'Check permissions', 'lock', 100, 330], ['06', 'Ground & validate', 'shield', 100, 620], ['', 'Useful output.<br>Human control.', 'check', 100, 910, 1]];
 const stepsEl = $('#steps');
 const ST = STEPS.map(([num, n, ic, x, y, fin]) => { const el = document.createElement('div'); el.className = 'step' + (fin ? ' final' : ''); el.style.left = x + 'px'; el.style.top = y + 'px'; el.innerHTML = `<div class="ring2"></div><div class="ic">${svg(ic)}</div><div>${num ? `<div class="num">${num}</div>` : ''}<div class="nm">${n}</div></div>`; stepsEl.appendChild(el); return el; });
-const pPath = mkPath($('#planeSvg'), 'M390 200 C 390 420 690 400 690 620 C 690 840 390 820 390 1040 C 390 1260 540 1240 540 1460');
+const pPath = mkPath($('#planeSvg'), 'M200 150 L 200 1020');
 const STEP_T = [13.85, 14.35, 14.85, 15.3];
 function scenePath(t) {
-  tf($('#s8a'), L(-900, 0, P(t, 13.55, 14.0, 'expo.out')), 0, 1, 0, 1); tf($('#s8b'), L(900, 0, P(t, 13.62, 14.07, 'expo.out')), 0, 1, 0, 1);
+  lineIn($('#s8a'), P(t, 13.6, 14.05, 'expo.out'), 1); lineIn($('#s8b'), P(t, 13.68, 14.13, 'expo.out'), -1);
   const hx = P(t, 15.45, 15.7, 'power3.in'); $('#s8h').style.transform = `translate3d(0,${-200 * hx}px,0)`; $('#s8h').style.opacity = 1 - hx;
-  const enter = P(t, 13.45, 13.95, 'expo.out'), scroll = 700 * P(t, 13.95, 15.35, 'power1.inOut');
-  const y = 560 + L(420, 0, enter) - scroll;
-  $('#plane').style.transform = `translate3d(0,${y}px,0) rotateX(${L(34, 26, enter)}deg)`;
+  const enter = P(t, 13.45, 13.95, 'expo.out'), scroll = 150 * P(t, 13.95, 15.35, 'power1.inOut');
+  const y = 590 + L(420, 0, enter) - scroll;
+  $('#plane').style.transform = `translate3d(0,${y}px,0) rotateX(${L(26, 16, enter)}deg)`;
   pPath.style.strokeDashoffset = pPath._len * (1 - P(t, 13.5, 14.2));
   const pk = P(t, STEP_T[0], STEP_T[3], 'none'), pt = pPath.getPointAtLength(pPath._len * pk);
   const pp = $('#ppulse'); pp.style.visibility = 'inherit'; pp.style.opacity = (t > 13.8 && t < 15.32) ? 1 : 0; pp.style.transform = `translate3d(${pt.x}px,${pt.y}px,0)`;
@@ -235,7 +238,7 @@ function scenePath(t) {
 // ---------- S9 / purple field ----------
 const purple = $('#purple');
 ['#shieldPath', '#shieldTick'].forEach(s => { $(s).setAttribute('pathLength', 1); $(s).style.strokeDasharray = 1; });
-const BOUND = { top: 640, left: 70, right: 70, bottom: 420 };
+const BOUND = { top: 620, left: 60, right: 60, bottom: 320 };
 function scenePurple(t) {
   let ins;
   if (t < 15.9) { // grow from the final step card's live rect
@@ -249,55 +252,55 @@ function scenePurple(t) {
   const fade = P(t, 17.85, 18.3, 'power1.inOut');
   purple.style.background = mix('6100A8', 'F1EAFB', fade); purple.style.opacity = 1 - P(t, 18.15, 18.4, 'none');
   // S9 content
-  $('#shieldPath').style.strokeDashoffset = 1 - P(t, 16.0, 16.5, 'power2.inOut'); $('#shieldTick').style.strokeDashoffset = 1 - P(t, 16.4, 16.65, 'power2.out');
+  $('#shieldPath').style.strokeDashoffset = 1 - P(t, 16.0, 16.5, 'power2.inOut'); $('#shieldTick').style.strokeDashoffset = 1 - P(t, 16.4, 16.65, 'power2.out'); $('#shieldTick').style.opacity = t > 16.4 ? 1 : 0; $('#shieldPath').style.opacity = t > 16.0 ? 1 : 0;
   const so = P(t, 17.45, 17.72, 'power3.in');
   tf($('#shield'), 0, -160 * so, L(0.85, 1, P(t, 16.0, 16.4, 'expo.out')), 0, 1 - so);
   ['#s9a', '#s9b', '#s9c'].forEach((s, i) => {
-    const k = P(t, 16.04 + i * 0.1, 16.5 + i * 0.1, 'expo.out'), x = (i % 2 ? 1 : -1) * 900 * (1 - k), o = P(t, 17.42 + i * 0.04, 17.7 + i * 0.04, 'power3.in');
-    tf($(s), x, -180 * o, 1, 0, 1 - o);
+    const k = P(t, 16.04 + i * 0.1, 16.5 + i * 0.1, 'expo.out'), o = P(t, 17.38 + i * 0.04, 17.62 + i * 0.04, 'power2.in');
+    lineIn($(s), k, i % 2 ? -1 : 1, o);
   });
-  const ps = L(1, 1.03, P(t, 16.5, 17.5, 'sine.inOut')); $('#s9h').style.transform = `scale(${ps})`; $('#s9h').style.transformOrigin = '0 50%';
+  const ps = L(1, 1.07, P(t, 16.1, 17.6, 'power1.inOut')); $('#s9h').style.transform = `scale(${ps})`; $('#s9h').style.transformOrigin = '0 50%';
 }
 
 // ---------- S10 controlled environment ----------
-$('#nData').innerHTML = `<div class="nb">${svg('db')}</div><div class="nm">Your data</div>`; Object.assign($('#nData').style, { left: '85px', top: '820px' });
-$('#nModel').innerHTML = `<div class="nb">${svg('bot')}</div><div class="nm">Private model</div>`; Object.assign($('#nModel').style, { left: '745px', top: '820px' });
-$('#bound').style.height = '860px';
+$('#nData').innerHTML = `<div class="nb">${svg('db')}</div><div class="nm">Your data</div>`; Object.assign($('#nData').style, { left: '60px', top: '800px' });
+$('#nModel').innerHTML = `<div class="nb">${svg('bot')}</div><div class="nm">Private model</div>`; Object.assign($('#nModel').style, { left: '740px', top: '800px' });
+
 const s10svg = $('#s10svg');
-const A1 = mkPath(s10svg, 'M290 886 L 405 886'), A2 = mkPath(s10svg, 'M675 886 L 790 886');
-const AH1 = mkPath(s10svg, 'M393 874 L 405 886 L 393 898'), AH2 = mkPath(s10svg, 'M778 874 L 790 886 L 778 898');
-const CH = ['Access policies', 'Audit controls', 'Data residency'].map((n, i) => { const el = document.createElement('div'); el.className = 'chip'; el.innerHTML = `<div class="ck">${svg('check')}</div>${n}`; $('#chips').appendChild(el); el.style.top = (1150 + i * 104) + 'px'; return el; });
-const push10 = t => L(1, 1.04, P(t, 18.4, 20.6, 'sine.inOut'));
+const A1 = mkPath(s10svg, 'M290 880 L 385 880'), A2 = mkPath(s10svg, 'M695 880 L 790 880');
+const AH1 = mkPath(s10svg, 'M372 866 L 386 880 L 372 894'), AH2 = mkPath(s10svg, 'M776 866 L 790 880 L 776 894');
+const CH = ['Access policies', 'Audit controls', 'Data residency'].map((n, i) => { const el = document.createElement('div'); el.className = 'chip'; el.innerHTML = `<div class="ck">${svg('check')}</div>${n}`; $('#chips').appendChild(el); el.style.top = (1200 + i * 124) + 'px'; return el; });
+const push10 = t => L(1, 1.06, P(t, 18.3, 20.6, 'power1.inOut'));
 function sceneControl(t) {
-  const sec = $('#s10'); sec.style.transformOrigin = '540px 886px'; sec.style.transform = `scale(${push10(t)})`;
-  const out = P(t, 20.5, 20.95, 'power3.in');
-  ['#s10a', '#s10b', '#s10c'].forEach((s, i) => { const k = P(t, 17.9 + i * 0.1, 18.4 + i * 0.1, 'expo.out'), sgn = i % 2 ? 1 : -1; tf($(s), sgn * 900 * (1 - k) + sgn * 1000 * P(t, 20.45 + i * 0.05, 20.85 + i * 0.05, 'power3.in'), 0, 1, 0, 1); });
+  const sec = $('#s10'); sec.style.transformOrigin = '540px 880px'; sec.style.transform = `scale(${push10(t)})`;
+  const out = P(t, 20.25, 20.55, 'power2.in');
+  ['#s10a', '#s10b', '#s10c'].forEach((s, i) => { const k = P(t, 17.95 + i * 0.1, 18.45 + i * 0.1, 'expo.out'); lineIn($(s), k, i % 2 ? -1 : 1, P(t, 20.3 + i * 0.04, 20.55 + i * 0.04, 'power2.in')); });
   const bo = P(t, 18.0, 18.3, 'power1.inOut');
-  const g = $('#bound'); g.style.opacity = bo * (1 - out); g.style.transformOrigin = '470px 430px'; g.style.transform = `scale(${L(1, 0.96, out)})`;
+  const g = $('#bound'); g.style.opacity = bo * (1 - out); g.style.transformOrigin = '480px 490px'; g.style.transform = `scale(${L(1, 0.96, out)})`;
   ['#nData', '#nModel'].forEach((s, i) => { const k = P(t, 18.2 + i * 0.1, 18.6 + i * 0.1, 'expo.out'); tf($(s), 0, 30 * (1 - k), L(0.85, 1, k) * L(1, 0.9, out), 0, k * (1 - out)); });
   A1.style.strokeDashoffset = A1._len * (1 - P(t, 18.4, 18.6)); AH1.style.strokeDashoffset = AH1._len * (1 - P(t, 18.55, 18.65));
   A2.style.strokeDashoffset = A2._len * (1 - P(t, 18.85, 19.05)); AH2.style.strokeDashoffset = AH2._len * (1 - P(t, 19.0, 19.1));
   s10svg.style.opacity = 1 - out;
   const lit = P(t, 19.2, 19.35, 'power2.out'); const nb = $('#nModel .nb'); nb.style.borderColor = mix('E3DAF4', '6100A8', lit); nb.style.background = mix('FFFFFF', 'F1EAFB', lit);
   nb.style.transform = `scale(${1 + 0.06 * Math.sin(Math.PI * clamp((t - 19.2) / 0.35))})`;
-  CH.forEach((el, i) => { const k = P(t, 19.3 + i * 0.2, 19.7 + i * 0.2, 'expo.out'); const w = 420; el.style.left = (540 - w / 2) + 'px'; tf(el, L(-60, 0, k), 0, 1, 0, k * (1 - out));
+  CH.forEach((el, i) => { const k = P(t, 19.3 + i * 0.2, 19.7 + i * 0.2, 'expo.out'); const w = 520; el.style.left = (540 - w / 2) + 'px'; tf(el, L(-60, 0, k), 0, 1, 0, k * (1 - out));
     const ck = el.querySelector('.ck'); ck.style.transform = `scale(${L(0.2, 1, P(t, 19.38 + i * 0.2, 19.7 + i * 0.2, 'back.out(2.4)'))})`; });
 }
 
 // ---------- S11 pilot ----------
 function scenePilot(t) {
   [['#s11a', 21.0, -1], ['#s11b', 21.45, 1], ['#s11c', 22.2, -1]].forEach(([s, t0, sg], i) => {
-    const k = P(t, t0, t0 + 0.5, 'expo.out'), drift = sg * -12 * P(t, t0 + 0.5, 23.4, 'sine.inOut'), o = P(t, 23.38 + i * 0.05, 23.8 + i * 0.05, 'power3.in');
-    tf($(s), sg * 1150 * (1 - k) + drift + (i === 1 ? 1 : -1) * 1200 * o, 0, 1, 0, 1);
+    const k = P(t, t0, t0 + 0.5, 'expo.out'), o = P(t, 23.3 + i * 0.04, 23.52 + i * 0.04, 'power2.in');
+    lineIn($(s), k, -sg, o); $(s).style.transform += ` translate3d(${(-sg * 22 * P(t, t0 + 0.4, 23.4, 'sine.inOut')).toFixed(2)}px,0,0)`;
   });
 }
 
 // ---------- S12 end ----------
-const endPush = t => L(1, 1.03, P(t, 24.05, 27, 'sine.inOut'));
+const endPush = t => L(1, 1.03, P(t, 23.95, 27, 'sine.inOut'));
 function sceneEnd(t) {
   const S = endPush(t); $('#s12').style.transform = `translate3d(${540 * (1 - S)}px,${960 * (1 - S)}px,0) scale(${S})`;
-  LOGO12.letters.forEach((el, i) => { const k = P(t, 23.82 + i * 0.05, 24.3 + i * 0.05, 'expo.out'); tf(el, (i === 0 ? -1 : 1) * 620 * (1 - k), 0, 1, 0, clamp(k * 2.5)); });
-  const c = P(t, 24.1, 24.6, 'expo.out'), press = P(t, 25.0, 25.08, 'power2.out') * (1 - P(t, 25.08, 25.4, 'back.out(2)'));
+  LOGO12.letters.forEach((el, i) => { const k = P(t, 23.66 + i * 0.05, 24.14 + i * 0.05, 'expo.out'); tf(el, (i === 0 ? -1 : 1) * 160 * (1 - k), 0, 1, 0, clamp(k * 1.6)); });
+  const c = P(t, 23.95, 24.45, 'expo.out'), press = P(t, 25.0, 25.08, 'power2.out') * (1 - P(t, 25.08, 25.4, 'back.out(2)'));
   tf($('#cta'), 0, L(90, 0, c), L(0.94, 1, c) * (1 - 0.045 * press), 0, c);
   $('#ripple').style.opacity = 0.5 * (1 - P(t, 25.0, 25.7, 'power1.out')) * (t >= 25.0 ? 1 : 0); $('#ripple').style.transform = `scale(${L(0.2, 5.5, P(t, 25.0, 25.7, 'power2.out'))})`;
   const nudge = Math.sin(Math.PI * clamp((t - 25.05) / 0.45)) + Math.sin(Math.PI * clamp((t - 26.2) / 0.45));
@@ -310,27 +313,29 @@ const ring = $('#ring');
 function ringState(t) {
   if (t < 1.72) return null;
   if (t < 3.15) { const d = t < 2.5 ? L(0, 720, P(t, 1.72, 2.5, 'expo.out')) : 720 + 40 * P(t, 2.5, 3.15, 'sine.inOut'); return [540, 900, d]; }
-  const push3 = 1 + 0.035 * P(t, 3.6, 5.2, 'sine.inOut');
+  const push3 = push3f(t);
   if (t < 3.65) { const k = P(t, 3.15, 3.65, 'power3.inOut'); return [L(540, LOGO3.ringX, k), L(900, LOGO3.ringY, k), L(760, LOGO3.ringD, k)]; }
   if (t < 5.8) { const x = 540 + (LOGO3.ringX - 540) * push3, y = 960 + (LOGO3.ringY - 960) * push3; return [x, y, LOGO3.ringD * push3 * portalZ(t)]; }
   if (t < 6.2) return null;
-  if (t < 8.35) { const [x, y, s] = cv2s(HUB_RING.x, HUB_RING.y, t); return y < 2200 ? [x, y, HUB_RING.d * s] : null; }
-  if (t < 10.55) { const [, hy] = cv2s(HUB_RING.x, HUB_RING.y, 8.35), k = P(t, 8.35, 8.8, 'power3.inOut'); const ex = P(t, 10.08, 10.5, 'power3.in'), S = L(1, 1.03, P(t, 9.0, 10.15, 'sine.inOut')) * L(1, 0.86, ex);
-    return [540, L(hy, 960, k), L(HUB_RING.d, 300, k) * S, 1 - P(t, 10.15, 10.5, 'none')]; }
+  if (t < 8.05) { const [x, y, s] = cv2s(HUB_RING.x, HUB_RING.y, t); return y < 2200 ? [x, y, HUB_RING.d * s] : null; }
+  if (t < 10.25) { const [, hy] = cv2s(HUB_RING.x, HUB_RING.y, 8.05), k = P(t, 8.1, 8.5, 'power3.inOut'); const ex = P(t, 9.9, 10.22, 'power3.in'), S = L(1, 1.04, P(t, 9.0, 10.0, 'sine.inOut')) * L(1, 0.86, ex);
+    return [540, L(hy, 960, k), L(HUB_RING.d, 300, k) * S, 1 - P(t, 9.95, 10.2, 'none')]; }
   if (t < 18.1) return null;
-  if (t < 20.6) return [540, 886, L(0, 250, P(t, 18.1, 18.6, 'expo.out')) * push10(t)];
-  if (t < 23.62) { const k = P(t, 20.6, 21.25, 'power3.inOut'); return [540, L(886, 1560, k) + 10 * Math.sin((t - 21.25) * 2.2) * P(t, 21.25, 21.6), L(260, 170, k)]; }
-  if (t < 24.05) { const k = P(t, 23.62, 24.05, 'power3.inOut'), bob = 10 * Math.sin((23.62 - 21.25) * 2.2); return [L(540, LOGO12.ringX, k), L(1560 + bob, LOGO12.ringY, k), L(170, LOGO12.ringD, k)]; }
+  if (t < 20.6) return [540, 880, L(0, 290, P(t, 18.1, 18.6, 'expo.out')) * push10(t)];
+  if (t < 23.5) { const k = P(t, 20.6, 21.25, 'power3.inOut'); return [540, L(880, 1540, k) + 10 * Math.sin((t - 21.25) * 2.2) * P(t, 21.25, 21.6), L(290 * 1.06, 420, k)]; }
+  if (t < 23.95) { const k = P(t, 23.5, 23.95, 'power3.inOut'), bob = 10 * Math.sin((23.5 - 21.25) * 2.2); return [L(540, LOGO12.ringX, k), L(1540 + bob, LOGO12.ringY, k), L(420, LOGO12.ringD, k)]; }
   const S = endPush(t); return [540 + (LOGO12.ringX - 540) * S, 960 + (LOGO12.ringY - 960) * S, LOGO12.ringD * S];
 }
+function push3f(t) { return 1 + 0.08 * P(t, 3.55, 5.25, 'power1.inOut'); }
 function portalZ(t) { return Math.exp(Math.log(34) * P(t, 5.2, 5.78, 'power3.in')); }
 function sceneLogo(t) {
-  const push = 1 + 0.035 * P(t, 3.6, 5.2, 'sine.inOut'), Z = portalZ(t);
+  const push = push3f(t), Z = portalZ(t);
   const cx = 540 + (LOGO3.ringX - 540) * push, cy = 960 + (LOGO3.ringY - 960) * push, S = push * Z;
   const Tx = cx + Z * (540 * (1 - push) - cx), Ty = cy + Z * (960 * (1 - push) - cy);
   $('#s3').style.transform = `translate3d(${Tx}px,${Ty}px,0) scale(${S})`;
-  LOGO3.letters.forEach((el, i) => { const k = P(t, 3.42 + i * 0.05, 3.9 + i * 0.05, 'expo.out'); tf(el, (i === 0 ? -1 : 1) * 620 * (1 - k), 0, 1, 0, clamp(k * 2.5)); });
-  ['#s3a', '#s3b', '#s3c'].forEach((s, i) => { const sg = i % 2 ? 1 : -1, k = P(t, 3.65 + i * 0.12, 4.2 + i * 0.12, 'expo.out'), o = P(t, 4.98 + i * 0.05, 5.28 + i * 0.05, 'power3.in'); tf($(s), sg * 700 * (1 - k) - sg * 1000 * o, 0, 1, 0, 1); });
+  LOGO3.letters.forEach((el, i) => { const k = P(t, 3.42 + i * 0.05, 3.9 + i * 0.05, 'expo.out'); tf(el, (i === 0 ? -1 : 1) * 160 * (1 - k), 0, 1, 0, clamp(k * 1.6)); });
+  ['#s3a', '#s3b', '#s3c'].forEach((s, i) => { const sg = i % 2 ? -1 : 1, k = P(t, 3.62 + i * 0.12, 4.17 + i * 0.12, 'expo.out'), o = P(t, 4.95 + i * 0.04, 5.2 + i * 0.04, 'power2.in'); lineIn($(s), k, sg, o); });
+  $('#s3tag').style.transform = `translate3d(0,${-24 * P(t, 4.0, 5.2, 'sine.inOut')}px,0)`;
   disc.style.opacity = 1 - P(t, 5.22, 5.42, 'none');
 }
 
@@ -340,13 +345,13 @@ function pulseState(t) {
   if (t >= 6.05 && t < 7.4) { const k = P(t, 6.05, 7.4, 'power1.inOut'), p = docPath.getPointAtLength(docPath._len * k); const [x, y] = cv2s(p.x, p.y, t); return [x, y, 1]; }
   if (t >= 7.4 && t < 7.78) { const k = P(t, 7.4, 7.78, 'power2.in'); const p = k < 0.15 ? { x: 540, y: L(1810, 2010, k / 0.15) } : hubToTick.getPointAtLength(hubToTick._len * (k - 0.15) / 0.85); const [x, y] = cv2s(p.x, p.y, t); return [x, y, 1]; }
   if (t >= 9.12 && t < 9.52) { const k = P(t, 9.12, 9.52, 'power2.in'), p = agentPath.getPointAtLength(agentPath._len * k); return [p.x, p.y, 1]; }
-  if (t >= 18.5 && t < 18.88) { const k = P(t, 18.5, 18.88, 'power2.in'); return [L(290, 520, k), 886, 1]; }
-  if (t >= 18.92 && t < 19.22) { const k = P(t, 18.92, 19.22, 'power2.in'); return [L(560, 790, k), 886, 1]; }
+  if (t >= 18.5 && t < 18.88) { const k = P(t, 18.5, 18.88, 'power2.in'); return [L(290, 520, k), 880, 1]; }
+  if (t >= 18.92 && t < 19.22) { const k = P(t, 18.92, 19.22, 'power2.in'); return [L(560, 790, k), 880, 1]; }
   return null;
 }
 
 // ---------- frame ----------
-const SCN = [['#s1', 0, 2.25], ['#s2', 2.0, 3.6], ['#s3', 3.4, 5.8], ['#s45', 5.2, 8.8], ['#s6', 8.45, 10.55], ['#s7', 10.2, 13.56], ['#s8', 13.45, 16.0], ['#purple', 15.5, 18.4], ['#s9', 15.95, 17.8], ['#s10', 17.95, 21.0], ['#s11', 20.9, 24.0], ['#s12', 23.75, 27.1]];
+const SCN = [['#s1', 0, 2.25], ['#s2', 2.0, 3.6], ['#s3', 3.4, 5.8], ['#s45', 5.2, 8.8], ['#s6', 8.28, 10.55], ['#s7', 10.2, 13.56], ['#s8', 13.45, 16.0], ['#purple', 15.5, 18.4], ['#s9', 15.95, 17.8], ['#s10', 17.95, 21.0], ['#s11', 20.9, 24.0], ['#s12', 23.6, 27.1]];
 function frame(t) {
   t = clamp(t, 0, D);
   for (const [s, a, b] of SCN) vis($(s), t >= a && t < b);
@@ -355,20 +360,20 @@ function frame(t) {
   $('#bg .dots').style.transform = `translate3d(0,${(-t * 8) % 36}px,0)`;
   if (t < 2.25) sceneWall(t);
   if (t >= 2.0 && t < 3.6) { const a = P(t, 2.0, 2.55, 'expo.out'), b = P(t, 2.1, 2.65, 'expo.out'), o = P(t, 3.12, 3.45, 'power3.in'), dr = P(t, 2.6, 3.2, 'sine.inOut');
-    tf($('#s2a'), L(-800, 0, a) - 14 * dr - 1000 * o, 0, 1, 0, 1); tf($('#s2b'), L(800, 0, b) + 14 * dr + 1000 * o, 0, 1, 0, 1); }
+    lineIn($('#s2a'), a, 1, o); lineIn($('#s2b'), b, -1, o); $('#s2h').style.transform = `scale(${1 + 0.04 * dr})`; }
   if (t >= 3.4 && t < 5.8) sceneLogo(t);
   if (t >= 5.2 && t < 8.8) sceneCanvas(t);
-  if (t >= 8.45 && t < 10.55) sceneOutputs(t);
+  if (t >= 8.28 && t < 10.55) sceneOutputs(t);
   // fly-through "Build once."
-  const fl = $('#fly'); vis(fl, t >= 10.0 && t < 10.55);
-  if (t >= 10.0 && t < 10.55) { const k = P(t, 10.0, 10.55, 'expo.inOut'), w = fl.offsetWidth, h = fl.offsetHeight, s = L(0.3, 1, k);
+  const fl = $('#fly'); vis(fl, t >= 10.18 && t < 10.68);
+  if (t >= 10.18 && t < 10.68) { const k = P(t, 10.18, 10.68, 'expo.out'), w = fl.offsetWidth, h = fl.offsetHeight, s = L(0.3, 1, k);
     const cx = L(540, 90 + w / 2, k), cy = L(960, 210 + h / 2, k); fl.style.transform = `translate3d(${cx - 90 - w * s / 2}px,${cy - 210 - h * s / 2}px,0) scale(${s})`; fl.style.opacity = clamp(k * 4); }
   if (t >= 10.2 && t < 13.56) scene3D(t);
   if (t >= 13.45 && t < 16.0) scenePath(t);
   if (t >= 15.5 && t < 18.4) scenePurple(t);
   if (t >= 17.95 && t < 21.0) sceneControl(t);
   if (t >= 20.9 && t < 24.0) scenePilot(t);
-  if (t >= 23.75) sceneEnd(t);
+  if (t >= 23.6) sceneEnd(t);
   const r = ringState(t); vis(ring, !!r);
   if (r) { const [x, y, d, o = 1] = r; ring.style.transform = `translate3d(${(x - 50).toFixed(2)}px,${(y - 50).toFixed(2)}px,0) scale(${(d / 100).toFixed(5)})`; ring.style.opacity = o; ring.style.setProperty('--spin', `${(t * 38) % 360}deg`);
     const flash = Math.max(0, Math.sin(Math.PI * clamp((t - 7.4) / 0.4))) + Math.max(0, Math.sin(Math.PI * clamp((t - 18.85) / 0.4)));

@@ -6,7 +6,7 @@
 "wall collapses into the point",
 -50,
 6,
--0.5
+-5.9
 ],
 [
 "whoosh",
@@ -15,16 +15,16 @@
 "ring travels to the logo",
 -50,
 6,
-0.0
+-1.4
 ],
 [
-"click",
+"tap",
 3.5,
--6,
+3,
 "letters lock around the ring",
--80,
+-50,
 6,
--4.0
+1.0
 ],
 [
 "whoosh",
@@ -33,16 +33,16 @@
 "push through the ring",
 -50,
 6,
-1.0
+-6.8
 ],
 [
-"click",
+"tap",
 5.95,
--6,
+3,
 "Documents selected",
--80,
+-50,
 6,
--3.0
+-7.5
 ],
 [
 "whoosh",
@@ -51,7 +51,7 @@
 "camera follows the pulse down",
 -50,
 6,
-3.5
+-5.2
 ],
 [
 "pop",
@@ -60,7 +60,7 @@
 "Semantic Search ticks",
 -50,
 6,
-1.0
+-4.8
 ],
 [
 "whoosh",
@@ -69,16 +69,16 @@
 "outputs burst",
 -50,
 6,
--2.0
+-3.8
 ],
 [
-"click",
+"tap",
 9.5,
--6,
+3,
 "AI Agents switches on",
--80,
+-50,
 6,
--1.0
+-2.0
 ],
 [
 "pop",
@@ -87,7 +87,7 @@
 "check lands",
 -50,
 6,
--6.0
+-4.2
 ],
 [
 "whoosh",
@@ -96,7 +96,7 @@
 "Build once flies forward",
 -50,
 6,
--0.5
+-6.6
 ],
 [
 "whoosh",
@@ -105,34 +105,34 @@
 "3D to path",
 -50,
 6,
--0.5
+-4.2
 ],
 [
-"click",
+"tap",
 13.85,
--6,
+3,
 "step 01",
--80,
+-50,
 6,
-2.0
+-5.8
 ],
 [
-"click",
+"tap",
 14.35,
--6,
+3,
 "step 04",
--80,
+-50,
 6,
-4.0
+-4.2
 ],
 [
-"click",
+"tap",
 14.85,
--6,
+3,
 "step 06",
--80,
+-50,
 6,
-1.5
+-5.7
 ],
 [
 "pop",
@@ -141,7 +141,7 @@
 "useful output",
 -50,
 6,
--4.9
+-2.3
 ],
 [
 "whoosh",
@@ -150,16 +150,16 @@
 "purple field expands",
 -50,
 6,
--1.0
+-10.5
 ],
 [
-"ping",
+"chime",
 16.4,
 3,
 "shield tick",
 -50,
 6,
-0.0
+-14.5
 ],
 [
 "whoosh",
@@ -168,7 +168,7 @@
 "field contracts to boundary",
 -50,
 6,
--3.5
+-6.9
 ],
 [
 "pop",
@@ -177,34 +177,34 @@
 "private model lights",
 -50,
 6,
--3.0
+-6.9
 ],
 [
-"click",
+"tap",
 19.38,
--6,
+3,
 "chip 1",
--80,
+-50,
 6,
-0.0
+-5.3
 ],
 [
-"click",
+"tap",
 19.58,
--6,
+3,
 "chip 2",
--80,
+-50,
 6,
-1.5
+-11.0
 ],
 [
-"click",
+"tap",
 19.78,
--6,
+3,
 "chip 3",
--80,
+-50,
 6,
-5.0
+-11.1
 ],
 [
 "whoosh",
@@ -213,7 +213,7 @@
 "lines exit, ring lifts",
 -50,
 6,
-1.5
+-7.0
 ],
 [
 "whoosh",
@@ -222,24 +222,24 @@
 "lines exit to end card",
 -50,
 6,
-0.0
+-0.9
 ],
 [
-"click",
+"tap",
 24.1,
--6,
+3,
 "logo locks",
--80,
+-50,
 6,
-0.5
+3.2
 ],
 [
-"click",
+"tap",
 25.0,
--6,
+3,
 "CTA press",
--80,
+-50,
 6,
-2.0
+3.0
 ]
 ]

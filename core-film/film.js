@@ -229,8 +229,8 @@ const STEP_T = [13.85, 14.35, 14.85, 15.3];
 function scenePath(t) {
   lineIn($('#s8a'), P(t, 13.44, 13.9, 'expo.out'), 1); lineIn($('#s8b'), P(t, 13.52, 13.98, 'expo.out'), -1);
   const hx = P(t, 15.45, 15.7, 'power3.in'); $('#s8h').style.transform = `translate3d(0,${-200 * hx}px,0)`; $('#s8h').style.opacity = 1 - hx;
-  const enter = P(t, 13.28, 13.8, 'expo.out'), scroll = 150 * P(t, 13.95, 15.35, 'power1.inOut');
-  const y = 590 + L(160, 0, enter) - scroll; $('#plane').style.opacity = P(t, 13.28, 13.5, 'power1.out');
+  const enter = P(t, 13.4, 13.88, 'expo.out'), scroll = 150 * P(t, 13.95, 15.35, 'power1.inOut');
+  const y = 590 + L(160, 0, enter) - scroll; 
   $('#plane').style.transform = `translate3d(0,${y}px,0) rotateX(${L(26, 16, enter)}deg)`;
   pPath.style.strokeDashoffset = pPath._len * (1 - P(t, 13.5, 14.2));
   const pk = P(t, STEP_T[0], STEP_T[3], 'none'), pt = pPath.getPointAtLength(pPath._len * pk);
@@ -362,7 +362,7 @@ function pulseState(t) {
 }
 
 // ---------- frame ----------
-const SCN = [['#s1', 0, 2.25], ['#s2', 2.0, 3.6], ['#s3', 3.4, 5.8], ['#s45', 5.2, 8.8], ['#s6', 8.04, 10.55], ['#s7', 10.0, 13.45], ['#s8', 13.28, 16.0], ['#purple', 15.4, 18.2], ['#s9', 15.7, 17.75], ['#s10', 17.6, 21.0], ['#s11', 20.55, 24.0], ['#s12', 23.6, 27.1]];
+const SCN = [['#s1', 0, 2.25], ['#s2', 2.0, 3.6], ['#s3', 3.4, 5.8], ['#s45', 5.2, 8.8], ['#s6', 8.04, 10.55], ['#s7', 10.0, 13.45], ['#s8', 13.4, 16.0], ['#purple', 15.4, 18.2], ['#s9', 15.7, 17.75], ['#s10', 17.6, 21.0], ['#s11', 20.55, 24.0], ['#s12', 23.6, 27.1]];
 function frame(t) {
   t = clamp(t, 0, D);
   for (const [s, a, b] of SCN) vis($(s), t >= a && t < b);
@@ -380,7 +380,7 @@ function frame(t) {
   if (t >= 10.18 && t < 10.7) { const k = P(t, 10.18, 10.7, 'expo.out'), w = fl.offsetWidth, h = fl.offsetHeight, s = L(0.3, 1, k);
     const cx = L(540, 90 + w / 2, k), cy = L(960, 210 + h / 2, k); fl.style.transform = `translate3d(${cx - 90 - w * s / 2}px,${cy - 210 - h * s / 2}px,0) scale(${s})`; fl.style.opacity = clamp(k * 4); }
   if (t >= 10.0 && t < 13.45) scene3D(t);
-  if (t >= 13.28 && t < 16.0) scenePath(t);
+  if (t >= 13.4 && t < 16.0) scenePath(t);
   if (t >= 15.4 && t < 18.4) scenePurple(t);
   if (t >= 17.6 && t < 21.0) sceneControl(t);
   if (t >= 20.55 && t < 24.0) scenePilot(t);

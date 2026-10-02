@@ -1,0 +1,288 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<script src="vendor/gsap.min.js"></script>
+<style>
+@font-face{font-family:'Archivo';font-weight:100 900;font-stretch:62% 125%;src:url(fonts/Archivo-100_900.woff2) format('woff2');font-display:block}
+@font-face{font-family:'Inter';font-weight:400 900;src:url(fonts/Inter-400_900.woff2) format('woff2');font-display:block}
+@font-face{font-family:'Gochi Hand';font-weight:400;src:url(fonts/GochiHand-400.woff2) format('woff2');font-display:block}
+
+/* Possible Labs · Field Notes tokens (sampled from the carousel) */
+:root{--paper:#F1EADF;--paper-hi:#F7F2EA;--ink:#0E0F0F;--or:#EB6327;--cream:#FBF6EE;--rule:rgba(14,15,15,.28);
+  --L:72px;--W:936px}
+*{box-sizing:border-box}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:var(--paper)}
+#root{position:relative;width:1080px;height:1920px;overflow:hidden;background:var(--paper);
+  font-family:'Archivo',sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+
+/* paper: faint ledger grid + fibre noise + soft falloff */
+#bg{position:absolute;inset:0;
+  background-image:
+    radial-gradient(120% 80% at 50% 40%,rgba(255,255,255,.35),rgba(255,255,255,0) 60%),
+    linear-gradient(rgba(14,15,15,.032) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(14,15,15,.032) 1px,transparent 1px);
+  background-size:100% 100%,54px 54px,54px 54px;background-position:0 0,0 18px,18px 0}
+#bg::after{content:"";position:absolute;inset:0;opacity:.5;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='360' height='360'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' seed='7' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .45  0 0 0 0 .4  0 0 0 0 .33  0 0 0 .09 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+
+/* persistent chrome */
+.corner{position:absolute;width:30px;height:30px;border-color:rgba(14,15,15,.55);border-style:solid;border-width:0}
+.c-tl{left:34px;top:34px;border-left-width:2px;border-top-width:2px}
+.c-tr{right:34px;top:34px;border-right-width:2px;border-top-width:2px}
+.c-bl{left:34px;bottom:34px;border-left-width:2px;border-bottom-width:2px}
+.c-br{right:34px;bottom:34px;border-right-width:2px;border-bottom-width:2px}
+#top{position:absolute;left:var(--L);width:var(--W);top:150px;height:34px;display:flex;align-items:center;gap:22px;
+  font-family:'Inter';font-weight:600;font-size:24px;letter-spacing:.17em}
+.roll{position:relative;height:34px;overflow:hidden}
+.roll .strip{display:flex;flex-direction:column}
+.roll .strip span{display:block;height:34px;line-height:34px;white-space:nowrap}
+#top .rule{flex:1;height:2px;background:var(--rule)}
+#lab{width:260px}
+#cnt{width:200px;text-align:right}
+#segs{position:absolute;left:var(--L);width:var(--W);top:206px;height:6px;display:flex;gap:8px}
+#segs i{flex:1;height:6px;border-radius:3px;background:rgba(14,15,15,.12);overflow:hidden;position:relative}
+#segs i b{position:absolute;inset:0;background:var(--or);transform-origin:0 50%;transform:scaleX(0)}
+#foot{position:absolute;left:var(--L);width:var(--W);bottom:64px;display:flex;align-items:center;gap:28px;
+  font-family:'Inter';font-weight:600;font-size:22px;letter-spacing:.24em;white-space:nowrap}
+#foot .rule{flex:1;height:2px;background:var(--rule)}
+
+/* scenes */
+.scene{position:absolute;inset:0;visibility:hidden}
+.col{position:absolute;left:var(--L);top:262px;bottom:330px;width:var(--W);display:flex;flex-direction:column;align-items:flex-start;justify-content:center}
+.lc{text-transform:none}
+.ln{display:block;overflow:hidden;padding:.06em .04em .02em 0;margin:-.06em 0 -.02em}
+.in{display:inline-block;white-space:nowrap;will-change:transform}
+.hl{font-weight:900;font-size:150px;line-height:.86;letter-spacing:-.022em;text-transform:uppercase}
+.box{margin-top:24px;background:var(--or);border:6px solid var(--ink);border-radius:22px;padding:12px 30px 16px 28px;
+  color:var(--cream);font-weight:900;font-size:108px;line-height:.9;letter-spacing:-.015em;text-transform:uppercase;
+  clip-path:inset(0% 0% 0% 0% round 22px)}
+.sub{margin-top:26px;font-family:'Inter';font-weight:700;font-size:50px;line-height:1.08;letter-spacing:-.025em}
+.art{margin-top:46px;width:1000px;margin-left:-32px;position:relative;transform-origin:50% 40%}
+.art .ph{position:relative;width:100%;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 7%,#000 93%,transparent 100%),linear-gradient(to right,transparent 0,#000 4%,#000 96%,transparent 100%);
+  -webkit-mask-composite:source-in;mask-composite:intersect}
+.art img{display:block;width:100%;height:auto;transform-origin:50% 50%}
+
+/* checklist */
+.card{margin-top:40px;width:var(--W);position:relative;background:var(--paper-hi);border-radius:6px;
+  padding:26px 40px 22px 92px;box-shadow:0 2px 0 rgba(14,15,15,.05),0 24px 50px -22px rgba(60,40,20,.35)}
+.card .holes{position:absolute;left:30px;top:30px;bottom:30px;width:22px;
+  background:radial-gradient(circle at 11px 11px,var(--paper) 7px,rgba(14,15,15,.18) 8px,transparent 9px) 0 0/22px 64px repeat-y}
+.card .tape{position:absolute;left:50%;top:-22px;width:170px;height:46px;margin-left:-85px;transform:rotate(-2deg);
+  background:linear-gradient(rgba(216,200,172,.85),rgba(206,190,160,.85));box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.row{display:flex;align-items:center;height:62px;border-bottom:2px solid rgba(14,15,15,.14)}
+.row:last-child{border-bottom:0}
+.row .n{width:96px;font-weight:900;font-size:46px;color:var(--or);letter-spacing:-.02em}
+.row .ck{width:42px;height:42px;border:4px solid var(--ink);border-radius:6px;margin-right:32px;position:relative;flex:none}
+.row .ck svg{position:absolute;left:-6px;top:-16px;width:62px;height:58px;overflow:visible}
+.row .t{font-family:'Inter';font-weight:800;font-size:33px;letter-spacing:-.01em;text-transform:uppercase}
+.then{margin-top:34px;font-weight:900;font-size:118px;line-height:.86;letter-spacing:-.022em;text-transform:uppercase;position:relative}
+.then svg{position:absolute;left:-6px;bottom:-34px;width:600px;height:30px;overflow:visible}
+
+/* CTA */
+.cta .sub{font-weight:800;font-size:56px;text-transform:uppercase;letter-spacing:-.02em;margin-top:44px}
+
+/* the orange field that carries one scene into the next */
+#flyer{position:absolute;background:var(--or);border:6px solid var(--ink);border-radius:22px;visibility:hidden;z-index:20}
+
+/* end card */
+#end{position:absolute;inset:0;z-index:30;visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center}
+#logo{width:300px;height:510px;overflow:visible}
+#wm{margin-top:56px;font-family:'Inter';font-weight:700;font-size:40px;letter-spacing:.36em;color:#F2EEE8;padding-left:.36em;white-space:nowrap}
+#wm span{display:inline-block}
+#tag{margin-top:22px;font-family:'Inter';font-weight:500;font-size:28px;letter-spacing:.06em;color:rgba(242,238,232,.62)}
+</style></head>
+<body>
+<div id="root" data-composition-id="root" data-width="1080" data-height="1920" data-duration="30" data-fps="60">
+  <div id="bg"></div>
+  <div class="corner c-tl"></div><div class="corner c-tr"></div><div class="corner c-bl"></div><div class="corner c-br"></div>
+  <div id="top"><div class="roll" id="lab"><div class="strip"></div></div><div class="rule"></div><div class="roll" id="cnt"><div class="strip"></div></div></div>
+  <div id="segs"></div>
+  <div id="scenes"></div>
+  <div id="foot"><div class="rule"></div><div>POSSIBLE LABS · FIELD NOTES</div><div class="rule"></div></div>
+  <div id="flyer"></div>
+  <div id="end">
+    <svg id="logo" viewBox="52 18 56 95">
+      <defs><linearGradient id="sun" x1="0" y1="0" x2=".35" y2="1">
+        <stop offset="0" stop-color="#E9561B"/><stop offset=".55" stop-color="#EF6B2B"/><stop offset="1" stop-color="#F8CBAA"/></linearGradient>
+        <clipPath id="sunclip"><rect id="sunrect" x="65.2" y="30" width="0" height="48"/></clipPath></defs>
+      <path id="L" d="M62 32.5 V113 H85.5" fill="none" stroke="#F2F2F2" stroke-width="3.3" stroke-linecap="butt" stroke-linejoin="miter"/>
+      <path d="M65.2 34.6 A19 18.7 0 0 1 65.2 72 Z" fill="url(#sun)" clip-path="url(#sunclip)"/>
+      <g id="rays" stroke="#E07446" stroke-width="1.5" stroke-linecap="round" opacity=".85">
+        <line x1="77.2" y1="31.7" x2="77.2" y2="24.2"/><line x1="90" y1="38.7" x2="94.7" y2="34.2"/>
+        <line x1="95" y1="52.7" x2="102.5" y2="52.7"/><line x1="90" y1="66.3" x2="94.7" y2="70.8"/>
+        <line x1="78.3" y1="75" x2="81.2" y2="81.7"/></g>
+    </svg>
+    <div id="wm"></div>
+    <div id="tag">AI + tech. Made easier to understand.</div>
+  </div>
+</div>
+<script>
+/* ---------- content ---------- */
+const TIPS = [
+  { hl:['Test at','480<span class="lc">p</span>.'],            box:['Go higher','later.'],          img:'s02' },
+  { hl:['Find the','look first.'],     box:['Build a','reference pack.'],   img:'s03' },
+  { hl:['Hard shot?','Use Blender.'],  box:['Block it first.'],             img:'s04' },
+  { hl:['Weird AI','motion?'],         box:['Define the','physics.'],       img:'s05' },
+  { hl:['Using Seedance','audio?'],    box:['Prompt it too.'],              img:'s06' },
+  { hl:['Got all the','context?'],     box:['Let your LLM','structure it.'],img:'s07' },
+  { hl:['New','setup?'],               box:['Generate','one first.'],       img:'s08' },
+  { hl:['Hard motion?','Use your phone.'], box:['Record it first.'],        img:'s09' },
+];
+const CHECKS = ['Test at 480p','References ready?','Hard shot blocked?','Physics defined?','Audio planned?','Prompt structured?','Testing one first?','Hard motion recorded?'];
+const LABELS = ['FIELD NOTES',...TIPS.map((_,i)=>'TIP 0'+(i+1)),'CHECKLIST','POSSIBLE LABS'];
+const COUNTS = ['08 TIPS',...TIPS.map((_,i)=>'0'+(i+1)+' / 08'),'SAVE THIS','FOLLOW'];
+
+/* ---------- 120 BPM grid: every cut lands on a beat (0.5s) ---------- */
+const T = { hook:0, tips:[2.5,5.5,8.0,10.5,13.0,15.5,18.0,20.5], check:23.0, cta:26.0, end:28.5, out:30.0 };
+const tipEnd = i => i < 7 ? T.tips[i+1] : T.check;
+
+/* ---------- precomputed layout (fonts loaded) — regenerate with measure.mjs ---------- */
+const LAYOUT = /*LAYOUT*/{"fit":{"0":84.7,"1":95.2,"10":94.7,"12":85.4,"13":96.7,"14":84.2,"15":92.9,"20":84.4,"22":91.9,"23":90.7,"26":97.4,"31":99.9,"32":84.2,"33":84.2,"34":84.2,"36":84.9,"37":84.4,"39":84.4,"41":85.4},"size":{"0":146,"5":100,"6":142,"10":116,"16":114,"18":104,"19":90,"21":162,"22":114},"rects":{"box0":{"x":72,"y":665.7,"w":906.14,"h":137.19},"box1":{"x":72,"y":723.34,"w":730.86,"h":236.53},"box8":{"x":72,"y":705.28,"w":939.08,"h":137.19},"box9":{"x":70.74,"y":608.09,"w":940.86,"h":121.33},"box10":{"x":57.96,"y":874.54,"w":966.96,"h":254.88}}}/*END*/;
+
+/* ---------- build DOM (synchronous) ---------- */
+const $ = (s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const lines = (arr,cls)=>arr.map(t=>`<span class="ln"><span class="in">${t}</span></span>`).join('');
+$('#lab .strip').innerHTML = LABELS.map(s=>`<span>${s}</span>`).join('');
+$('#cnt .strip').innerHTML = COUNTS.map(s=>`<span>${s}</span>`).join('');
+$('#segs').innerHTML = TIPS.map(()=>'<i><b></b></i>').join('');
+$('#wm').innerHTML = 'POSSIBLE LABS'.split('').map(c=>`<span>${c===' '?'&nbsp;':c}</span>`).join('');
+let html = `<section class="scene" id="sc0" style="visibility:visible"><div class="col">
+  <div class="hl">${lines(['How to save','credits on'])}</div>
+  <div class="box" id="box0">${lines(['Seedance 2.5'])}</div>
+  <div class="sub">${lines(['8 practical ways to','waste fewer generations.'])}</div>
+  <div class="art"><div class="ph"><img src="img/s01.png"></div></div></div></section>`;
+TIPS.forEach((t,i)=>{ html += `<section class="scene tip" id="sc${i+1}"><div class="col">
+  <div class="hl">${lines(t.hl)}</div><div class="box" id="box${i+1}">${lines(t.box)}</div>
+  <div class="art"><div class="ph"><img src="img/${t.img}.png"></div></div></div></section>`; });
+html += `<section class="scene" id="sc9"><div class="col">
+  <div class="hl" style="font-size:132px">${lines(['Before you spend','the credits…'])}</div>
+  <div class="box" id="box9" style="font-size:92px">${lines(['Check these first.'])}</div>
+  <div class="card"><div class="holes"></div><div class="tape"></div>${CHECKS.map((c,i)=>`<div class="row"><span class="n">0${i+1}</span><span class="ck"><svg viewBox="0 0 62 58"><path d="M8 30 L24 46 L56 6" fill="none" stroke="#EB6327" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/></svg></span><span class="t">${c}</span></div>`).join('')}</div>
+  <div class="then">${lines(['Then generate.'])}<svg viewBox="0 0 600 30"><path d="M4 18 C 120 8, 330 6, 596 14" fill="none" stroke="#EB6327" stroke-width="9" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/></svg></div>
+  </div></section>`;
+html += `<section class="scene cta" id="sc10"><div class="col">
+  <div class="hl" style="font-size:168px">${lines(['Like this','explainer?'])}</div>
+  <div class="box" id="box10" style="font-size:124px">${lines(['Follow','Possible Labs.'])}</div>
+  <div class="sub">${lines(['AI + tech.','Made easier to understand.'])}</div></div></section>`;
+$('#scenes').innerHTML = html;
+
+/* fit: condense the width axis per line so every headline line fits the column at one type size */
+$$('.in').forEach((el,k)=>{ el.dataset.k=k; const s = LAYOUT.fit[k]; if (s) el.style.fontStretch = s+'%'; });
+$$('.hl, .box, .then').forEach((el,k)=>{ el.dataset.b=k; const z = (LAYOUT.size||{})[k]; if (z) el.style.fontSize = z+'px'; });
+
+/* ---------- timeline ---------- */
+const tl = gsap.timeline({ paused:true, defaults:{ overwrite:false } });
+const E_IN='expo.out', E_OUT='power3.in';
+const ins = sc => $$('.hl .in, .sub .in, .then .in', sc);
+
+function linesIn(els, t, st=0.07, d=0.7){ tl.fromTo(els,{yPercent:112},{yPercent:0,duration:d,ease:E_IN,stagger:st,immediateRender:false},t); }
+function linesOut(els, t, st=0.035){ tl.fromTo(els,{yPercent:0},{yPercent:-112,duration:0.32,ease:E_OUT,stagger:st,immediateRender:false},t); }
+function boxIn(box, t){
+  tl.fromTo(box,{clipPath:'inset(0% 100% 0% 0% round 22px)'},{clipPath:'inset(0% 0% 0% 0% round 22px)',duration:0.55,ease:'expo.out',immediateRender:false},t);
+  linesIn($$('.in',box), t+0.07, 0.06, 0.6);
+}
+function boxOut(box, t){ tl.fromTo(box,{clipPath:'inset(0% 0% 0% 0% round 22px)'},{clipPath:'inset(0% 0% 100% 0% round 22px)',duration:0.3,ease:E_OUT,immediateRender:false},t); }
+function artIn(sc, t, hold){
+  const a=$('.art',sc), im=$('img',sc);
+  tl.fromTo(a,{clipPath:'inset(100% 0% 0% 0%)'},{clipPath:'inset(0% 0% 0% 0%)',duration:0.8,ease:E_IN,immediateRender:false},t);
+  tl.fromTo(im,{yPercent:14,scale:1.1,rotation:-1.2},{yPercent:0,scale:1,rotation:0,duration:1.0,ease:E_IN,immediateRender:false},t);
+  tl.fromTo(a,{scale:1},{scale:1.04,duration:hold,ease:'sine.inOut',immediateRender:false},t);  // slow push keeps the hold alive
+}
+function artOut(sc, t){ const a=$('.art',sc);
+  tl.fromTo(a,{clipPath:'inset(0% 0% 0% 0%)',y:0},{clipPath:'inset(0% 0% 100% 0%)',y:-70,duration:0.32,ease:E_OUT,immediateRender:false},t); }
+function show(sc, t0, t1){ if(t0>0) tl.set(sc,{visibility:'visible'},t0); tl.set(sc,{visibility:'hidden'},t1); }
+function chrome(k, t){ // label / counter roll to index k
+  tl.to('#lab .strip',{y:-34*k,duration:0.6,ease:'expo.inOut'},t-0.2);
+  tl.to('#cnt .strip',{y:-34*k,duration:0.6,ease:'expo.inOut'},t-0.15);
+}
+// orange field: box A -> full frame -> box B (rects from LAYOUT)
+const FULL={left:-12,top:-12,width:1104,height:1944,borderRadius:0};
+const R = id => { const r=LAYOUT.rects[id]||{x:72,y:600,w:600,h:140}; return {left:r.x,top:r.y,width:r.w,height:r.h,borderRadius:22}; };
+function fly(fromId, toId, t, upDur=0.32, downDur=0.5){
+  const f='#flyer';
+  tl.set(f,{visibility:'visible',...R(fromId)},t);
+  tl.set('#'+fromId,{visibility:'hidden'},t);
+  tl.to(f,{...FULL,duration:upDur,ease:'power3.in'},t);
+  if (toId){
+    tl.fromTo(f,{...FULL},{...R(toId),duration:downDur,ease:'expo.out',immediateRender:false},t+upDur+0.06);
+    tl.set(f,{visibility:'hidden'},t+upDur+0.06+downDur);
+  }
+}
+
+/* starting states: nothing shows its landed pose before its own entrance */
+tl.set($$('.scene:not(#sc0) .in'),{yPercent:112},0);
+tl.set($$('.scene:not(#sc0) .box:not(#box1):not(#box9)'),{clipPath:'inset(0% 100% 0% 0% round 22px)'},0);
+tl.set($$('.scene:not(#sc0) .art'),{clipPath:'inset(100% 0% 0% 0%)'},0);
+tl.set($$('#sc9 .card, #sc9 .row, #wm span, #tag, #rays line'),{opacity:0},0);
+tl.set('#L',{strokeDasharray:82+23.5,strokeDashoffset:82+23.5},0);
+
+/* HOOK — frame 0 is a finished headline; the evidence and promise land underneath */
+const s0=$('#sc0');
+tl.fromTo($$('.hl .in',s0),{scale:1.035,transformOrigin:'0% 100%'},{scale:1,duration:1.2,ease:'expo.out'},0);
+linesIn($$('.sub .in',s0), 0.35, 0.08);
+artIn(s0, 0.2, 2.4);
+linesOut($$('.hl .in, .sub .in',s0), 2.18);
+artOut(s0, 2.18);
+fly('box0','box1', T.tips[0]-0.04, 0.3, 0.55);
+show(s0, 0, T.tips[0]+0.3);
+
+/* TIPS */
+TIPS.forEach((tp,i)=>{
+  const sc=$('#sc'+(i+1)), t0=T.tips[i], t1=tipEnd(i), first=i===0;
+  const enter = first ? t0+0.34 : t0;
+  show(sc, first ? t0+0.2 : t0-0.02, t1+0.02);
+  chrome(i+1, t0);
+  tl.fromTo(`#segs i:nth-child(${i+1}) b`,{scaleX:0},{scaleX:1,duration:t1-t0,ease:'none',immediateRender:false},t0);
+  linesIn($$('.hl .in',sc), enter, 0.07);
+  if (first) { tl.set('#box1',{visibility:'hidden'},0); tl.set('#box1',{visibility:'visible'},t0+0.3); linesIn($$('#box1 .in'), t0+0.8, 0.06, 0.55); }
+  else boxIn($('#box'+(i+1)), enter+0.16);
+  artIn(sc, enter+0.12, t1-enter);
+  if (i<7){ linesOut($$('.hl .in',sc), t1-0.32); boxOut($('#box'+(i+1)), t1-0.28); artOut(sc, t1-0.32); }
+  else { linesOut($$('.hl .in',sc), t1-0.34); artOut(sc, t1-0.34); }
+});
+
+/* CHECKLIST — the last tip's box becomes the orange field, which lands as "Check these first." */
+const s9=$('#sc9');
+fly('box8','box9', T.check-0.04, 0.3, 0.5);
+tl.set('#box9',{visibility:'hidden'},0); tl.set('#box9',{visibility:'visible'},T.check+0.3);
+show(s9, T.check+0.2, T.cta+0.02);
+chrome(9, T.check+0.1);
+linesIn($$('.hl .in',s9), T.check+0.3, 0.07);
+linesIn($$('#box9 .in'), T.check+0.76, 0.06, 0.5);
+tl.fromTo($('.card',s9),{yPercent:18,opacity:0,rotation:1.5},{yPercent:0,opacity:1,rotation:-0.5,duration:0.8,ease:E_IN,immediateRender:false},T.check+0.45);
+tl.fromTo($$('.row',s9),{opacity:0,x:40},{opacity:1,x:0,duration:0.5,ease:E_IN,stagger:0.045,immediateRender:false},T.check+0.55);
+tl.fromTo($$('.row path',s9),{strokeDashoffset:1},{strokeDashoffset:0,duration:0.22,ease:'power2.out',stagger:0.11,immediateRender:false},T.check+0.95);
+tl.fromTo($$('.row .n',s9),{scale:1},{keyframes:[{scale:1.18,duration:0.08},{scale:1,duration:0.2}],ease:'power2.out',stagger:0.11,transformOrigin:'0% 50%',immediateRender:false},T.check+0.95);
+linesIn($$('.then .in',s9), T.check+1.95, 0.07, 0.6);
+tl.fromTo($('.col',s9),{scale:1},{scale:1.03,duration:T.cta-T.check-0.3,ease:'sine.inOut',transformOrigin:'50% 30%',immediateRender:false},T.check+0.3);
+tl.fromTo($('.then path',s9),{strokeDashoffset:1},{strokeDashoffset:0,duration:0.45,ease:'power2.inOut',immediateRender:false},T.check+2.2);
+linesOut($$('.hl .in, .then .in',s9), T.cta-0.32); boxOut($('#box9'), T.cta-0.3);
+tl.fromTo($('.card',s9),{clipPath:'inset(0% 0% 0% 0%)',y:0},{clipPath:'inset(0% 0% 100% 0%)',y:-70,duration:0.32,ease:E_OUT,immediateRender:false},T.cta-0.32);
+tl.to('#segs b',{opacity:1,duration:0.01},T.check);
+
+/* CTA */
+const s10=$('#sc10');
+show(s10, T.cta-0.02, T.end+0.5);
+chrome(10, T.cta);
+tl.to('#segs',{opacity:0,duration:0.4,ease:'power2.out'},T.cta);
+linesIn($$('.hl .in',s10), T.cta, 0.08, 0.75);
+boxIn($('#box10'), T.cta+0.2);
+linesIn($$('.sub .in',s10), T.cta+0.45, 0.08);
+linesOut($$('.hl .in, .sub .in',s10), T.end-0.3);
+tl.fromTo($('.col',s10),{scale:1},{scale:1.03,duration:T.end-T.cta,ease:'sine.inOut',transformOrigin:'50% 40%',immediateRender:false},T.cta);
+
+/* END — the follow box floods the frame, the paper goes dark, the sun rises */
+fly('box10', null, T.end-0.05, 0.36);
+tl.to('#flyer',{backgroundColor:'#0B0B0C',borderColor:'#0B0B0C',duration:0.3,ease:'power2.inOut'},T.end+0.28);
+tl.set('#end',{visibility:'visible'},T.end+0.3);
+const Lp=$('#L'), Llen=82+23.5;
+tl.fromTo(Lp,{strokeDasharray:Llen,strokeDashoffset:Llen},{strokeDashoffset:0,duration:0.55,ease:'power3.inOut',immediateRender:false},T.end+0.32);
+tl.fromTo('#sunrect',{attr:{width:0}},{attr:{width:22},duration:0.55,ease:'expo.out',immediateRender:false},T.end+0.6);
+tl.fromTo('#rays line',{opacity:0,scale:0.4,transformOrigin:'50% 50%'},{opacity:1,scale:1,duration:0.4,ease:'expo.out',stagger:0.05,immediateRender:false},T.end+0.82);
+tl.fromTo('#wm span',{yPercent:60,opacity:0},{yPercent:0,opacity:1,duration:0.6,ease:E_IN,stagger:0.025,immediateRender:false},T.end+0.7);
+tl.fromTo('#tag',{opacity:0,y:16},{opacity:1,y:0,duration:0.6,ease:E_IN,immediateRender:false},T.end+0.95);
+tl.fromTo('#end',{scale:1},{scale:1.03,duration:T.out-T.end-0.3,ease:'sine.out',immediateRender:false},T.end+0.3);
+tl.set({}, {}, T.out);
+
+window.__timelines = window.__timelines || {}; window.__timelines.root = tl;
+</script></body></html>

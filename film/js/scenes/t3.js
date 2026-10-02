@@ -4,9 +4,10 @@ import { E, el, place, img, tag, svg, path, tipHeadline, rng } from '../core.js'
 
 export const meta = { box: { lines: ['BLOCK IT FIRST.'] } };
 
-// big polaroid that holds the 3D render
-const F = { x: 80, y: 690, w: 920, h: 770, pad: 16 };
-const CW = F.w - 2 * F.pad, CH = F.h - 2 * F.pad; // 888 × 738
+// full-bleed band that holds the 3D render (the film's wide shot)
+const F = { x: 0, y: 700, w: 1080, h: 860 };
+const CW = F.w, CH = F.h; // 1080 × 860
+const KEY_X = 940; // labels stay left of the Reels rail
 
 const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
 const lerp = (a, b, k) => a + (b - a) * k;
@@ -23,7 +24,7 @@ const T_WIPE = 8.9, T_WIPE_D = 0.2;       // matched wipe to the photo
 
 // render camera poses: target, distance, azimuth (deg, from +Z toward +X), pitch (deg). Pitch stays within 35–55.
 const POSE0 = { T: [2.6, 0, -3], d: 30, az: 24, pitch: 52 };
-const POSE1 = { T: [2.341, 1.13, -7.257], d: 9.6, az: 38, pitch: 35 };
+const POSE1 = { T: [2.342, 1.139, -7.266], d: 9.6, az: 38, pitch: 35 };
 
 function buildWorld() {
   const scene = new THREE.Scene();
@@ -117,10 +118,9 @@ export function build(ctx) {
   const { tl, layer, onFrame } = ctx;
   tipHeadline(ctx, ['HARD SHOT?', 'USE BLENDER.']);
 
-  // polaroid frame
-  const pol = el('div', 'polaroid', { padding: F.pad + 'px', zIndex: 2 }, layer); place(pol, F);
-  const ph = el('div', 'ph', { background: '#E4DFD6' }, pol);
-  el('div', 'tape', { left: (F.w / 2 - 75) + 'px', top: '-20px', transform: 'rotate(-2deg)' }, pol);
+  // full-bleed band (edge to edge), soft shadow like the paper pieces
+  const pol = el('div', 'abs', { zIndex: 2, overflow: 'hidden', background: '#E4DFD6', boxShadow: '0 18px 36px -12px rgba(40,25,10,.35), 0 -10px 28px -14px rgba(40,25,10,.25)' }, layer); place(pol, F);
+  const ph = pol;
 
   // three.js
   const W3 = buildWorld();
@@ -129,16 +129,17 @@ export function build(ctx) {
   renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFShadowMap; // r186: PCFSoftShadowMap was folded into PCF (soft via shadow.radius)
   renderer.toneMapping = THREE.NeutralToneMapping; renderer.toneMappingExposure = 1.0;
   ph.appendChild(renderer.domElement);
+  Object.assign(renderer.domElement.style, { position: 'absolute', left: 0, top: 0, width: CW + 'px', height: CH + 'px', display: 'block' });
   const cam = new THREE.PerspectiveCamera(34, CW / CH, 0.1, 200);
 
   // real photo, cropped so its baked-in border never shows; the car sits where the block car ends
   const photoBox = el('div', 'abs', { inset: 0, overflow: 'hidden', clipPath: 'polygon(0 0,0 0,0 0,0 0)' }, ph);
-  const S = 1.3516, CX = 340, CY = 446; // display scale; car centre in frame px
-  const pimg = img('city-car', photoBox, { position: 'absolute', left: '-52px', top: '-13.5px', width: 734 * S + 'px', height: 580 * S + 'px', objectFit: 'fill', transformOrigin: `${CX + 52}px ${CY + 13.5}px` });
+  const S = 1.58, OX = -39.9, OY = -15.8, CX = 400, CY = 530; // display scale/offset; car centre in band px
+  const pimg = img('city-car', photoBox, { position: 'absolute', left: OX + 'px', top: OY + 'px', width: 734 * S + 'px', height: 580 * S + 'px', objectFit: 'fill', display: 'block', transformOrigin: `${CX - OX}px ${CY - OY}px` });
   const wipeBar = el('div', 'abs', { inset: 0, background: 'var(--orange)', clipPath: 'polygon(0 0,0 0,0 0,0 0)' }, ph);
 
   // labels pinned from 3D (live inside the polaroid so they follow its transforms)
-  const ov = el('div', 'abs', { left: F.pad + 'px', top: F.pad + 'px', width: CW + 'px', height: CH + 'px', zIndex: 4, pointerEvents: 'none' }, pol);
+  const ov = el('div', 'abs', { left: 0, top: 0, width: CW + 'px', height: CH + 'px', zIndex: 4, pointerEvents: 'none' }, pol);
   const lines = svg(ov, { x: 0, y: 0, w: CW, h: CH });
   const mk = (text, rot) => {
     const t = tag(ov, text, { x: 0, y: 0, size: 40, rot }); t.style.transformOrigin = '50% 50%';
@@ -190,7 +191,8 @@ export function build(ctx) {
     LAB.forEach(({ l, at, off, anchor }) => {
       const on = out3((t - at) / 0.3) * (1 - clamp((t - LAB_OUT) / 0.12));
       const [ax, ay] = project(anchor());
-      const tx = clamp(ax + off[0], 10, CW - 220), ty = clamp(ay + off[1], 10, CH - 80);
+      const tw = l.t.offsetWidth || 220;
+      const tx = clamp(ax + off[0], 64, KEY_X - tw), ty = clamp(ay + off[1], 16, CH - 90);
       l.t.style.left = tx + 'px'; l.t.style.top = ty + 'px';
       l.t.style.opacity = on; l.t.style.transform = `rotate(${l === L.cam ? -4 : 3}deg) scale(${lerp(1.4, 1, on)})`;
       const ex = tx + 50, ey = off[1] < 0 ? ty + 64 : ty;
@@ -210,8 +212,7 @@ export function build(ctx) {
   // photo pushes in slowly after the wipe
   tl.fromTo(pimg, { scale: 1 }, { scale: 1.07, duration: 0.75, ease: E.soft, immediateRender: false }, 8.9);
 
-  // the frame lands from below, breathes, then drops out fast
-  tl.fromTo(pol, { y: 1250, rotation: 4 }, { y: 0, rotation: -1, duration: 0.6, ease: E.land, immediateRender: true }, 7.4);
-  tl.to(pol, { rotation: 0.6, duration: 1.3, ease: E.soft }, 7.92);
-  tl.to(pol, { y: 1350, rotation: -6, duration: 0.42, ease: E.fast }, 9.62);
+  // the band slides in from the right (a pan), then leaves to the left fast — never through text
+  tl.fromTo(pol, { x: 1120 }, { x: 0, duration: 0.6, ease: E.land, immediateRender: true }, 7.35);
+  tl.to(pol, { x: -1160, duration: 0.4, ease: E.fast }, 9.62);
 }

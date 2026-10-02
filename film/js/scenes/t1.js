@@ -11,22 +11,22 @@ export function build(ctx) {
   tipHeadline(ctx, ['TEST AT', '480p.'], { inAt: 2.42 });
 
   // big polaroid
-  const G = { x: 110, y: 752, w: 860, h: 694 };
+  const G = { x: 34, y: 724, w: 1012, h: 822 };
   const pol = el('div', 'polaroid', { padding: '16px' }, layer); place(pol, G);
   const ph = el('div', 'ph', null, pol);
   const sharp = img('final-desert', ph, { opacity: 0 });
-  const cv = el('canvas', '', null, ph); cv.width = 828; cv.height = 662;
+  const cv = el('canvas', '', null, ph); cv.width = 980; cv.height = 790;
   const c2 = cv.getContext('2d');
   const small = document.createElement('canvas'); const sc = small.getContext('2d');
   let lastP = -1;
   const drawPix = p => {
     if (p === lastP || !sharp.complete || !sharp.naturalWidth) return; lastP = p;
     // cover-fit source rect
-    const iw = sharp.naturalWidth, ih = sharp.naturalHeight, r = Math.max(828 / iw, 662 / ih);
-    const sw = 828 / r, sh = 662 / r, sx = (iw - sw) / 2, sy = (ih - sh) / 2;
-    const w = Math.max(1, Math.round(828 / p)), h = Math.max(1, Math.round(662 / p));
+    const iw = sharp.naturalWidth, ih = sharp.naturalHeight, r = Math.max(980 / iw, 790 / ih);
+    const sw = 980 / r, sh = 790 / r, sx = (iw - sw) / 2, sy = (ih - sh) / 2;
+    const w = Math.max(1, Math.round(980 / p)), h = Math.max(1, Math.round(790 / p));
     small.width = w; small.height = h; sc.imageSmoothingEnabled = true; sc.drawImage(sharp, sx, sy, sw, sh, 0, 0, w, h);
-    c2.imageSmoothingEnabled = p === 1; c2.clearRect(0, 0, 828, 662); c2.drawImage(small, 0, 0, w, h, 0, 0, 828, 662);
+    c2.imageSmoothingEnabled = p === 1; c2.clearRect(0, 0, 980, 790); c2.drawImage(small, 0, 0, w, h, 0, 0, 980, 790);
   };
   onFrame(t => drawPix(pixelAt(t)));
   // once resolved, the real <img> takes over (identical element type on both sides of the handoff)
@@ -38,7 +38,7 @@ export function build(ctx) {
   tl.to(scan, { opacity: 0, duration: 0.08 }, 3.8);
 
   // tape label that flips from draft to final
-  const lab = el('div', 'abs', { left: '150px', top: '700px', zIndex: 5 }, layer);
+  const lab = el('div', 'abs', { left: '84px', top: '690px', zIndex: 5 }, layer);
   const tA = tag(lab, '480P DRAFT', { x: 0, y: 0, size: 44, rot: -4 });
   const tB = tag(lab, 'FINAL RENDER', { x: 0, y: 0, size: 44, rot: -4 }); gsap.set(tB, { rotationX: 90, opacity: 0 });
   tl.to(tA, { rotationX: 90, duration: 0.1, ease: 'power2.in' }, 4.0);
@@ -46,7 +46,7 @@ export function build(ctx) {
   tl.fromTo(tB, { rotationX: -90, opacity: 1 }, { rotationX: 0, duration: 0.22, ease: E.pop, immediateRender: false }, 4.1);
 
   // check strip: "CHECK" + framing / motion / position icons, each ticked on the beat
-  const strip = el('div', 'card', { padding: '18px 26px', display: 'flex', alignItems: 'center', gap: '30px', zIndex: 6 }, layer); place(strip, { x: 170, y: 1352 });
+  const strip = el('div', 'card', { padding: '18px 26px', display: 'flex', alignItems: 'center', gap: '30px', zIndex: 6 }, layer); place(strip, { x: 96, y: 1430 });
   hand(strip, 'CHECK', { size: 46 }).style.position = 'relative';
   const icons = [
     'M6 18 V6 H18 M44 6 H56 V18 M56 44 V56 H44 M18 56 H6 V44',                 // framing brackets
@@ -71,7 +71,8 @@ export function build(ctx) {
   tl.fromTo(pol, { scale: 1.07, rotation: -1 }, { scale: 1, rotation: -1.5, duration: 0.6, ease: E.land2 }, 2.45);
   tl.fromTo(strip, { y: 140, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: E.land }, 2.95);
   tl.fromTo(lab, { y: -60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: E.land }, 2.75);
-  tl.to(pol, { scale: 1.025, duration: 0.9, ease: E.soft }, 3.1);
+  tl.to(pol, { scale: 1.03, duration: 0.9, ease: E.soft }, 3.1);
+  tl.to(pol, { scale: 1.07, rotation: -0.5, duration: 0.5, ease: 'power2.out' }, 4.0);
 
   // exit: strip + tag go, polaroid shrinks into the handoff slot for tip 2's wall
   tl.to([strip, lab], { y: 120, opacity: 0, duration: 0.22, ease: E.leave }, 4.48);

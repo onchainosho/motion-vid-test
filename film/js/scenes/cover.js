@@ -34,26 +34,26 @@ export function build({ tl, layer, s, e, box, boxText }) {
   // visual group: film frames + coins
   const g = el('div', 'abs', { left: 0, top: 0, width: '1080px', height: '1920px', transformOrigin: '540px 1250px' }, layer);
   const frames = [
-    filmFrame(g, { x: 64, y: 1000, w: 440, h: 320, rot: -11, grey: true, z: 1 }),
-    filmFrame(g, { x: 130, y: 1040, w: 440, h: 320, rot: -7, grey: true, z: 2 }),
-    filmFrame(g, { x: 196, y: 1080, w: 440, h: 320, rot: -3, grey: true, z: 3 }),
+    filmFrame(g, { x: 70, y: 980, w: 470, h: 340, rot: -11, grey: true, z: 1 }),
+    filmFrame(g, { x: 130, y: 1020, w: 470, h: 340, rot: -7, grey: true, z: 2 }),
+    filmFrame(g, { x: 190, y: 1060, w: 470, h: 340, rot: -3, grey: true, z: 3 }),
   ];
   frames.forEach(({ mark }) => { const x = svg(mark, { x: 12, y: 12, w: 38, h: 38, vb: '0 0 38 38' }); path(x, 'M6 6 L32 32 M32 6 L6 32', { stroke: '#F7F0E6', width: 7 }); });
-  const good = filmFrame(g, { x: 290, y: 1110, w: 500, h: 360, rot: 2.5, grey: false, z: 4 });
+  const good = filmFrame(g, { x: 250, y: 1080, w: 580, h: 420, rot: 2.5, grey: false, z: 4 });
   const okTick = tick(good.mark, { x: 6, y: 8, s: 0.56, width: 13 });
   const coins = [];
-  for (let i = 0; i < 5; i++) coins.push(coin(g, { x: 800, y: 1400 - i * 30, z: 10 + i }));
-  const drop1 = coin(g, { x: 800, y: 1400 - 5 * 30, z: 15 });
-  const drop2 = coin(g, { x: 800, y: 1400 - 6 * 30, z: 16 });
-  coin(g, { x: 720, y: 1450, rot: -8, z: 20 });
+  for (let i = 0; i < 5; i++) coins.push(coin(g, { x: 740, y: 1420 - i * 30, z: 10 + i }));
+  const drop1 = coin(g, { x: 740, y: 1420 - 5 * 30, z: 15 });
+  const drop2 = coin(g, { x: 740, y: 1420 - 6 * 30, z: 16 });
+  coin(g, { x: 660, y: 1470, rot: -8, z: 20 });
 
   // --- alive from frame 0 ---
-  tl.fromTo(g, { scale: 1 }, { scale: 1.035, duration: 2.0, ease: E.soft }, 0);
+  tl.fromTo(g, { scale: 1 }, { scale: 1.06, duration: 1.95, ease: 'sine.inOut' }, 0);
   tl.fromTo(lines[0], { x: 0 }, { x: -14, duration: 1.95, ease: 'sine.out' }, 0);
   tl.fromTo(lines[1], { x: 0 }, { x: 14, duration: 1.95, ease: 'sine.out' }, 0);
   const fanTo = [[-17, -40, -10], [-10, -18, 0], [-4, 0, 6]];
-  frames.forEach(({ f }, i) => tl.to(f, { rotation: fanTo[i][0], x: fanTo[i][1], y: fanTo[i][2], duration: 1.5, ease: E.land2 }, 0.05 + i * 0.05));
-  tl.fromTo(good.f, { y: 0, rotation: 2.5 }, { y: -18, rotation: 1.2, duration: 1.4, ease: E.land2 }, 0.1);
+  frames.forEach(({ f }, i) => tl.to(f, { rotation: fanTo[i][0], x: fanTo[i][1], y: fanTo[i][2], duration: 1.9, ease: 'sine.out' }, 0.05 + i * 0.05));
+  tl.fromTo(good.f, { y: 0, rotation: 2.5 }, { y: -30, rotation: 0.5, duration: 1.85, ease: 'sine.inOut' }, 0.1);
   // the tick stamps on the beat
   tl.fromTo(okTick, { strokeDashoffset: 120 }, { strokeDashoffset: 0, duration: 0.22, ease: 'power2.out', immediateRender: true }, 0.5);
   okTick.style.strokeDasharray = '120 122';

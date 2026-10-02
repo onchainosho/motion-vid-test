@@ -1,8 +1,10 @@
 // Tip 7 (17.5–20.0): NEW SETUP? GENERATE ONE FIRST. — an overhead contact sheet: one test frame is checked,
 // then the other five slots fill with the same shot. TEST 01 then grows into tip 8's phone screen.
-import { E, el, place, tag, svg, path, tick, tipHeadline, HANDOFF } from '../core.js';
+import { E, el, place, tag, svg, path, tick, tipHeadline } from '../core.js';
 
 export const meta = { box: { lines: ['GENERATE', 'ONE FIRST.'] } };
+// TEST 01 → tip 8 phone screen at exactly 20.0 s (v2 layout: box bottoms 758/676, key content x ≤ 940). Shared with t8.js.
+export const HO = { x: 518, y: 778, w: 384, h: 744, rot: 0 };
 
 // ---- test01.jpg has the slide's orange circle baked in (and a slide border). Clean it once, in code:
 // mask the orange ring, fill it by diffusion from its edges, crop the border. Shared with tip 8.
@@ -72,17 +74,17 @@ export async function build(ctx) {
   tipHeadline(ctx, ['NEW', 'SETUP?']);
 
   // ---- the contact sheet
-  const P = { x: 86, y: 730, w: 908, h: 770 }; // ×1.03 push stays inside x 64–1000
-  const panel = el('div', '', { position: 'absolute', background: '#171615', borderRadius: '10px', boxShadow: '0 22px 44px -16px rgba(40,25,10,.55),0 4px 12px rgba(40,25,10,.18)', transformOrigin: '454px 385px' }, layer);
+  const P = { x: 64, y: 790, w: 856, h: 740 }; // ×1.03 push keeps the frames inside x ≤ 940
+  const panel = el('div', '', { position: 'absolute', background: '#171615', borderRadius: '10px', boxShadow: '0 22px 44px -16px rgba(40,25,10,.55),0 4px 12px rgba(40,25,10,.18)', transformOrigin: `${P.w / 2}px ${P.h / 2}px` }, layer);
   place(panel, P);
   // sprocket holes along the top and bottom edges
-  for (let i = 0; i < 22; i++) {
-    [16, P.h - 32].forEach(y => el('div', '', { position: 'absolute', left: (22 + i * 40.1) + 'px', top: y + 'px', width: '22px', height: '16px', borderRadius: '4px', background: 'rgba(239,232,219,.82)' }, panel));
+  for (let i = 0; i < 21; i++) {
+    [16, P.h - 32].forEach(y => el('div', '', { position: 'absolute', left: (22 + i * (P.w - 66) / 20) + 'px', top: y + 'px', width: '22px', height: '16px', borderRadius: '4px', background: 'rgba(239,232,219,.82)' }, panel));
   }
   // 3×2 slots (panel-relative)
   const slots = [];
-  for (let r = 0; r < 2; r++) for (let c = 0; c < 3; c++) slots.push({ x: 28 + c * 290, y: 60 + r * 330, w: 272, h: 300 });
-  const TEST = 1; // middle top slot → x404 y790 w272 h300, centred on x540
+  for (let r = 0; r < 2; r++) for (let c = 0; c < 3; c++) slots.push({ x: 24 + c * 276, y: 60 + r * 320, w: 256, h: 300 });
+  const TEST = 1; // middle top slot → x364 y850 w256 h300
   const outlines = slots.map(S => {
     const o = el('div', '', { position: 'absolute', border: '3px dashed rgba(239,232,219,.5)', borderRadius: '6px', boxSizing: 'border-box' }, panel);
     place(o, S); return o;
@@ -98,18 +100,18 @@ export async function build(ctx) {
   }
 
   // ---- TEST 01 photo: lives in the layer (not the panel) so it can become tip 8's screen at exact pixels
-  const S0 = { x: P.x + slots[TEST].x, y: P.y + slots[TEST].y, w: 272, h: 300 };
-  const photo = el('div', '', { position: 'absolute', overflow: 'hidden', borderRadius: '6px', background: '#222', zIndex: 4, boxShadow: '0 16px 30px -12px rgba(0,0,0,.6)', transformOrigin: `${540 - S0.x}px ${1115 - S0.y}px` }, layer);
+  const S0 = { x: P.x + slots[TEST].x, y: P.y + slots[TEST].y, w: slots[TEST].w, h: slots[TEST].h };
+  const photo = el('div', '', { position: 'absolute', overflow: 'hidden', borderRadius: '6px', background: '#222', zIndex: 4, boxShadow: '0 16px 30px -12px rgba(0,0,0,.6)', transformOrigin: `${P.x + P.w / 2 - S0.x}px ${P.y + P.h / 2 - S0.y}px` }, layer);
   place(photo, S0);
   const pimg = await test01Img(photo, { objectPosition: '70% 50%' });
   // the check circle (hand-drawn loop around the spot behind the car) + a stamp with a tick
-  const cs = svg(photo, { x: 0, y: 0, w: 272, h: 300 });
+  const cs = svg(photo, { x: -11, y: 0, w: 272, h: 300 });
   const circ = path(cs, 'M250 140 C240 112 214 106 190 110 C152 116 134 144 138 172 C143 206 175 222 205 218 C238 214 256 192 254 162 C252 138 232 120 204 116', { width: 9 });
   const stamp = el('div', '', { position: 'absolute', left: '16px', bottom: '16px', width: '74px', height: '74px', background: '#111', borderRadius: '10px', opacity: 0 }, photo);
   const st = tick(stamp, { x: 9, y: 11, s: 0.62, width: 13 }); st.style.strokeDasharray = '120 122'; st.style.strokeDashoffset = 120;
 
-  const tTest = tag(layer, 'TEST 01', { x: 420, y: 760, size: 38, rot: -4 }); tTest.style.zIndex = 6;
-  const tCont = tag(layer, 'THEN CONTINUE', { x: 592, y: 1446, size: 40, rot: 3 }); tCont.style.zIndex = 6;
+  const tTest = tag(layer, 'TEST 01', { x: 380, y: 820, size: 38, rot: -4 }); tTest.style.zIndex = 6;
+  const tCont = tag(layer, 'THEN CONTINUE', { x: 556, y: 1478, size: 40, rot: 3 }); tCont.style.zIndex = 6;
 
   // ---- entrance: the sheet slides up under the camera and settles
   tl.fromTo(panel, { y: 1250, rotation: -5 }, { y: 0, rotation: 0, duration: 0.55, ease: E.land }, 17.42);
@@ -135,7 +137,7 @@ export async function build(ctx) {
   tl.to([panel, photo], { scale: 1.03, duration: 1.5, ease: E.soft }, 18.0);
 
   // ---- exit: the sheet falls away; TEST 01 lifts and grows into the phone-screen slot
-  const H = HANDOFF.t7t8;
+  const H = HO;
   tl.to([tTest, tCont], { y: -24, scale: 0.85, opacity: 0, duration: 0.1, ease: 'power1.out' }, 19.5);
   tl.to([circ, stamp], { opacity: 0, scale: 0.85, transformOrigin: '50% 50%', duration: 0.1, ease: 'power1.out' }, 19.5);
   tl.to(panel, { y: 1250, rotation: 4, duration: 0.4, ease: E.fast }, 19.48);

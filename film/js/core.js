@@ -123,7 +123,7 @@ export function tipHeadline(ctx, lines, { inAt, outAt } = {}) {
 // Pixel-exact handoffs between scenes (outer geometry of the carried element).
 export const HANDOFF = {
   // tip 1's desert polaroid → tip 2's first wall photo (at 5.0 s)
-  t1t2: { x: 96, y: 760, w: 470, h: 360, rot: -5 },
+  t1t2: { x: 96, y: 800, w: 470, h: 360, rot: -5 },
   // tip 7's TEST 01 frame → tip 8's phone screen (at 20.0 s)
   t7t8: { x: 352, y: 742, w: 376, h: 668, rot: 0 },
 };

@@ -12,7 +12,7 @@ from pathlib import Path
 P = Path(__file__).resolve().parents[1]; SR = 48000; DUR = 30.0; N = int(DUR * SR)
 args = sys.argv[1:]; pic, out = args[0], args[1]
 opt = lambda k, d: args[args.index(k) + 1] if k in args else d
-target_lufs = float(opt('--music-lufs', '-15.5')); HF_CAP = float(opt('--hf-cap', '4')); PKCAP = float(opt('--pkcap', '0'))
+target_lufs = float(opt('--music-lufs', '-14.3')); HF_CAP = float(opt('--hf-cap', '4')); PKCAP = float(opt('--pkcap', '0'))
 no_sfx = '--no-sfx' in args
 def load(p): return np.frombuffer(subprocess.run(['ffmpeg', '-v', 'error', '-i', str(p), '-ac', '2', '-ar', str(SR), '-f', 'f32le', '-'], capture_output=True).stdout, np.float32).reshape(-1, 2).copy()
 def write(p, x): subprocess.run(['ffmpeg', '-v', 'error', '-y', '-f', 'f32le', '-ar', str(SR), '-ac', '2', '-i', '-', str(p)], input=np.clip(x, -1, 1).astype(np.float32).tobytes(), check=True)
@@ -31,7 +31,7 @@ mg = 10 ** ((target_lufs - lufs(mus)[0]) / 20); mus *= mg; mono_m = mus.mean(1)
 fx = np.zeros_like(mus); rep = []
 plan = [] if no_sfx else json.loads((P / 'assets/audio/plan.json').read_text())
 HB = butter(4, [2000, 8000], btype='band', fs=SR, output='sos')
-FIXED = {'whoosh-short': -15.0, 'pop': -12.0, 'click-soft': -16.0, 'ping': -15.0}
+FIXED = {'whoosh-short': -11.0, 'pop': -9.0, 'click-soft': -13.0, 'ping': -12.0}
 for ev in plan:
     name, t, target, note = ev[:4]; pkc = ev[4] if len(ev) > 4 else PKCAP
     s = load(P / 'assets/audio' / f'{name}.mp3'); m1 = s.mean(1)
@@ -58,7 +58,9 @@ for ev in plan:
 mix = mus + fx
 # true-peak safety: limiter to -1.5 dBFS sample peak
 lim = 10 ** (-1.5 / 20); pkv = np.abs(mix).max()
-if pkv > lim: mix *= lim / pkv
+if pkv > lim:  # soft-knee peak limiter on the sum (only touches the few peaks above the ceiling)
+    a = np.abs(mix); over = a > lim * 0.8; k = lim * 0.8
+    mix[over] = np.sign(mix[over]) * (k + (lim - k) * np.tanh((a[over] - k) / (lim - k)))
 wav = P / f'renders/_mix-{Path(out).stem}.wav'; write(wav, mix)
 subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', pic, '-i', str(wav), '-map', '0:v:0', '-map', '1:a:0', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '256k', '-shortest', '-movflags', '+faststart', out], check=True)
 Lm, _, _ = lufs(mus); Lx, tp, lra = lufs(mix)

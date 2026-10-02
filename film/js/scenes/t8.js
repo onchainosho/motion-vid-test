@@ -1,8 +1,8 @@
 // Tip 8 (20.0–22.5): HARD MOTION? USE YOUR PHONE. RECORD IT FIRST. — laid out like slide 09:
 // tip 7's TEST 01 frame becomes the phone screen; the phone records a rough take (3-frame strip on the left),
 // the strip arrows into SEEDANCE 2.5, which arrows into the phone and resolves the styled shot.
-import { E, el, place, img, tag, hand, svg, path, arrow, tape, tipHeadline, HANDOFF } from '../core.js';
-import { test01Img } from './t7.js';
+import { E, el, place, img, tag, hand, svg, path, arrow, tape, tipHeadline } from '../core.js';
+import { test01Img, HO } from './t7.js';
 
 export const meta = { box: { lines: ['RECORD IT FIRST.'] } };
 
@@ -10,14 +10,13 @@ export async function build(ctx) {
   const { tl, layer } = ctx;
   tipHeadline(ctx, ['HARD MOTION?', 'USE YOUR PHONE.']);
 
-  const H = HANDOFF.t7t8;
-  // final phone: body x520–980, y700–1520; screen inset 18
-  const BODY = { left: 520, top: 700, width: 460, height: 820, borderRadius: 60 };
+  const H = HO; // tip 7's TEST 01 rect at 20.0 = the phone screen (it stays put; the body grows around it)
   const B = 18;
-  const SCR = { left: BODY.left + B, top: BODY.top + B, width: BODY.width - 2 * B, height: BODY.height - 2 * B, borderRadius: 44 };
+  const BODY = { left: H.x - B, top: H.y - B, width: H.w + 2 * B, height: H.h + 2 * B, borderRadius: 58 }; // x500–920, y760–1540
+  const SCR = { left: H.x, top: H.y, width: H.w, height: H.h, borderRadius: 42 };
 
   // everything lives in one group: pushes and drops together
-  const g = el('div', 'abs', { left: 0, top: 0, width: '1080px', height: '1920px', transformOrigin: '540px 1110px' }, layer);
+  const g = el('div', 'abs', { left: 0, top: 0, width: '1080px', height: '1920px', transformOrigin: '710px 1150px' }, layer);
 
   // ---------------- phone
   const ph = el('div', 'abs', { left: 0, top: 0, width: '1080px', height: '1920px' }, g);
@@ -41,13 +40,13 @@ export async function build(ctx) {
   const island = el('div', '', { position: 'absolute', left: '50%', top: '16px', width: '120px', height: '34px', marginLeft: '-60px', borderRadius: '17px', background: '#050505', opacity: 0 }, screen);
 
   // the screen leaves the handoff rect and grows into the big phone; the body grows around it
-  tl.fromTo(screen, R0, { ...SCR, duration: 0.45, ease: E.move, immediateRender: false }, 20.0);
-  tl.fromTo(body, R0, { ...BODY, duration: 0.45, ease: E.move, immediateRender: false }, 20.0);
+  tl.fromTo(screen, R0, { ...SCR, duration: 0.3, ease: E.land, immediateRender: false }, 20.0);
+  tl.fromTo(body, R0, { ...BODY, duration: 0.3, ease: E.land, immediateRender: false }, 20.0);
   tl.to(island, { opacity: 1, duration: 0.15 }, 20.1);
   gsap.set([btnL, btnR], { opacity: 0 }); tl.to([btnL, btnR], { opacity: 1, duration: 0.2 }, 20.2);
 
   // ---------------- rough-take strip (left), slide-09 style
-  const C = { x: 64, y: 668, w: 356, h: 400 };
+  const C = { x: 64, y: 712, w: 356, h: 400 };
   const card = el('div', 'card', { background: '#F1EADD' }, g); place(card, C);
   tape(card, { x: C.w / 2 - 70, y: -20, w: 140, rot: -3 });
   const lRough = hand(card, 'ROUGH TAKE', { x: 18, y: 22, size: 40, rot: -3, ul: true });
@@ -63,7 +62,7 @@ export async function build(ctx) {
   const pfill = el('div', '', { position: 'absolute', inset: 0, borderRadius: '3px', background: '#111', transformOrigin: '0 50%' }, pbar);
 
   // ---------------- SEEDANCE 2.5 tag + arrows
-  const T = { x: 120, y: 1170, w: 230, h: 150 };
+  const T = { x: 112, y: 1214, w: 230, h: 150 };
   const sd = el('div', 'tag', { width: T.w + 'px', height: T.h + 'px', boxSizing: 'border-box', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0 }, g); place(sd, T);
   el('div', 'disp', { fontSize: '50px', textAlign: 'center', lineHeight: '.9' }, sd, 'SEEDANCE<br>2.5');
   tape(sd, { x: T.w / 2 - 55, y: -18, w: 110, rot: 2 });
@@ -72,12 +71,13 @@ export async function build(ctx) {
   const bl = [[20, 22, 36, 38], [T.w + 60, 22, T.w + 44, 38], [20, T.h + 58, 36, T.h + 42], [T.w + 60, T.h + 58, T.w + 44, T.h + 42]]
     .map(([a, b, c, d]) => path(bursts, `M${a} ${b} L${c} ${d}`, { stroke: '#111', width: 5 }));
   const as = svg(g, { x: 0, y: 0, w: 1080, h: 1920 });
-  const a1 = arrow(as, 240, 1088, 236, 1150, { bow: 0.25, width: 7, headLen: 20 });
-  const a2 = arrow(as, 368, 1245, 512, 1222, { bow: -0.18, width: 7, headLen: 22 });
+  const a1 = arrow(as, 232, 1132, 228, 1194, { bow: 0.25, width: 7, headLen: 20 });
+  const a2 = arrow(as, 360, 1289, 492, 1262, { bow: -0.18, width: 7, headLen: 22 });
 
   // STYLED SHOT label above the phone
-  const lSty = hand(g, 'STYLED SHOT', { x: 640, y: 636, size: 42, rot: -3, ul: true });
-  lSty.style.position = 'absolute';
+  // STYLED SHOT: a taped tag over the phone's bottom edge (the box sits right above the phone)
+  const lSty = tag(g, 'STYLED SHOT', { x: 584, y: 1460, size: 40, rot: 3 }); lSty.style.zIndex = 6;
+  tape(lSty, { x: 90, y: -22, w: 110, rot: -4 });
 
   // ---------------- timeline
   // 20.1: the phone starts recording the rough take right away
@@ -114,8 +114,8 @@ export async function build(ctx) {
   tl.fromTo(sty, { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.28, ease: E.move, immediateRender: false }, 21.5);
   tl.fromTo(sty, { scale: 1.14 }, { scale: 1, duration: 0.8, ease: E.land, immediateRender: false }, 21.5);
   tl.fromTo(sweep, { x: 0 }, { x: SCR.width + 480, duration: 0.5, ease: 'none', immediateRender: false }, 21.5);
-  tl.fromTo(lSty, { opacity: 0, y: 30, '--ul': '0%' }, { opacity: 1, y: 0, '--ul': '100%', duration: 0.35, ease: E.land, immediateRender: true }, 21.5);
-  tl.fromTo(ph, { rotation: 0 }, { rotation: -1.2, duration: 0.5, ease: E.land2, transformOrigin: '750px 1110px', immediateRender: false }, 21.5);
+  tl.fromTo(lSty, { opacity: 0, y: 40, scale: 1.3 }, { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: E.pop, immediateRender: true }, 21.5);
+  tl.fromTo(ph, { rotation: 0 }, { rotation: -1.2, duration: 0.5, ease: E.land2, transformOrigin: '710px 1150px', immediateRender: false }, 21.5);
   // 3% push to the drop; then everything drops away fast
   tl.fromTo(g, { scale: 1 }, { scale: 1.03, duration: 0.65, ease: 'sine.inOut', immediateRender: false }, 21.65);
   tl.to(g, { y: 1500, rotation: 6, duration: 0.4, ease: E.fast }, 22.12);

@@ -72,16 +72,16 @@ export async function build(ctx) {
   tipHeadline(ctx, ['NEW', 'SETUP?']);
 
   // ---- the contact sheet
-  const P = { x: 64, y: 730, w: 952, h: 770 };
-  const panel = el('div', '', { position: 'absolute', background: '#171615', borderRadius: '10px', boxShadow: '0 22px 44px -16px rgba(40,25,10,.55),0 4px 12px rgba(40,25,10,.18)', transformOrigin: '476px 385px' }, layer);
+  const P = { x: 86, y: 730, w: 908, h: 770 }; // ×1.03 push stays inside x 64–1000
+  const panel = el('div', '', { position: 'absolute', background: '#171615', borderRadius: '10px', boxShadow: '0 22px 44px -16px rgba(40,25,10,.55),0 4px 12px rgba(40,25,10,.18)', transformOrigin: '454px 385px' }, layer);
   place(panel, P);
   // sprocket holes along the top and bottom edges
-  for (let i = 0; i < 23; i++) {
-    [16, P.h - 32].forEach(y => el('div', '', { position: 'absolute', left: (22 + i * 40.4) + 'px', top: y + 'px', width: '22px', height: '16px', borderRadius: '4px', background: 'rgba(239,232,219,.82)' }, panel));
+  for (let i = 0; i < 22; i++) {
+    [16, P.h - 32].forEach(y => el('div', '', { position: 'absolute', left: (22 + i * 40.1) + 'px', top: y + 'px', width: '22px', height: '16px', borderRadius: '4px', background: 'rgba(239,232,219,.82)' }, panel));
   }
   // 3×2 slots (panel-relative)
   const slots = [];
-  for (let r = 0; r < 2; r++) for (let c = 0; c < 3; c++) slots.push({ x: 40 + c * 300, y: 60 + r * 330, w: 272, h: 300 });
+  for (let r = 0; r < 2; r++) for (let c = 0; c < 3; c++) slots.push({ x: 28 + c * 290, y: 60 + r * 330, w: 272, h: 300 });
   const TEST = 1; // middle top slot → x404 y790 w272 h300, centred on x540
   const outlines = slots.map(S => {
     const o = el('div', '', { position: 'absolute', border: '3px dashed rgba(239,232,219,.5)', borderRadius: '6px', boxSizing: 'border-box' }, panel);
@@ -136,8 +136,8 @@ export async function build(ctx) {
 
   // ---- exit: the sheet falls away; TEST 01 lifts and grows into the phone-screen slot
   const H = HANDOFF.t7t8;
-  tl.to([tTest, tCont], { y: -40, opacity: 0, duration: 0.18, ease: E.leave }, 19.42);
-  tl.to([circ, stamp], { opacity: 0, duration: 0.14, ease: E.leave }, 19.5);
+  tl.to([tTest, tCont], { y: -24, scale: 0.85, opacity: 0, duration: 0.1, ease: 'power1.out' }, 19.5);
+  tl.to([circ, stamp], { opacity: 0, scale: 0.85, transformOrigin: '50% 50%', duration: 0.1, ease: 'power1.out' }, 19.5);
   tl.to(panel, { y: 1250, rotation: 4, duration: 0.4, ease: E.fast }, 19.48);
   tl.to(photo, { left: H.x, top: H.y, width: H.w, height: H.h, rotation: H.rot, scale: 1, borderRadius: 34, boxShadow: '0 16px 30px -12px rgba(0,0,0,0)', duration: 0.5, ease: E.move }, 19.5);
   tl.to(pimg, { objectPosition: '25% 50%', duration: 0.5, ease: E.move }, 19.5);

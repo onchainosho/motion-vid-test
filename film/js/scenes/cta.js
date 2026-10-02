@@ -1,5 +1,5 @@
 // CTA (26.5–30.0): LIKE THIS EXPLAINER? FOLLOW POSSIBLE LABS. — the logo's sun rises, an arrow points to the
-// profile/follow area; the card holds from ~27.3 with a slow 2% push. Nothing exits.
+// profile/follow area; the card holds from ~27.3 with a slow 0.98→1.00 push. Nothing exits.
 import { E, el, place, headline, linesIn, measure, sans, svg, path } from '../core.js';
 
 const BOX = { x: 64, y: 534, w: 952, h: 300 };
@@ -13,25 +13,38 @@ export function build({ tl, layer, s, box }) {
   const L = ['LIKE THIS', 'EXPLAINER?'];
   const size = Math.min(176, Math.floor(176 * 944 / Math.max(...L.map(l => measure(l, 176)))));
   const lines = headline(g, L, { x: 64, y: 214, size });
-  linesIn(tl, lines, s - 0.08, { dur: 0.6, stagger: 0.1 });
+  linesIn(tl, lines, s - 0.06, { dur: 0.6, stagger: 0.1 });
 
   // sub line
   const sub = sans(g, 'AI + TECH.<br>MADE EASIER TO UNDERSTAND.', { x: 66, y: 870, size: 60 });
   tl.fromTo(sub, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: E.land, immediateRender: true }, 26.9);
 
-  // ---- logo mark (redrawn): thin ink L, orange half-sun on the right of the vertical stroke, short rays
-  const LG = { x: 740, y: 1030, w: 200, h: 400 }; // logo-ref coords (150×150), cropped to the mark, ×4
-  const ls = svg(g, { x: LG.x, y: LG.y, w: LG.w, h: LG.h, vb: '50 22 50 100' });
-  const ell = path(ls, 'M63 28 L63 118 L92 118', { stroke: '#111', width: 2.6 });
-  ell.style.strokeLinecap = 'square'; ell.style.strokeLinejoin = 'miter';
-  const sunG = document.createElementNS('http://www.w3.org/2000/svg', 'g'); ls.appendChild(sunG);
-  const sun = path(sunG, 'M63 34 A17 17 0 0 1 63 68 Z', { stroke: 'none', width: 0 });
-  sun.style.fill = 'var(--orange)';
-  const rays = [-62, -31, 0, 31, 62].map(a => {
-    const r = a * Math.PI / 180, cx = 63, cy = 51;
-    return path(ls, `M${cx + Math.cos(r) * 23} ${cy + Math.sin(r) * 23} L${cx + Math.cos(r) * 31} ${cy + Math.sin(r) * 31}`, { stroke: 'var(--orange)', width: 2.6 });
+  // ---- logo lockup (redrawn from assets/logo-ref.png, ref px): thin ink L (x63, y33→112, foot to x86),
+  // half-sun with flat edge at x67.5, r22, top level with the L top; 5 thin short rays with a gap from the disc.
+  const NS = 'http://www.w3.org/2000/svg';
+  const LK = { x: 680, w: 300 };
+  const MK = { vx: 58, vy: 30, vw: 48, vh: 86, s: 4.1 };
+  const mw = MK.vw * MK.s, mh = MK.vh * MK.s;
+  const ls = svg(g, { x: LK.x + (LK.w - mw) / 2, y: 1050, w: mw, h: mh, vb: `${MK.vx} ${MK.vy} ${MK.vw} ${MK.vh}` });
+  const defs = document.createElementNS(NS, 'defs'); ls.appendChild(defs);
+  defs.innerHTML = '<linearGradient id="ctaSun" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EC6327"/><stop offset="1" stop-color="#F4A57A"/></linearGradient>';
+  const SC = { x: 67.5, y: 55, r: 22 };
+  const sunG = document.createElementNS(NS, 'g'); ls.appendChild(sunG);
+  const sun = path(sunG, `M${SC.x} ${SC.y - SC.r} A${SC.r} ${SC.r} 0 0 1 ${SC.x} ${SC.y + SC.r} Z`, { stroke: 'none', width: 0 });
+  sun.style.fill = 'url(#ctaSun)';
+  const ell = path(ls, 'M63 33 L63 112 L86 112', { stroke: '#111', width: 2.4 });
+  ell.style.strokeLinecap = 'butt'; ell.style.strokeLinejoin = 'miter';
+  const rays = [-72, -40, -8, 24, 56].map(a => {
+    const r = a * Math.PI / 180;
+    return path(ls, `M${SC.x + Math.cos(r) * 28} ${SC.y + Math.sin(r) * 28} L${SC.x + Math.cos(r) * 33.5} ${SC.y + Math.sin(r) * 33.5}`, { stroke: 'var(--orange)', width: 1.6 });
   });
-  ls.insertBefore(sunG, ls.firstChild); // the L stroke stays on top of the sun
+  rays.forEach(p => { p.style.strokeLinecap = 'butt'; });
+  // ink wordmark, fitted to the lockup width
+  const wm = el('div', 'label abs', { fontSize: '40px', letterSpacing: '.2em', color: 'var(--ink)' }, g, 'POSSIBLE LABS');
+  const ww = wm.getBoundingClientRect().width; // includes trailing tracking
+  const wfs = 40 * LK.w / (ww - 0.2 * 40); // visible width (without trailing tracking) = LK.w
+  wm.style.fontSize = wfs.toFixed(2) + 'px';
+  place(wm, { x: LK.x, y: 1050 + mh + 26 });
 
   // ---- wordless hand-drawn arrow toward the profile / follow button (bottom-left)
   const as = svg(g, { x: 0, y: 0, w: 1080, h: 1920 });
@@ -44,8 +57,7 @@ export function build({ tl, layer, s, box }) {
   const eL = ell.getTotalLength(); ell.style.strokeDasharray = eL + ' ' + (eL + 2);
   tl.fromTo(ell, { strokeDashoffset: eL }, { strokeDashoffset: 0, duration: 0.4, ease: 'power2.inOut', immediateRender: true }, 26.85);
   // the sun rises: scales out of its spot on the L and lifts a little
-  sunG.style.transformBox = 'view-box'; sunG.style.transformOrigin = '63px 51px';
-  tl.fromTo(sunG, { scale: 0, y: 30 }, { scale: 1, y: 0, duration: 0.55, ease: E.land, immediateRender: true }, 27.0);
+  tl.fromTo(sunG, { scale: 0, y: 14, svgOrigin: `${SC.x} ${SC.y}` }, { scale: 1, y: 0, duration: 0.55, ease: E.land, immediateRender: true }, 27.0);
   rays.forEach((rp, i) => {
     const l = rp.getTotalLength(); rp.style.strokeDasharray = l + ' ' + (l + 1);
     tl.fromTo(rp, { strokeDashoffset: l, opacity: 0 }, { strokeDashoffset: 0, opacity: 1, duration: 0.18, ease: 'power2.out', immediateRender: true }, 27.25 + i * 0.05);
@@ -59,7 +71,9 @@ export function build({ tl, layer, s, box }) {
   rays.forEach((rp, i) => tl.to(rp, { opacity: 0.55, duration: 0.5, ease: E.soft, yoyo: true, repeat: 1 }, 28.0 + (i % 2) * 0.25));
   rays.forEach((rp, i) => tl.to(rp, { opacity: 0.55, duration: 0.5, ease: E.soft, yoyo: true, repeat: 1 }, 29.0 + (i % 2) * 0.25));
   tl.fromTo(as, { x: 0, y: 0 }, { x: -8, y: 8, duration: 0.5, ease: E.soft, yoyo: true, repeat: 3, immediateRender: false }, 28.0);
-  tl.fromTo(g, { scale: 1 }, { scale: 1.02, duration: 3.2, ease: 'sine.inOut' }, 26.8);
+  tl.fromTo(g, { scale: 0.98 }, { scale: 1, duration: 3.25, ease: 'sine.inOut', immediateRender: true }, 26.75);
+  tl.fromTo(wm, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: E.land, immediateRender: true }, 27.25);
   // the box shares the same pivot so the whole card pushes as one
-  tl.fromTo(box, { scale: 1 }, { scale: 1.02, duration: 3.2, ease: 'sine.inOut', transformOrigin: `${PIV.x - BOX.x}px ${PIV.y - BOX.y}px`, immediateRender: false }, 26.8);
+  tl.fromTo(box, { scale: 1 }, { scale: 0.98, duration: 0.45, ease: E.move, transformOrigin: `${PIV.x - BOX.x}px ${PIV.y - BOX.y}px`, immediateRender: false }, 26.3);
+  tl.fromTo(box, { scale: 0.98 }, { scale: 1, duration: 3.25, ease: 'sine.inOut', transformOrigin: `${PIV.x - BOX.x}px ${PIV.y - BOX.y}px`, immediateRender: false }, 26.75);
 }

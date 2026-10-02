@@ -11,14 +11,14 @@ export function build({ tl, layer, s, e }) {
   const L = ['BEFORE YOU SPEND', 'THE CREDITS...'];
   const size = Math.min(132, Math.floor(132 * 936 / Math.max(...L.map(l => measure(l, 132)))));
   const lines = headline(layer, L, { x: 64, y: 220 + (132 - size) * 0.86, size });
-  linesIn(tl, lines, s - 0.08);
+  linesIn(tl, lines, s - 0.06);
   linesOut(tl, lines, 26.15);
 
   // group that pushes slowly and slides down on exit
   const g = el('div', 'abs', { left: 0, top: 0, width: '1080px', height: '1920px', transformOrigin: '540px 1000px' }, layer);
 
   // ---- the torn note
-  const N = { x: 112, y: 644, w: 856, h: 704 };
+  const N = { x: 96, y: 644, w: 888, h: 704 };
   const r = rng(1010);
   const note = el('div', '', { position: 'absolute', filter: 'drop-shadow(0 16px 18px rgba(40,25,10,.28)) drop-shadow(0 3px 4px rgba(40,25,10,.12))' }, g); place(note, N);
   // torn right + bottom edges (polygon), straight top/left
@@ -40,9 +40,9 @@ export function build({ tl, layer, s, e }) {
   ROWS.forEach((label, i) => {
     const y = top + i * pitch;
     const row = el('div', '', { position: 'absolute', left: 0, top: y + 'px', width: N.w + 'px', height: pitch + 'px' }, note);
-    const num = el('div', 'disp abs', { left: '84px', top: '12px', fontSize: '60px', color: 'var(--orange)' }, row, String(i + 1).padStart(2, '0'));
+    const num = el('div', 'disp abs', { left: '72px', top: '12px', fontSize: '60px', color: 'var(--orange)' }, row, String(i + 1).padStart(2, '0'));
     // ink checkbox (slightly wobbly)
-    const bx = el('div', 'abs', { left: '196px', top: '15px', width: '48px', height: '48px' }, row);
+    const bx = el('div', 'abs', { left: '170px', top: '15px', width: '48px', height: '48px' }, row);
     const bs = svg(bx, { x: 0, y: 0, w: 48, h: 48, vb: '0 0 48 48' });
     const j = () => (r() - 0.5) * 3;
     path(bs, `M${4 + j()} ${5 + j()} L${44 + j()} ${4 + j()} L${44 + j()} ${44 + j()} L${4 + j()} ${44 + j()} Z`, { stroke: '#111', width: 4 });
@@ -50,14 +50,14 @@ export function build({ tl, layer, s, e }) {
     const ts = svg(bx, { x: -6, y: -22, w: 78, h: 70, vb: '0 0 90 80' });
     const tk = path(ts, 'M8 44 L33 68 L84 6', { stroke: 'var(--orange)', width: 13 });
     tk.style.strokeDasharray = '125 127'; tk.style.strokeDashoffset = 125;
-    el('div', 'sans abs', { left: '284px', top: '20px', fontSize: '36px', letterSpacing: '-.01em', whiteSpace: 'nowrap' }, row, label);
-    if (i < ROWS.length) el('div', 'abs', { left: '84px', right: '86px', bottom: '0', height: '2px', background: 'rgba(0,0,0,.28)' }, row);
+    el('div', 'sans abs', { left: '246px', top: '14px', fontSize: '48px', letterSpacing: '-.015em', whiteSpace: 'nowrap' }, row, label);
+    if (i < ROWS.length) el('div', 'abs', { left: '72px', right: '40px', bottom: '0', height: '2px', background: 'rgba(0,0,0,.28)' }, row);
     rows.push(row); ticks.push(tk); boxes.push(bx);
   });
 
   // THEN GENERATE. + underline
   const tgSize = 112, tgW = measure('THEN GENERATE.', tgSize);
-  const tg = el('div', 'disp abs', { fontSize: tgSize + 'px', transformOrigin: '50% 60%' }, g, 'THEN GENERATE.'); place(tg, { x: 540 - tgW / 2, y: 1372 });
+  const tg = el('div', 'disp abs', { fontSize: tgSize + 'px', transformOrigin: '50% 60%', zIndex: 10 }, g, 'THEN GENERATE.'); place(tg, { x: 540 - tgW / 2, y: 1372 });
   const us = svg(g, { x: 540 - tgW / 2 - 10, y: 1474, w: tgW + 20, h: 30, vb: `0 0 ${tgW + 20} 30` });
   const ul = path(us, `M6 18 C${tgW * 0.3} 8 ${tgW * 0.7} 22 ${tgW + 14} 10`, { stroke: 'var(--orange)', width: 10 });
   const uL = ul.getTotalLength(); ul.style.strokeDasharray = uL + ' ' + (uL + 2);
@@ -76,7 +76,8 @@ export function build({ tl, layer, s, e }) {
   });
 
   // ---- 25.5: THEN GENERATE. stamps, underline draws
-  tl.fromTo(tg, { scale: 2.2, opacity: 0, rotation: -4 }, { scale: 1, opacity: 1, rotation: 0, duration: 0.24, ease: 'power3.in', immediateRender: true }, 25.26);
+  tl.fromTo(tg, { scale: 1.7, rotation: -4 }, { scale: 1, rotation: 0, duration: 0.24, ease: 'power3.in', immediateRender: true }, 25.26);
+  gsap.set(tg, { opacity: 0 }); tl.to(tg, { opacity: 1, duration: 0.06 }, 25.26);
   tl.fromTo(note, { y: 0 }, { y: 8, duration: 0.07, ease: 'power2.out', yoyo: true, repeat: 1, immediateRender: false }, 25.5);
   gsap.set(ul, { opacity: 0 }); tl.set(ul, { opacity: 1 }, 25.58);
   tl.fromTo(ul, { strokeDashoffset: uL }, { strokeDashoffset: 0, duration: 0.32, ease: 'power2.inOut', immediateRender: true }, 25.58);

@@ -16,7 +16,7 @@ const Y0 = -R - 20, T_DROP = 10.0, T_HIT = 10.5; // dropped from rest just above
 const G = 2 * (YC - Y0) / ((T_HIT - T_DROP) ** 2);
 const V_HIT = G * (T_HIT - T_DROP);
 const REST = 0.5;                       // bounce 1 lasts 0.5 s -> second impact at 11.0
-const T_OUT = 11.9;                     // support drops away; ball free-falls from rest
+const T_OUT = 11.85;                    // support drops away; ball free-falls from rest
 const IMPACTS = (() => { const a = [[T_HIT, V_HIT]]; let t = T_HIT, v = V_HIT * REST; for (let i = 0; i < 5; i++) { t += 2 * v / G; a.push([t, v]); v *= REST; } return a; })();
 const T_SETTLE = IMPACTS[IMPACTS.length - 1][0];
 

@@ -140,9 +140,9 @@ const OC = OUT.map(([ic, n, x, y, hero], i) => {
 const agentPath = OC[4].line;
 const OUT_T = [8.22, 8.27, 8.4, 8.45, 8.06]; // AI Agents leaves first so it never crosses the bottom pair
 function sceneOutputs(t) {
-  const push = L(1, 1.04, P(t, 9.0, 10.0, 'sine.inOut')), ex = P(t, 9.9, 10.22, 'power3.in');
+  const push = L(1, 1.04, P(t, 9.0, 10.0, 'sine.inOut')), ex = P(t, 9.82, 10.1, 'power3.in');
   const S = push * L(1, 0.86, ex);
-  $('#s6').style.transformOrigin = '540px 960px'; $('#s6').style.transform = `scale(${S})`; $('#s6').style.opacity = 1 - P(t, 9.95, 10.2, 'none');
+  $('#s6').style.transformOrigin = '540px 960px'; $('#s6').style.transform = `scale(${S})`; $('#s6').style.opacity = 1 - P(t, 9.85, 10.1, 'none');
   $('#s6label').style.opacity = P(t, 8.4, 8.7);
   OC.forEach((c, i) => {
     const k = P(t, OUT_T[i], OUT_T[i] + 0.5, 'expo.out');
@@ -216,8 +216,8 @@ function scene3D(t) {
   $('#s7').style.transform = `translate3d(0,${-50 * lift}px,0)`; $('#s7').style.opacity = 1 - lift;
   gl.style.opacity = P(t, 10.05, 10.4, 'power1.out');
   lineIn($('#s7b'), P(t, 10.72, 11.2, 'expo.out'), -1);
-  $('#s7foot').style.opacity = P(t, 11.0, 11.4);
-  $('#s7a').style.opacity = t >= 10.68 ? 1 : 0;
+  $('#s7foot').style.opacity = P(t, 11.0, 11.4) * (1 - P(t, 12.95, 13.15, 'none'));
+  $('#s7a').style.opacity = t >= 10.7 ? 1 : 0;
 }
 
 // ---------- S8 overhead path ----------
@@ -329,8 +329,8 @@ function ringState(t) {
   if (t < 5.8) { const x = 540 + (LOGO3.ringX - 540) * push3, y = 960 + (LOGO3.ringY - 960) * push3; return [x, y, LOGO3.ringD * push3 * portalZ(t)]; }
   if (t < 6.2) return null;
   if (t < 8.0) { const [x, y, s] = cv2s(HUB_RING.x, HUB_RING.y, t); return y < 2200 ? [x, y, HUB_RING.d * s] : null; }
-  if (t < 10.25) { const [, hy] = cv2s(HUB_RING.x, HUB_RING.y, 8.0), k = P(t, 7.98, 8.28, 'power2.inOut'); const ex = P(t, 9.9, 10.22, 'power3.in'), S = L(1, 1.04, P(t, 9.0, 10.0, 'sine.inOut')) * L(1, 0.86, ex);
-    return [540, L(hy, 960, k), L(HUB_RING.d, 300, k) * S, 1 - P(t, 9.95, 10.2, 'none')]; }
+  if (t < 10.25) { const [, hy] = cv2s(HUB_RING.x, HUB_RING.y, 8.0), k = P(t, 7.98, 8.28, 'power2.inOut'); const ex = P(t, 9.82, 10.1, 'power3.in'), S = L(1, 1.04, P(t, 9.0, 10.0, 'sine.inOut')) * L(1, 0.86, ex);
+    return [540, L(hy, 960, k), L(HUB_RING.d, 300, k) * S, 1 - P(t, 9.85, 10.1, 'none')]; }
   if (t < 17.85) return null;
   if (t < 20.6) return [540, 880, L(0, 290, P(t, 17.85, 18.35, 'expo.out')) * push10(t)];
   if (t < 23.5) { const k = P(t, 20.6, 21.25, 'power3.inOut'); return [540, L(880, 1560, k) + 10 * Math.sin((t - 21.25) * 2.2) * P(t, 21.25, 21.6), L(290 * 1.06, 500, k)]; }
@@ -376,8 +376,8 @@ function frame(t) {
   if (t >= 5.2 && t < 8.8) sceneCanvas(t);
   if (t >= 8.04 && t < 10.55) sceneOutputs(t);
   // fly-through "Build once."
-  const fl = $('#fly'); vis(fl, t >= 10.06 && t < 10.68);
-  if (t >= 10.06 && t < 10.68) { const k = P(t, 10.06, 10.68, 'expo.out'), w = fl.offsetWidth, h = fl.offsetHeight, s = L(0.3, 1, k);
+  const fl = $('#fly'); vis(fl, t >= 10.18 && t < 10.7);
+  if (t >= 10.18 && t < 10.7) { const k = P(t, 10.18, 10.7, 'expo.out'), w = fl.offsetWidth, h = fl.offsetHeight, s = L(0.3, 1, k);
     const cx = L(540, 90 + w / 2, k), cy = L(960, 210 + h / 2, k); fl.style.transform = `translate3d(${cx - 90 - w * s / 2}px,${cy - 210 - h * s / 2}px,0) scale(${s})`; fl.style.opacity = clamp(k * 4); }
   if (t >= 10.0 && t < 13.45) scene3D(t);
   if (t >= 13.28 && t < 16.0) scenePath(t);

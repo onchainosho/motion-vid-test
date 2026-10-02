@@ -230,7 +230,7 @@ function scenePath(t) {
   lineIn($('#s8a'), P(t, 13.44, 13.9, 'expo.out'), 1); lineIn($('#s8b'), P(t, 13.52, 13.98, 'expo.out'), -1);
   const hx = P(t, 15.45, 15.7, 'power3.in'); $('#s8h').style.transform = `translate3d(0,${-200 * hx}px,0)`; $('#s8h').style.opacity = 1 - hx;
   const enter = P(t, 13.4, 13.88, 'expo.out'), scroll = 150 * P(t, 13.95, 15.35, 'power1.inOut');
-  const y = 590 + L(160, 0, enter) - scroll; 
+  const y = 590 - scroll; $('#plane').style.opacity = P(t, 13.42, 13.6, 'power1.inOut'); 
   $('#plane').style.transform = `translate3d(0,${y}px,0) rotateX(${L(26, 16, enter)}deg)`;
   pPath.style.strokeDashoffset = pPath._len * (1 - P(t, 13.5, 14.2));
   const pk = P(t, STEP_T[0], STEP_T[3], 'none'), pt = pPath.getPointAtLength(pPath._len * pk);

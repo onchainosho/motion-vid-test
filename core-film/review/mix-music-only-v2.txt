@@ -1,0 +1,2 @@
+score score-raw.wav: music-only -17.0 LUFS (chain gain -2.2 dB); mix -17.0 LUFS, LRA 1.6, true peak -6.1 dBFS; 0 effects
+

@@ -1,0 +1,107 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<title>Core: intro film 9:16</title>
+<script src="./vendor/gsap.min.js"></script>
+<link rel="stylesheet" href="./film.css">
+</head>
+<body>
+<div id="root" data-composition-id="root" data-width="1080" data-height="1920" data-duration="27" data-fps="60">
+
+  <!-- shared background -->
+  <div id="bg"><div class="glow g1"></div><div class="glow g2"></div><div class="dots"></div></div>
+
+  <!-- S1 wall of sources -->
+  <section class="scene" id="s1">
+    <div id="wall"></div>
+    <div class="panel" id="s1panel"><h1 class="h1" id="s1h">Connect your<br>company knowledge,</h1></div>
+  </section>
+
+  <!-- S2 ring macro text -->
+  <section class="scene" id="s2">
+    <h1 class="h1 center" id="s2h"><span class="ln" id="s2a">through one</span><br><span class="ln" id="s2b">intelligent foundation.</span></h1>
+  </section>
+
+  <!-- S3 logo + tagline (portal) -->
+  <section class="scene" id="s3">
+    <div id="s3plate"></div>
+    <div id="s3disc"></div>
+    <div id="s3logo" class="logo"></div>
+    <h1 class="h1 center tag" id="s3tag"><span class="ln" id="s3a">The Intelligence</span><br><span class="ln" id="s3b">Layer for Your</span><br><span class="ln purple" id="s3c">Enterprise</span></h1>
+  </section>
+
+  <!-- S4/S5 continuous canvas: sources -> hub -->
+  <section class="scene" id="s45">
+    <div id="cv">
+      <svg id="cvlines" width="1080" height="3400" viewBox="0 0 1080 3400"></svg>
+      <div class="mono label" id="s4label" style="left:90px;top:340px">YOUR BUSINESS</div>
+      <div id="srcs"></div>
+      <div id="hub">
+        <div class="hubname">Intelligence Foundation</div>
+        <div id="caps"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S6 outputs burst -->
+  <section class="scene" id="s6">
+    <svg id="s6lines" width="1080" height="1920" viewBox="0 0 1080 1920"></svg>
+    <div class="mono label center-x" id="s6label" style="top:250px">POWERING YOUR ENTERPRISE AI</div>
+    <div id="outs"></div>
+  </section>
+
+  <!-- S7 3D foundation -->
+  <section class="scene" id="s7">
+    <canvas id="gl" width="1080" height="1920"></canvas>
+    <div id="s7labels"></div>
+    <h1 class="h1" id="s7h"><span class="ln" id="s7a">Build once.</span><br><span class="ln purple sub" id="s7b">Put intelligence to work.</span></h1>
+    <div class="mono label center-x" id="s7foot" style="top:1660px">SHARED INTELLIGENCE FOUNDATION</div>
+  </section>
+
+  <!-- S8 overhead path -->
+  <section class="scene" id="s8">
+    <h1 class="h1" id="s8h"><span class="ln" id="s8a">Follow the context.</span><br><span class="ln purple sub" id="s8b">Understand the controls.</span></h1>
+    <div id="planeWrap"><div id="plane">
+      <svg id="planeSvg" width="1080" height="2400" viewBox="0 0 1080 2400"></svg>
+      <div id="steps"></div>
+      <div class="pulse" id="ppulse"></div>
+    </div></div>
+  </section>
+
+  <!-- S9 purple field / S10 boundary -->
+  <div id="purple"></div>
+  <section class="scene" id="s9">
+    <svg id="shield" viewBox="0 0 24 24" width="190" height="190"><path id="shieldPath" d="M12 2.6l8 3v6.2c0 5-3.5 8.5-8 9.6-4.5-1.1-8-4.6-8-9.6V5.6z"/><path id="shieldTick" d="m8.6 12.2 2.4 2.4 4.6-4.8"/></svg>
+    <h1 class="h1 white" id="s9h"><span class="ln" id="s9a">Grounded in what</span><br><span class="ln" id="s9b">your organisation</span><br><span class="ln" id="s9c">approves.</span></h1>
+  </section>
+
+  <section class="scene" id="s10">
+    <h1 class="h1" id="s10h"><span class="ln" id="s10a">Private intelligence,</span><br><span class="ln purple" id="s10b">inside the environment</span><br><span class="ln" id="s10c">you control.</span></h1>
+    <div id="bound"><div class="mono label" id="boundLabel">YOUR CONTROLLED ENVIRONMENT</div></div>
+    <div class="node" id="nData"></div>
+    <div class="node" id="nModel"></div>
+    <svg id="s10svg" width="1080" height="1920" viewBox="0 0 1080 1920"></svg>
+    <div id="chips"></div>
+  </section>
+
+  <!-- S11 pilot lines -->
+  <section class="scene" id="s11">
+    <h1 class="h1 big" id="s11a">Start small.</h1>
+    <h1 class="h1 big purple" id="s11b">Prove the value<br>with your data.</h1>
+    <h1 class="h1 big" id="s11c">Scale from there.</h1>
+  </section>
+
+  <!-- S12 end card -->
+  <section class="scene" id="s12">
+    <div id="s12logo" class="logo"></div>
+    <div id="cta"><span>Pilot with your data</span><svg viewBox="0 0 24 24" id="ctaArrow"><path d="M5 12h14M13 6l6 6-6 6"/></svg><div id="ripple"></div></div>
+    <div id="by">Ainfinite AI</div>
+  </section>
+
+  <!-- persistent actors -->
+  <div id="ring"><div class="ringGlow"></div><div class="ringBody"></div><div class="ringSheen"></div></div>
+  <div class="pulse" id="pulse"></div>
+  <div id="fly" class="h1">Build once.</div>
+</div>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<script type="module" src="./film.js"></script>
+</body></html>

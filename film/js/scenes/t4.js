@@ -1,140 +1,130 @@
 // Tip 4 (10.0–12.5): WEIRD AI MOTION? / DEFINE THE PHYSICS.
-// A shaded ball falls under real gravity (y = y0 + ½gt²), squashes on the floor and bounces with energy loss
-// (closed-form arcs), while a 2×2 grid of physics polaroids pops in on the beats.
-import { E, el, place, polaroid, hand, svg, path, tipHeadline } from '../core.js';
+// A full-size shaded ball drops from above the frame under constant acceleration (y = y0 + ½gt²) onto the WEIGHT
+// polaroid, which dips on a spring. It bounces with energy loss (closed-form arcs) and settles. Each other polaroid
+// pops in on a beat and fires an orange arrow at the ball. Exit: the grid drops away and the ball falls with it.
+import { E, el, polaroid, tape, hand, svg, path, arrow, tipHeadline } from '../core.js';
 
 export const meta = { box: { lines: ['DEFINE THE', 'PHYSICS.'] } };
 
-// ---- physics (pure functions of master time) ----
-const FLOOR = 1440, R = 62;            // floor line y, ball radius
-const X0 = 626, Y0 = 806, VX = 300;     // release point (centre) and horizontal speed (px/s)
-const T_IN = 10.0, T_REL = 10.5, T_HIT = 11.0; // pop-in, release, first impact (all on beats)
-const REST = 0.75;                      // restitution: each bounce keeps 75% of the speed
-const G = 2 * (FLOOR - R - Y0) / ((T_HIT - T_REL) ** 2); // px/s², so the first fall lasts exactly 0.5 s
-const YC = FLOOR - R;                   // centre height at contact
-const V_HIT = G * (T_HIT - T_REL);
-// impact times: 11.0, 11.75, 12.3125 ...
-const IMPACTS = (() => { const a = [[T_HIT, V_HIT]]; let t = T_HIT, v = V_HIT * REST; for (let i = 0; i < 6; i++) { t += 2 * v / G; a.push([t, v]); v *= REST; } return a; })();
-const T_END = 12.45; // ball is far off the right edge by now
+// ---- grid geometry (2×2, ~860 wide, y 750–1500) ----
+const CW = 416, CH = 362, GX = [80, 520], GY = [752, 1138];
+const R = 70;                           // ball radius
+const BX = GX[1] + CW / 2;              // ball x: centre of the WEIGHT polaroid (top-right)
+const TOP = GY[0];                      // its top edge: the ball lands here
+const YC = TOP - R;                     // ball centre at contact
+const Y0 = -R - 20, T_DROP = 10.0, T_HIT = 10.5; // dropped from rest just above the frame; first impact on the beat
+const G = 2 * (YC - Y0) / ((T_HIT - T_DROP) ** 2);
+const V_HIT = G * (T_HIT - T_DROP);
+const REST = 0.5;                       // bounce 1 lasts 0.5 s -> second impact at 11.0
+const T_OUT = 11.9;                     // support drops away; ball free-falls from rest
+const IMPACTS = (() => { const a = [[T_HIT, V_HIT]]; let t = T_HIT, v = V_HIT * REST; for (let i = 0; i < 5; i++) { t += 2 * v / G; a.push([t, v]); v *= REST; } return a; })();
+const T_SETTLE = IMPACTS[IMPACTS.length - 1][0];
 
+// spring dip of the WEIGHT polaroid (px, positive = down)
+function dipAt(t) {
+  let d = 0;
+  for (const [ti, v] of IMPACTS) if (t >= ti && t < T_OUT) { const u = t - ti; d += 19 * (v / V_HIT) * Math.exp(-7 * u) * Math.sin(24 * u); }
+  return d;
+}
 function ballAt(t) {
-  const x = X0 + VX * Math.max(0, t - T_REL);
-  if (t < T_REL) { // hover after the pop-in: rises slightly and comes to rest at the release point (velocity 0 at release)
-    const p = Math.min(1, Math.max(0, (t - T_IN) / (T_REL - T_IN)));
-    return { x, y: Y0 + 18 * (1 - p) * (1 - p), vy: 0, last: null };
-  }
-  if (t < T_HIT) { const d = t - T_REL; return { x, y: Y0 + 0.5 * G * d * d, vy: G * d, last: null }; }
+  if (t < T_HIT) { const d = t - T_DROP; return { y: Y0 + 0.5 * G * d * d, vy: G * d, last: null }; }
+  if (t >= T_OUT) { const d = t - T_OUT; return { y: YC + 0.5 * G * d * d, vy: G * d, last: null, free: true }; }
   let ti = T_HIT, v = V_HIT * REST;
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < IMPACTS.length - 1; i++) {
     const T = 2 * v / G;
-    if (t < ti + T) { const d = t - ti; return { x, y: YC - v * d + 0.5 * G * d * d, vy: -v + G * d, last: ti, vImp: v / REST }; }
+    if (t < ti + T) { const d = t - ti; return { y: YC - v * d + 0.5 * G * d * d, vy: -v + G * d, last: ti, vImp: v / REST }; }
     ti += T; v *= REST;
   }
-  return { x, y: YC, vy: 0, last: ti };
+  return { y: YC, vy: 0, last: ti, vImp: v / REST, rest: true };
 }
 
 export function build(ctx) {
   const { tl, layer, s, e, onFrame } = ctx;
   tipHeadline(ctx, ['WEIRD AI', 'MOTION?']);
 
-  // ---- floor line (ink) with a dip under the ball on impact ----
-  const fs = svg(layer, {});
-  const floor = path(fs, `M64 ${FLOOR} L1000 ${FLOOR}`, { stroke: '#111', width: 5 });
-  floor.style.strokeDasharray = '1100 2400';
-  tl.fromTo(floor, { strokeDashoffset: 1100 }, { strokeDashoffset: 0, duration: 0.5, ease: E.land2, immediateRender: true }, 9.95);
-  tl.to(floor, { strokeDashoffset: -1100, duration: 0.32, ease: E.fast }, 12.2);
-  // impact strokes (orange), redrawn per frame
-  const bursts = [0, 1, 2, 3, 4, 5].map(() => path(fs, 'M0 0', { stroke: 'var(--orange)', width: 6 }));
-
-  // ---- dashed orange trail of the real trajectory ----
-  const trail = path(fs, 'M0 0', { stroke: 'var(--orange)', width: 6 });
-  trail.style.strokeDasharray = '16 16';
-  tl.to(trail, { opacity: 0, duration: 0.3, ease: E.leave }, 12.05);
-
-  // ---- 2×2 polaroid grid (left column, standing above the floor) ----
-  const grid = el('div', 'abs', { left: 0, top: 0, width: '1080px', height: '1920px' }, layer);
-  const CW = 224, CH = 300;
+  // ---- the grid ----
   const cells = [
-    { src: 'weight', x: 64, y: 756, rot: -4, label: 'WEIGHT', at: 10.25 },
-    { src: 'gravity', x: 306, y: 772, rot: 3, at: 10.5 },
-    { src: 'wind', x: 70, y: 1084, rot: 2.5, label: 'WIND', at: 10.75 },
-    { src: 'coat', x: 306, y: 1096, rot: -3, at: 11.0 },
+    { src: 'gravity', c: 0, r: 0, rot: -2.5, at: 10.25, pos: '85% 50%' },
+    { src: 'weight', c: 1, r: 0, rot: 0, at: 9.9, label: 'WEIGHT' },
+    { src: 'wind', c: 0, r: 1, rot: 2, at: 10.75, label: 'WIND' },
+    { src: 'coat', c: 1, r: 1, rot: -2, at: 11.25 },
   ];
-  const pols = cells.map((c, i) => {
-    const p = polaroid(grid, { x: c.x, y: c.y, w: CW, h: CH, src: c.src, rot: c.rot, pad: 12, tapeRot: i % 2 ? 4 : -4 });
-    p.root.style.paddingBottom = '58px';
-    if (c.src === 'gravity') p.img.style.objectPosition = '88% 50%';
-    gsap.set(p.root, { opacity: 0 });
-    tl.fromTo(p.root, { opacity: 0, scale: 0.55, rotation: c.rot - 10, y: 30 }, { opacity: 1, scale: 1, rotation: c.rot, y: 0, duration: 0.38, ease: E.pop, immediateRender: false }, c.at);
+  const wraps = [], pols = [];
+  cells.forEach((c, i) => {
+    const w = el('div', 'abs', { left: 0, top: 0, width: '1080px', height: '1920px' }, layer);
+    const p = polaroid(w, { x: GX[c.c], y: GY[c.r], w: CW, h: CH, src: c.src, rot: c.rot, pad: 14, tape: false });
+    p.root.style.paddingBottom = '66px';
+    if (c.pos) p.img.style.objectPosition = c.pos;
+    tape(p.root, { x: c.src === 'weight' ? 12 : 30, y: -18, rot: -7 });
+    tape(p.root, { x: CW - (c.src === 'weight' ? 162 : 180), y: -18, rot: 6 });
+    tl.fromTo(p.root, { opacity: 0, scale: 0.6, rotation: c.rot - 9, y: 40 }, { opacity: 1, scale: 1, rotation: c.rot, y: 0, duration: 0.4, ease: E.pop, immediateRender: true }, c.at);
     if (c.label) {
-      const h = hand(p.root, c.label, { x: 16, y: CH - 52, size: 38, rot: -2 });
+      const h = hand(p.root, c.label, { x: 22, y: CH - 60, size: 48, rot: -2 });
       h.style.position = 'absolute';
-      tl.fromTo(h, { clipPath: 'inset(-20% 100% -20% 0%)' }, { clipPath: 'inset(-20% 0% -20% 0%)', duration: 0.3, ease: 'power2.out', immediateRender: true }, c.at + 0.2);
+      tl.fromTo(h, { clipPath: 'inset(-20% 100% -20% 0%)' }, { clipPath: 'inset(-20% 0% -20% 0%)', duration: 0.3, ease: 'power2.out', immediateRender: true }, c.src === 'weight' ? 10.55 : 11.5);
     }
-    return p.root;
+    wraps.push(w); pols.push(p.root);
   });
-  // the floor shakes the grid on each impact (a visible result of the hit)
-  [[T_HIT, 9], [IMPACTS[1][0], 5]].forEach(([t, a]) => {
-    tl.to(grid, { y: a, duration: 0.05, ease: 'power2.out' }, t);
-    tl.to(grid, { y: 0, duration: 0.4, ease: 'elastic.out(1,0.35)' }, t + 0.05);
-  });
-  // small idle sway so the grid never freezes
-  pols.forEach((p, i) => tl.to(p, { rotation: `+=${i % 2 ? -1.5 : 1.5}`, duration: 0.9, ease: E.soft }, 11.2 + i * 0.05));
-  // exit: the grid drops out fast
-  pols.forEach((p, i) => tl.to(p, { y: 1300, rotation: `+=${i % 2 ? 14 : -12}`, duration: 0.4, ease: E.fast }, 12.0 + [0, 0.06, 0.03, 0.09][i]));
+  const weightWrap = wraps[1];
+  // the other photos twitch on each hit (they share the board)
+  [[T_HIT, 6], [IMPACTS[1][0], 3.5]].forEach(([t, a]) => [0, 2, 3].forEach(i => {
+    tl.to(wraps[i], { y: a * (i === 0 ? 1 : 0.6), duration: 0.05, ease: 'power2.out' }, t);
+    tl.to(wraps[i], { y: 0, duration: 0.42, ease: 'elastic.out(1,0.35)' }, t + 0.05);
+  }));
 
-  // ---- the ball ----
-  const shadow = el('div', 'abs', { width: '170px', height: '26px', borderRadius: '50%', background: 'radial-gradient(ellipse at 50% 50%, rgba(30,18,8,.55), rgba(30,18,8,0) 70%)', opacity: 0 }, layer);
+  // ---- orange arrows: each photo fires at the ball as it lands ----
+  const as = svg(layer, {});
+  const arrows = [
+    { a: arrow(as, 380, GY[0] + 4, BX - R - 18, YC - 34, { bow: -0.28, width: 7, headLen: 26 }), at: 10.5 },        // gravity -> ball
+    { a: arrow(as, GX[0] + CW - 40, GY[1] + 10, BX - R - 10, YC + 40, { bow: -0.18, width: 7, headLen: 26 }), at: 11.0 }, // wind -> ball
+    { a: arrow(as, GX[1] + CW - 30, GY[1] + 6, BX + R + 14, YC + 20, { bow: 0.25, width: 7, headLen: 26 }), at: 11.5 },   // coat -> ball
+  ];
+  arrows.forEach(({ a, at }) => {
+    const L = a.shaft.getTotalLength();
+    a.shaft.style.strokeDasharray = `${L} ${L + 4}`; a.head.style.strokeDasharray = '80 82';
+    tl.fromTo(a.shaft, { strokeDashoffset: L }, { strokeDashoffset: 0, duration: 0.24, ease: 'power2.out', immediateRender: true }, at - 0.1);
+    tl.fromTo(a.head, { strokeDashoffset: 80 }, { strokeDashoffset: 0, duration: 0.08, ease: 'none', immediateRender: true }, at + 0.12);
+  });
+  tl.to(as, { opacity: 0, duration: 0.2, ease: E.leave }, T_OUT - 0.1);
+
+  // ---- dashed trail of the fall ----
+  const ts = svg(layer, {});
+  const trail = path(ts, 'M0 0', { stroke: 'var(--orange)', width: 7 });
+  trail.style.strokeDasharray = '18 16';
+  tl.to(ts, { opacity: 0, duration: 0.25, ease: E.leave }, 11.4);
+
+  // ---- ball + contact shadow (on the polaroid's top edge) ----
+  const shadow = el('div', 'abs', { width: '190px', height: '24px', borderRadius: '50%', background: 'radial-gradient(ellipse at 50% 50%, rgba(30,18,8,.5), rgba(30,18,8,0) 70%)' }, layer);
   const ball = el('div', 'abs', {
     width: 2 * R + 'px', height: 2 * R + 'px', borderRadius: '50%', transformOrigin: '50% 100%',
     background: 'radial-gradient(circle at 34% 28%, #FBF8F1 0%, #D2CCC1 13%, #9C958A 38%, #5C564E 68%, #26231F 100%)',
-    boxShadow: 'inset -10px -14px 22px rgba(0,0,0,.35), inset 4px 6px 10px rgba(255,255,255,.18)', visibility: 'hidden',
+    boxShadow: 'inset -10px -14px 22px rgba(0,0,0,.35), inset 4px 6px 10px rgba(255,255,255,.18), 0 14px 22px -10px rgba(40,25,10,.4)',
   }, layer);
-  const popE = gsap.parseEase('back.out(2.2)');
+
+  // ---- exit: the grid drops away, the ball falls with it ----
+  pols.forEach((p, i) => tl.to(p, { y: 1250, rotation: `+=${i % 2 ? 12 : -10}`, duration: 0.42, ease: E.fast }, T_OUT + [0.04, 0, 0.08, 0.05][i]));
 
   onFrame(t => {
+    const dip = dipAt(t);
+    weightWrap.style.transform = `translateY(${dip.toFixed(2)}px)`;
     // ball
-    if (t < T_IN || t > T_END) { ball.style.visibility = 'hidden'; shadow.style.opacity = 0; }
-    else {
-      const b = ballAt(t);
-      const pop = popE(Math.min(1, Math.max(0, (t - T_IN) / 0.36)));
-      let sx = 1, sy = 1;
-      const st = Math.min(0.1, Math.abs(b.vy) / V_HIT * 0.1); sy = 1 + st; sx = 1 / sy; // stretch along speed
-      if (b.last != null && t - b.last < 0.09) { // squash on impact, scaled by impact speed
-        const k = 1 - (t - b.last) / 0.09, amt = 0.36 * (b.vImp / V_HIT) * k * k;
-        sy = 1 - amt; sx = 1 + amt * 0.85;
-      }
-      ball.style.visibility = 'visible';
-      ball.style.left = (b.x - R) + 'px'; ball.style.top = (b.y - R) + 'px';
-      ball.style.transform = `scale(${sx * pop}, ${sy * pop})`;
-      const hgt = YC - b.y, k = Math.max(0, 1 - hgt / 760);
-      shadow.style.left = (b.x - 85) + 'px'; shadow.style.top = (FLOOR - 13) + 'px';
-      shadow.style.transform = `scale(${(0.45 + 0.65 * k) * Math.min(1, pop)}, 1)`;
-      shadow.style.opacity = (0.2 + 0.8 * k) * Math.min(1, pop);
-    }
-    // floor dip under the ball right after an impact
-    let dip = 0, dx = X0;
-    for (const [ti, v] of IMPACTS.slice(0, 2)) if (t >= ti && t - ti < 0.3) { const k = 1 - (t - ti) / 0.3; dip = 16 * (v / V_HIT) * k * k; dx = X0 + VX * (ti - T_REL); }
-    if (dip > 0.2) { const a = Math.max(70, dx - 150), c = Math.min(994, dx + 150); floor.setAttribute('d', `M64 ${FLOOR} L${a} ${FLOOR} Q${dx} ${FLOOR + 2 * dip} ${c} ${FLOOR} L1000 ${FLOOR}`); }
-    else floor.setAttribute('d', `M64 ${FLOOR} L1000 ${FLOOR}`);
-    // impact strokes: three short lines either side of the contact point
-    let bd = null;
-    for (const [ti, v] of IMPACTS.slice(0, 2)) if (t >= ti && t - ti < 0.28) bd = [ti, v];
-    bursts.forEach((p, i) => {
-      if (!bd) { p.setAttribute('d', 'M0 0'); p.style.opacity = 0; return; }
-      const [ti, v] = bd, q = (t - ti) / 0.28, side = i < 3 ? -1 : 1, ang = [-0.2, -0.55, -0.9][i % 3];
-      const cx = X0 + VX * (ti - T_REL), r0 = 92 + 50 * q, r1 = r0 + 34 * (1 - q) * (v / V_HIT);
-      const ca = Math.cos(ang), sa = Math.sin(ang);
-      p.setAttribute('d', `M${cx + side * ca * r0} ${FLOOR - 6 + sa * r0 * 0.7} L${cx + side * ca * r1} ${FLOOR - 6 + sa * r1 * 0.7}`);
-      p.style.opacity = 1 - q * q;
-    });
-    // trail: the real trajectory from release to now
-    if (t <= T_REL) trail.setAttribute('d', 'M0 0');
-    else {
-      const t1 = Math.min(t, T_END); let d = '';
-      for (let u = T_REL; u <= t1 + 1e-6; u += 1 / 60) { const b = ballAt(u); d += (d ? 'L' : 'M') + b.x.toFixed(1) + ' ' + b.y.toFixed(1); }
-      const b = ballAt(t1); d += 'L' + b.x.toFixed(1) + ' ' + b.y.toFixed(1);
-      trail.setAttribute('d', d);
-    }
+    const b = ballAt(t);
+    let y = b.y;
+    if (b.rest || (b.last != null && t - b.last < 0.05)) y += Math.max(0, dip);
+    let sx = 1, sy = 1;
+    const st = Math.min(0.12, Math.abs(b.vy) / V_HIT * 0.12); sy = 1 + st; sx = 1 / sy;
+    if (b.last != null && t - b.last < 0.09) { const k = 1 - (t - b.last) / 0.09, amt = 0.34 * (b.vImp / V_HIT) * k * k; sy = 1 - amt; sx = 1 + amt * 0.85; }
+    const vis = t >= T_DROP - 0.01 && y < 2000;
+    ball.style.visibility = vis ? 'visible' : 'hidden';
+    ball.style.left = (BX - R) + 'px'; ball.style.top = (y - R) + 'px';
+    ball.style.transform = `scale(${sx.toFixed(4)}, ${sy.toFixed(4)})`;
+    // contact shadow on the polaroid top edge (only while the polaroid is there)
+    const hgt = YC - b.y, k = Math.max(0, 1 - hgt / 700);
+    shadow.style.visibility = vis && t < T_OUT && t > T_DROP + 0.15 ? 'visible' : 'hidden';
+    shadow.style.left = (BX - 95) + 'px'; shadow.style.top = (TOP - 12 + dip) + 'px';
+    shadow.style.transform = `scale(${(0.4 + 0.7 * k).toFixed(3)}, 1)`; shadow.style.opacity = (0.15 + 0.85 * k).toFixed(3);
+    // trail: from the top of the frame down to the ball (the fall line)
+    if (t <= T_DROP + 0.05) trail.setAttribute('d', 'M0 0');
+    else { const yTop = 200, yEnd = Math.min(b.y, YC) - R + 6; trail.setAttribute('d', yEnd > yTop ? `M${BX} ${yTop} L${BX} ${yEnd}` : 'M0 0'); }
   });
 }

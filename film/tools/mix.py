@@ -31,6 +31,7 @@ mg = 10 ** ((target_lufs - lufs(mus)[0]) / 20); mus *= mg; mono_m = mus.mean(1)
 fx = np.zeros_like(mus); rep = []
 plan = [] if no_sfx else json.loads((P / 'assets/audio/plan.json').read_text())
 HB = butter(4, [2000, 8000], btype='band', fs=SR, output='sos')
+FIXED = {'whoosh-short': -15.0, 'pop': -12.0, 'click-soft': -16.0, 'ping': -15.0}
 for ev in plan:
     name, t, target, note = ev[:4]; pkc = ev[4] if len(ev) > 4 else PKCAP
     s = load(P / 'assets/audio' / f'{name}.mp3'); m1 = s.mean(1)
@@ -46,6 +47,9 @@ for ev in plan:
     while hl > HF_CAP and g > 1e-4: g *= .85; hl = hf_lift(g)
     k0 = min(len(m1), len(seg_m) - SR // 2); mloc = 20 * np.log10(np.abs(seg_m[SR // 2:SR // 2 + W]).max() + 1e-9)
     while 20 * np.log10(g * np.abs(m1[:k0]).max() + 1e-9) > mloc + pkc and g > 1e-4: g *= .9
+    # consistency: repeated sounds sit at one fixed sample-peak level per type (kit audio rule 3), always under the local music peak
+    if name in FIXED: g = 10 ** ((FIXED[name] - 20 * np.log10(np.abs(m1).max() + 1e-9)) / 20) * (10 ** ((target - 3.0) / 20)); hl = hf_lift(g)
+    while name in FIXED and hl > HF_CAP + 1 and g > 1e-4: g *= .9; hl = hf_lift(g)
     j = min(N, i + len(s)); fx[i:j] += g * s[:j - i]
     e = np.zeros_like(seg_m); k = min(len(m1), len(seg_m) - SR // 2); e[SR // 2:SR // 2 + k] = g * m1[:k]
     inb = pk(sosfilt(sos, seg_m + e)[SR // 2:SR // 2 + W]) - pk(sosfilt(sos, seg_m)[SR // 2:SR // 2 + W])

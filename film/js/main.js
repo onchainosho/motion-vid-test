@@ -69,9 +69,9 @@ function buildBox(metas) {
   for (let i = 1; i < withBox.length; i++) {
     const [pid] = withBox[i - 1], [id, m] = withBox[i];
     const b = SCENES[id][0], g = m.box, tm = m.boxTiming || {};
-    master.to(texts[pid], { opacity: 0, y: -24, duration: 0.18, ease: E.leave }, b - 0.30);
+    master.to(texts[pid], { opacity: 0, y: -24, duration: 0.12, ease: E.leave }, b - 0.24);
     master.to(box, { left: g.x, top: g.y, width: g.w, height: g.h, duration: tm.morph ?? 0.42, ease: E.move }, b - 0.22 + (tm.morphShift ?? 0));
-    master.fromTo(texts[id], { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.4, ease: E.land, immediateRender: false }, b + 0.08 + (tm.textShift ?? 0));
+    master.fromTo(texts[id], { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.4, ease: E.land, immediateRender: false }, b - 0.04 + (tm.textShift ?? 0));
   }
   return { box, texts };
 }

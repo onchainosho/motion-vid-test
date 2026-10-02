@@ -18,7 +18,7 @@ export function build(ctx) {
   const H = HANDOFF.t1t2;
   const P = [
     { src: 'final-desert', wall: { x: H.x, y: H.y, w: H.w, h: H.h, rot: H.rot }, cell: 0 },
-    { src: 'jacket', wall: { x: 470, y: 728, w: 290, h: 360, rot: 5 }, cell: 1, from: { x: 300, y: -900, r: 18 }, at: 5.0 },
+    { src: 'jacket', wall: { x: 470, y: 728, w: 290, h: 360, rot: 5 }, cell: 1, from: { x: 1000, y: 120, r: 18 }, at: 5.0 },
     { src: 'face', wall: { x: 700, y: 820, w: 300, h: 390, rot: -3 }, cell: 2, from: { x: 900, y: -200, r: 22 }, at: 5.06 },
     { src: 'location', wall: { x: 84, y: 1150, w: 460, h: 320, rot: 3 }, cell: 3, from: { x: -1000, y: 200, r: -20 }, at: 5.12 },
     { src: 'bag', wall: { x: 470, y: 1050, w: 280, h: 360, rot: -6 }, cell: 4, from: { x: 0, y: 1100, r: -14 }, at: 5.18 },
@@ -68,6 +68,9 @@ export function build(ctx) {
   const tL = tag(g, 'LOCATION', { x: lc.left + 22, y: lc.top + lc.height - 84, size: 42, rot: 3 });
   [tC, tL].forEach((t, i) => { t.style.zIndex = 20; gsap.set(t, { opacity: 0 }); tl.fromTo(t, { opacity: 0, scale: 1.5, y: -30 }, { opacity: 1, scale: 1, y: 0, duration: 0.3, ease: E.pop, immediateRender: false }, 6.25 + i * 0.08); });
 
+  // labels keep breathing while the pack pushes
+  tl.to(tC, { rotation: -1.5, y: -6, duration: 0.6, ease: E.soft }, 6.5);
+  tl.to(tL, { rotation: 5, y: 6, duration: 0.6, ease: E.soft }, 6.5);
   // slow push, then the pack lifts up and out fast
   tl.fromTo(g, { scale: 1 }, { scale: 1.02, duration: 0.75, ease: E.soft, immediateRender: false }, 6.3);
   items.forEach((it, i) => tl.to(it.pol.root, { y: -1500 - (i % 3) * 80, rotation: (i % 2 ? 4 : -4), duration: 0.42, ease: E.fast }, 7.05 + (i % 3) * 0.03 + Math.floor(i / 3) * 0.04));

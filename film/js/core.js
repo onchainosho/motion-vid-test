@@ -90,7 +90,9 @@ export function arrow(s, x1, y1, x2, y2, { bow = 0.2, width = 6, color = 'var(--
 export function linesIn(tl, lines, t, { dist = 1100, dur = 0.55, stagger = 0.06 } = {}) {
   lines.forEach((l, i) => tl.fromTo(l, { x: i % 2 ? dist : -dist }, { x: 0, duration: dur, ease: E.land }, t + i * stagger));
 }
-export function linesOut(tl, lines, t, { dist = 1200, dur = 0.32, stagger = 0.04 } = {}) {
+// Lines leave in the SAME direction the next headline travels (line 0 → right, line 1 → left), and are gone before it arrives,
+// so outgoing and incoming titles never cross or splice.
+export function linesOut(tl, lines, t, { dist = 1200, dur = 0.24, stagger = 0.03 } = {}) {
   lines.forEach((l, i) => tl.to(l, { x: i % 2 ? -dist : dist, duration: dur, ease: E.fast }, t + i * stagger));
 }
 
@@ -112,8 +114,8 @@ export function tipHeadline(ctx, lines, { inAt, outAt } = {}) {
   const { tl, layer, s, e } = ctx;
   const size = Math.min(TIP.size, Math.floor(TIP.size * TIP.maxW / Math.max(...lines.map(l => measure(l, TIP.size)))));
   const ls = headline(layer, lines, { x: TIP.x, y: TIP.y + (TIP.size - size) * 0.86, size });
-  linesIn(tl, ls, inAt ?? s - 0.08);
-  linesOut(tl, ls, outAt ?? e - 0.3);
+  linesIn(tl, ls, inAt ?? s - 0.06);
+  linesOut(tl, ls, outAt ?? e - 0.36);
   return ls;
 }
 // Pixel-exact handoffs between scenes (outer geometry of the carried element).

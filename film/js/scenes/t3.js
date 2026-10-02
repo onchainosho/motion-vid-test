@@ -211,7 +211,7 @@ export function build(ctx) {
   tl.fromTo(pimg, { scale: 1 }, { scale: 1.07, duration: 0.75, ease: E.soft, immediateRender: false }, 8.9);
 
   // the frame lands from below, breathes, then drops out fast
-  tl.fromTo(pol, { y: 1250, rotation: 4 }, { y: 0, rotation: -1, duration: 0.6, ease: E.land, immediateRender: true }, 7.32);
+  tl.fromTo(pol, { y: 1250, rotation: 4 }, { y: 0, rotation: -1, duration: 0.6, ease: E.land, immediateRender: true }, 7.4);
   tl.to(pol, { rotation: 0.6, duration: 1.3, ease: E.soft }, 7.92);
   tl.to(pol, { y: 1350, rotation: -6, duration: 0.42, ease: E.fast }, 9.62);
 }

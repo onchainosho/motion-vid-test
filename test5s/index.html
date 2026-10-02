@@ -1,0 +1,38 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<script src="./vendor/gsap.min.js"></script>
+<style>
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#0b0d12;font-family:system-ui,sans-serif}
+#root{position:relative;width:1080px;height:1920px;overflow:hidden}
+canvas{position:absolute;inset:0;width:1080px;height:1920px}
+.t{position:absolute;left:84px;right:84px;font-weight:700;color:#f3f5f8;letter-spacing:-3px}
+#a{top:240px;font-size:128px;line-height:1}
+#b{bottom:260px;font-size:56px;font-weight:500;letter-spacing:-1px;color:#b9c2d0}
+</style></head>
+<body>
+<div id="root" data-composition-id="root" data-width="1080" data-height="1920" data-duration="5" data-fps="60">
+  <canvas id="c" width="1080" height="1920"></canvas>
+  <div class="t" id="a">Render<br>test.</div>
+  <div class="t" id="b">GSAP timeline · three.js · 9:16 · 60fps</div>
+</div>
+<script type="module">
+import * as THREE from './vendor/three.module.js';
+const W = 1080, H = 1920, D = 5;
+const r = new THREE.WebGLRenderer({ canvas: document.getElementById('c'), antialias: true, preserveDrawingBuffer: true });
+r.setPixelRatio(1); r.setSize(W, H, false); r.setClearColor(0x0b0d12, 1);
+const s = new THREE.Scene(), cam = new THREE.PerspectiveCamera(35, W / H, 0.1, 100);
+s.add(new THREE.HemisphereLight(0xdfe8ff, 0x20242c, 0.6));
+const key = new THREE.DirectionalLight(0xffffff, 2.2); key.position.set(-4, 3, 4); s.add(key);
+const rim = new THREE.DirectionalLight(0x8fb4ff, 2.5); rim.position.set(3, 2, -5); s.add(rim);
+const m = new THREE.Mesh(new THREE.TorusKnotGeometry(1, 0.32, 220, 32), new THREE.MeshStandardMaterial({ color: 0x5b8cff, metalness: 0.4, roughness: 0.3 }));
+s.add(m);
+// every value is a function of timeline time only
+const draw = t => { m.rotation.set(0.4 + t * 0.5, t * 0.9, 0); cam.position.set(0, 0, 9 - t * 0.4); cam.lookAt(0, 0, 0); r.render(s, cam); };
+const st = { t: 0 };
+const tl = gsap.timeline({ paused: true });
+tl.to(st, { t: D, duration: D, ease: 'none', onUpdate: () => draw(st.t) }, 0);
+tl.to('#a', { scale: 1.04, duration: 3, ease: 'sine.inOut' }, 1);
+tl.fromTo('#b', { opacity: 0.0, y: 40 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }, 0.5);
+window.__timelines = window.__timelines || {}; window.__timelines.root = tl;
+draw(0); window.addEventListener('hf-seek', e => draw(e.detail.time));
+</script></body></html>

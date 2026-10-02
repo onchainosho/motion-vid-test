@@ -1,0 +1,2 @@
+music-only -14.3 LUFS; mix -14.3 LUFS, LRA 3.1 LU, peak -1.5 dBFS; 0 effects
+

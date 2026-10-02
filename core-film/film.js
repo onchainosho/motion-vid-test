@@ -134,7 +134,7 @@ const OC = OUT.map(([ic, n, x, y, hero], i) => {
   el.innerHTML = `<div class="fill"></div><div class="inner"><div class="badge">${svg(ic)}</div><div class="nm">${n}</div></div>${hero ? `<div class="chk">${svg('check')}</div>` : ''}`;
   outs.appendChild(el);
   const ey = y + (y < 960 ? h / 2 : -h / 2);
-  const line = mkPath(s6l, `M540 960 C 540 ${(960 + ey) / 2} ${x} ${(960 + ey) / 2} ${x} ${ey}`);
+  const sy = y < 960 ? 805 : 1115; const line = mkPath(s6l, `M540 ${sy} C 540 ${(sy + ey) / 2} ${x} ${(sy + ey) / 2} ${x} ${ey}`);
   return { el, x, y, line, hero };
 });
 const agentPath = OC[4].line;
@@ -182,7 +182,15 @@ const CUBES = [[-1.15, -1.15], [1.15, -1.15], [0, 0], [-1.15, 1.15], [1.15, 1.15
   const sh = new THREE.Mesh(new THREE.PlaneGeometry(8.5, 8.5), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(c), transparent: true, depthWrite: false })); sh.rotation.x = -Math.PI / 2; sh.position.y = 0.002; sc3.add(sh); sh.scale.setScalar(0.86);
 }
 const G3 = new THREE.Group(); [base, ...LAY, top, ...CUBES].forEach(m => G3.add(m)); sc3.add(G3); G3.scale.setScalar(0.86);
-const LBL = ['Connected<br>knowledge', 'Governed<br>intelligence', 'Reusable<br>capabilities'].map(n => { const el = document.createElement('div'); el.className = 'l3d'; el.innerHTML = `<div class="knob"></div><div class="lead"></div><div class="pill"><b>${n}</b></div>`; $('#s7labels').appendChild(el); return el; });
+const s7svg = document.createElementNS(NS, 'svg'); s7svg.setAttribute('width', 1080); s7svg.setAttribute('height', 1920); s7svg.style.cssText = 'position:absolute;left:0;top:0;overflow:visible'; $('#s7labels').appendChild(s7svg);
+// labels sit in fixed, evenly spaced rows (bottom layer -> lowest row); leaders run from the projected layer corner
+const ROWS = [1150, 975, 800];
+const LBL = ['Connected<br>knowledge', 'Governed<br>intelligence', 'Reusable<br>capabilities'].map((n, i) => {
+  const pill = document.createElement('div'); pill.className = 'l3d'; pill.innerHTML = `<div class="pill"><b>${n}</b></div>`; $('#s7labels').appendChild(pill);
+  const knob = document.createElement('div'); knob.className = 'l3d'; knob.innerHTML = '<div class="knob"></div>'; $('#s7labels').appendChild(knob);
+  const line = document.createElementNS(NS, 'path'); line.setAttribute('style', 'fill:none;stroke:#B9A6E3;stroke-width:3;stroke-linecap:round'); s7svg.appendChild(line);
+  return { pill, knob, line, row: ROWS[i] };
+});
 const v3 = new THREE.Vector3();
 function scene3D(t) {
   const e = P(t, 10.85, 11.55, 'power2.inOut') * (1 - P(t, 12.65, 13.15, 'power2.inOut'));
@@ -199,14 +207,14 @@ function scene3D(t) {
   LAY.forEach((m, i) => {
     m.localToWorld(v3.set(2.0, 0, 2.0)); v3.project(cam3);
     const ax = (v3.x * 0.5 + 0.5) * 1080, ay = (-v3.y * 0.5 + 0.5) * 1920;
-    const el = LBL[i], o = P(t, 11.2 + i * 0.1, 11.5 + i * 0.1) * (1 - P(t, 12.55, 12.8, 'none'));
-    const pillX = 715, lead = Math.max(10, pillX - ax - 18);
-    el.querySelector('.lead').style.width = lead + 'px';
-    tf(el, ax - 9, ay - 60, 1, 0, o);
+    const L3 = LBL[i], o = P(t, 11.2 + i * 0.1, 11.5 + i * 0.1) * (1 - P(t, 12.55, 12.8, 'none'));
+    const pillX = 740, ph = L3.pill.offsetHeight || 130;
+    tf(L3.pill, pillX, L3.row - ph / 2, 1, 0, o); tf(L3.knob, ax - 13, ay - 13, 1, 0, o);
+    L3.line.setAttribute('d', `M${ax.toFixed(1)} ${ay.toFixed(1)} C ${(ax + 50).toFixed(1)} ${ay.toFixed(1)} ${pillX - 50} ${L3.row} ${pillX} ${L3.row}`); L3.line.style.opacity = o;
   });
-  const lift = P(t, 13.2, 13.55, 'power3.in');
-  $('#s7').style.transform = `translate3d(0,${-360 * lift}px,0)`; $('#s7').style.opacity = 1 - P(t, 13.3, 13.55, 'none');
-  gl.style.opacity = P(t, 10.25, 10.6, 'power1.out');
+  const lift = P(t, 13.15, 13.42, 'power2.in');
+  $('#s7').style.transform = `translate3d(0,${-50 * lift}px,0)`; $('#s7').style.opacity = 1 - lift;
+  gl.style.opacity = P(t, 10.05, 10.4, 'power1.out');
   lineIn($('#s7b'), P(t, 10.72, 11.2, 'expo.out'), -1);
   $('#s7foot').style.opacity = P(t, 11.0, 11.4);
   $('#s7a').style.opacity = t >= 10.68 ? 1 : 0;
@@ -219,9 +227,9 @@ const ST = STEPS.map(([num, n, ic, x, y, fin]) => { const el = document.createEl
 const pPath = mkPath($('#planeSvg'), 'M200 150 L 200 1020');
 const STEP_T = [13.85, 14.35, 14.85, 15.3];
 function scenePath(t) {
-  lineIn($('#s8a'), P(t, 13.6, 14.05, 'expo.out'), 1); lineIn($('#s8b'), P(t, 13.68, 14.13, 'expo.out'), -1);
+  lineIn($('#s8a'), P(t, 13.44, 13.9, 'expo.out'), 1); lineIn($('#s8b'), P(t, 13.52, 13.98, 'expo.out'), -1);
   const hx = P(t, 15.45, 15.7, 'power3.in'); $('#s8h').style.transform = `translate3d(0,${-200 * hx}px,0)`; $('#s8h').style.opacity = 1 - hx;
-  const enter = P(t, 13.45, 13.95, 'expo.out'), scroll = 150 * P(t, 13.95, 15.35, 'power1.inOut');
+  const enter = P(t, 13.28, 13.8, 'expo.out'), scroll = 150 * P(t, 13.95, 15.35, 'power1.inOut');
   const y = 590 + L(420, 0, enter) - scroll;
   $('#plane').style.transform = `translate3d(0,${y}px,0) rotateX(${L(26, 16, enter)}deg)`;
   pPath.style.strokeDashoffset = pPath._len * (1 - P(t, 13.5, 14.2));
@@ -242,8 +250,8 @@ const purple = $('#purple');
 const BOUND = { top: 620, left: 60, right: 60, bottom: 320 };
 function scenePurple(t) {
   let ins;
-  if (t < 15.82) { // grow from the final step card's live rect
-    const r = ST[3].getBoundingClientRect(), k = P(t, 15.42, 15.8, 'power3.inOut');
+  if (t < 15.77) { // grow from the final step card's live rect
+    const r = ST[3].getBoundingClientRect(), k = P(t, 15.45, 15.75, 'power3.inOut');
     ins = [L(r.top, 0, k), L(1080 - r.right, 0, k), L(1920 - r.bottom, 0, k), L(r.left, 0, k), L(38, 0, k)];
   } else {
     const k = P(t, 17.45, 17.85, 'power3.inOut');
@@ -253,11 +261,11 @@ function scenePurple(t) {
   const fade = P(t, 17.65, 18.0, 'power1.inOut');
   purple.style.background = mix('6100A8', 'F1EAFB', fade); purple.style.opacity = 1 - P(t, 17.9, 18.15, 'none');
   // S9 content
-  $('#shieldPath').style.strokeDashoffset = 1 - P(t, 15.82, 16.3, 'power2.inOut'); $('#shieldTick').style.strokeDashoffset = 1 - P(t, 16.4, 16.65, 'power2.out'); $('#shieldTick').style.opacity = P(t, 16.4, 16.45, 'none'); $('#shieldPath').style.opacity = P(t, 15.84, 15.92, 'none');
+  $('#shieldPath').style.strokeDashoffset = 1 - P(t, 15.72, 16.2, 'power2.inOut'); $('#shieldTick').style.strokeDashoffset = 1 - P(t, 16.4, 16.65, 'power2.out'); $('#shieldTick').style.opacity = P(t, 16.4, 16.45, 'none'); $('#shieldPath').style.opacity = P(t, 15.74, 15.8, 'none');
   const so = P(t, 17.42, 17.62, 'power2.in');
-  tf($('#shield'), 0, -40 * so, L(0.85, 1, P(t, 15.82, 16.2, 'expo.out')), 0, 1 - so);
+  tf($('#shield'), 0, -40 * so, L(0.85, 1, P(t, 15.72, 16.1, 'expo.out')), 0, 1 - so);
   ['#s9a', '#s9b', '#s9c'].forEach((s, i) => {
-    const k = P(t, 15.84 + i * 0.1, 16.3 + i * 0.1, 'expo.out'), o = P(t, 17.42 + i * 0.04, 17.62 + i * 0.04, 'power2.in');
+    const k = P(t, 15.72 + i * 0.1, 16.2 + i * 0.1, 'expo.out'), o = P(t, 17.42 + i * 0.04, 17.62 + i * 0.04, 'power2.in');
     lineIn($(s), k, i % 2 ? -1 : 1, o);
   });
   const ps = L(1, 1.07, P(t, 15.9, 17.5, 'power1.inOut')); $('#s9h').style.transform = `scale(${ps})`; $('#s9h').style.transformOrigin = '0 50%';
@@ -297,6 +305,7 @@ function scenePilot(t) {
 }
 
 // ---------- S12 end ----------
+const TRUST = [...document.querySelectorAll('#trust > *')];
 const endPush = t => L(1, 1.03, P(t, 23.95, 27, 'sine.inOut'));
 function sceneEnd(t) {
   const S = endPush(t); $('#s12').style.transform = `translate3d(${540 * (1 - S)}px,${960 * (1 - S)}px,0) scale(${S})`;
@@ -307,6 +316,7 @@ function sceneEnd(t) {
   const nudge = Math.sin(Math.PI * clamp((t - 25.05) / 0.45)) + Math.sin(Math.PI * clamp((t - 26.2) / 0.45));
   $('#ctaArrow').style.transform = `translateX(${14 * nudge}px)`;
   $('#by').style.opacity = P(t, 24.4, 24.8);
+  TRUST.forEach((el, i) => { const k = P(t, 24.7 + i * 0.07, 25.15 + i * 0.07, 'expo.out'); tf(el, 0, 30 * (1 - k), 1, 0, k); });
 }
 
 // ---------- persistent ring ----------
@@ -323,8 +333,8 @@ function ringState(t) {
     return [540, L(hy, 960, k), L(HUB_RING.d, 300, k) * S, 1 - P(t, 9.95, 10.2, 'none')]; }
   if (t < 17.85) return null;
   if (t < 20.6) return [540, 880, L(0, 290, P(t, 17.85, 18.35, 'expo.out')) * push10(t)];
-  if (t < 23.5) { const k = P(t, 20.6, 21.25, 'power3.inOut'); return [540, L(880, 1540, k) + 10 * Math.sin((t - 21.25) * 2.2) * P(t, 21.25, 21.6), L(290 * 1.06, 420, k)]; }
-  if (t < 23.95) { const k = P(t, 23.5, 23.95, 'power3.inOut'), bob = 10 * Math.sin((23.5 - 21.25) * 2.2); return [L(540, LOGO12.ringX, k), L(1540 + bob, LOGO12.ringY, k), L(420, LOGO12.ringD, k)]; }
+  if (t < 23.5) { const k = P(t, 20.6, 21.25, 'power3.inOut'); return [540, L(880, 1560, k) + 10 * Math.sin((t - 21.25) * 2.2) * P(t, 21.25, 21.6), L(290 * 1.06, 500, k)]; }
+  if (t < 23.95) { const k = P(t, 23.5, 23.95, 'power3.inOut'), bob = 10 * Math.sin((23.5 - 21.25) * 2.2); return [L(540, LOGO12.ringX, k), L(1560 + bob, LOGO12.ringY, k), L(500, LOGO12.ringD, k)]; }
   const S = endPush(t); return [540 + (LOGO12.ringX - 540) * S, 960 + (LOGO12.ringY - 960) * S, LOGO12.ringD * S];
 }
 function push3f(t) { return 1 + 0.08 * P(t, 3.55, 5.25, 'power1.inOut'); }
@@ -352,7 +362,7 @@ function pulseState(t) {
 }
 
 // ---------- frame ----------
-const SCN = [['#s1', 0, 2.25], ['#s2', 2.0, 3.6], ['#s3', 3.4, 5.8], ['#s45', 5.2, 8.8], ['#s6', 8.04, 10.55], ['#s7', 10.2, 13.56], ['#s8', 13.45, 16.0], ['#purple', 15.4, 18.2], ['#s9', 15.8, 17.75], ['#s10', 17.6, 21.0], ['#s11', 20.55, 24.0], ['#s12', 23.6, 27.1]];
+const SCN = [['#s1', 0, 2.25], ['#s2', 2.0, 3.6], ['#s3', 3.4, 5.8], ['#s45', 5.2, 8.8], ['#s6', 8.04, 10.55], ['#s7', 10.0, 13.45], ['#s8', 13.28, 16.0], ['#purple', 15.4, 18.2], ['#s9', 15.7, 17.75], ['#s10', 17.6, 21.0], ['#s11', 20.55, 24.0], ['#s12', 23.6, 27.1]];
 function frame(t) {
   t = clamp(t, 0, D);
   for (const [s, a, b] of SCN) vis($(s), t >= a && t < b);
@@ -366,12 +376,12 @@ function frame(t) {
   if (t >= 5.2 && t < 8.8) sceneCanvas(t);
   if (t >= 8.04 && t < 10.55) sceneOutputs(t);
   // fly-through "Build once."
-  const fl = $('#fly'); vis(fl, t >= 10.18 && t < 10.68);
-  if (t >= 10.18 && t < 10.68) { const k = P(t, 10.18, 10.68, 'expo.out'), w = fl.offsetWidth, h = fl.offsetHeight, s = L(0.3, 1, k);
+  const fl = $('#fly'); vis(fl, t >= 10.06 && t < 10.68);
+  if (t >= 10.06 && t < 10.68) { const k = P(t, 10.06, 10.68, 'expo.out'), w = fl.offsetWidth, h = fl.offsetHeight, s = L(0.3, 1, k);
     const cx = L(540, 90 + w / 2, k), cy = L(960, 210 + h / 2, k); fl.style.transform = `translate3d(${cx - 90 - w * s / 2}px,${cy - 210 - h * s / 2}px,0) scale(${s})`; fl.style.opacity = clamp(k * 4); }
-  if (t >= 10.2 && t < 13.56) scene3D(t);
-  if (t >= 13.45 && t < 16.0) scenePath(t);
-  if (t >= 15.5 && t < 18.4) scenePurple(t);
+  if (t >= 10.0 && t < 13.45) scene3D(t);
+  if (t >= 13.28 && t < 16.0) scenePath(t);
+  if (t >= 15.4 && t < 18.4) scenePurple(t);
   if (t >= 17.6 && t < 21.0) sceneControl(t);
   if (t >= 20.55 && t < 24.0) scenePilot(t);
   if (t >= 23.6) sceneEnd(t);

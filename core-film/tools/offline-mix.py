@@ -81,6 +81,7 @@ for ev in plan:
     # peak cap (Duo, client: "too loud"): the effect's sample peak may sit at most PKCAP dB over the music's local peak (floored)
     k0 = min(len(m1), len(seg_m) - SR // 2); mloc = max(20 * np.log10(np.abs(seg_m[SR // 2:SR // 2 + W]).max() + 1e-9), PKFLOOR)
     while 20 * np.log10(g * np.abs(m1[:k0]).max() + 1e-9) > mloc + pkc and g > 1e-4: g *= .9
+    if len(ev) > 6: g *= 10 ** (ev[6] / 20)                                  # optional manual trim (dB) after solving
     j = min(N, i + len(s)); fx[i:j] += g * s[:j - i]
     e = np.zeros_like(seg_m); k = min(len(m1), len(seg_m) - SR // 2); e[SR // 2:SR // 2 + k] = g * m1[:k]
     inb = pk(sosfilt(sos, seg_m + e)[SR // 2:SR // 2 + W]) - mpk

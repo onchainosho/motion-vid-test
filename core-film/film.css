@@ -95,7 +95,7 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:var(--b
 .l3d{position:absolute;left:0;top:0;display:flex;align-items:center;gap:0;will-change:transform}
 .l3d .lead{height:3px;background:#B9A6E3}
 .l3d .pill{background:#fff;border:2px solid #E3DAF4;border-radius:26px;padding:18px 26px;box-shadow:0 14px 36px rgba(54,20,120,.10)}
-.l3d .pill b{display:block;font-size:48px;font-weight:740;letter-spacing:-.025em;line-height:1.05;color:var(--ink)}
+.l3d .pill b{display:block;font-size:42px;font-weight:740;letter-spacing:-.025em;line-height:1.05;color:var(--ink)}
 .l3d .pill i{display:block;font-style:normal;font-family:JBMono,monospace;font-size:20px;letter-spacing:.12em;color:var(--accent);margin-bottom:6px}
 .l3d .knob{width:18px;height:18px;border-radius:50%;background:var(--accent);border:4px solid #fff;box-shadow:0 0 0 2px #B9A6E3;flex:none}
 
@@ -142,3 +142,11 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:var(--b
 #by{position:absolute;left:0;right:0;top:1300px;text-align:center;font-size:40px;font-weight:650;color:var(--muted);letter-spacing:-.01em}
 
 #fly{position:absolute;left:90px;top:210px;font-size:112px;visibility:hidden;transform-origin:0 0;white-space:nowrap}
+
+#trust{position:absolute;left:0;right:0;top:1460px;text-align:center}
+#trust .tline{font-size:40px;font-weight:700;letter-spacing:-.02em;color:var(--ink);margin-bottom:28px}
+#trust .tchips{display:flex;justify-content:center;flex-wrap:wrap;gap:16px;padding:0 60px}
+#trust .tchips span{display:inline-block;padding:16px 28px;border-radius:40px;background:#fff;border:2px solid #E3DAF4;font-size:32px;font-weight:650;color:var(--muted)}
+
+#shieldPath{stroke-linecap:butt}
+#s8 .step{will-change:transform}

@@ -3,13 +3,19 @@
 "whoosh",
 1.55,
 3,
-"wall collapses into the point"
+"wall collapses into the point",
+-50,
+6,
+-0.5
 ],
 [
 "whoosh",
 3.15,
 3,
-"ring travels to the logo"
+"ring travels to the logo",
+-50,
+6,
+0.0
 ],
 [
 "click",
@@ -18,13 +24,16 @@
 "letters lock around the ring",
 -80,
 6,
--9
+-4.0
 ],
 [
 "whoosh",
 5.2,
 3,
-"push through the ring"
+"push through the ring",
+-50,
+6,
+1.0
 ],
 [
 "click",
@@ -33,25 +42,34 @@
 "Documents selected",
 -80,
 6,
--9
+-3.0
 ],
 [
 "whoosh",
 6.3,
 2,
-"camera follows the pulse down"
+"camera follows the pulse down",
+-50,
+6,
+3.5
 ],
 [
 "pop",
 7.75,
 3,
-"Semantic Search ticks"
+"Semantic Search ticks",
+-50,
+6,
+1.0
 ],
 [
 "whoosh",
 8.15,
 3,
-"outputs burst"
+"outputs burst",
+-50,
+6,
+-2.0
 ],
 [
 "click",
@@ -60,7 +78,7 @@
 "AI Agents switches on",
 -80,
 6,
--11
+-1.0
 ],
 [
 "pop",
@@ -69,19 +87,25 @@
 "check lands",
 -50,
 6,
--4
+-6.0
 ],
 [
 "whoosh",
 10.06,
 3,
-"Build once flies forward"
+"Build once flies forward",
+-50,
+6,
+-0.5
 ],
 [
 "whoosh",
 13.15,
 3,
-"3D to path"
+"3D to path",
+-50,
+6,
+-0.5
 ],
 [
 "click",
@@ -90,7 +114,7 @@
 "step 01",
 -80,
 6,
--11
+2.0
 ],
 [
 "click",
@@ -99,7 +123,7 @@
 "step 04",
 -80,
 6,
--11
+4.0
 ],
 [
 "click",
@@ -108,40 +132,52 @@
 "step 06",
 -80,
 6,
--11
+1.5
 ],
 [
 "pop",
 15.3,
 3,
-"useful output"
+"useful output",
+-50,
+6,
+-4.9
 ],
 [
 "whoosh",
 15.45,
 3,
-"purple field expands"
+"purple field expands",
+-50,
+6,
+-1.0
 ],
 [
 "ping",
 16.4,
--6,
+3,
 "shield tick",
--80,
+-50,
 6,
--11
+0.0
 ],
 [
 "whoosh",
 17.45,
 3,
-"field contracts to boundary"
+"field contracts to boundary",
+-50,
+6,
+-3.5
 ],
 [
 "pop",
 19.2,
 2,
-"private model lights"
+"private model lights",
+-50,
+6,
+-3.0
 ],
 [
 "click",
@@ -150,7 +186,7 @@
 "chip 1",
 -80,
 6,
--11
+0.0
 ],
 [
 "click",
@@ -159,7 +195,7 @@
 "chip 2",
 -80,
 6,
--11
+1.5
 ],
 [
 "click",
@@ -168,19 +204,25 @@
 "chip 3",
 -80,
 6,
--11
+5.0
 ],
 [
 "whoosh",
 20.28,
 3,
-"lines exit, ring lifts"
+"lines exit, ring lifts",
+-50,
+6,
+1.5
 ],
 [
 "whoosh",
 23.2,
 3,
-"lines exit to end card"
+"lines exit to end card",
+-50,
+6,
+0.0
 ],
 [
 "click",
@@ -189,7 +231,7 @@
 "logo locks",
 -80,
 6,
--11
+0.5
 ],
 [
 "click",
@@ -198,6 +240,6 @@
 "CTA press",
 -80,
 6,
--11
+2.0
 ]
 ]

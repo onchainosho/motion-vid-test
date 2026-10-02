@@ -90,6 +90,9 @@ export function build({ tl, layer, s, box }) {
   tl.fromTo(lines[1], { x: 0 }, { x: 18, duration: 2.6, ease: 'none', immediateRender: false }, 27.4);
   tl.fromTo(sub, { x: 0 }, { x: 10, duration: 2.6, ease: 'none', immediateRender: false }, 27.4);
   tl.fromTo(wm, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: E.land, immediateRender: true }, 27.25);
+  // break the end hold: the logo lockup breathes up 3% across 28.4–29.4, the arrow drifts toward the follow button
+  tl.fromTo(sunG, { scale: 1 }, { scale: 1.06, duration: 1.0, ease: 'sine.inOut', svgOrigin: `${SC.x} ${SC.y}`, immediateRender: false }, 28.45);
+  tl.fromTo(wm, { x: 0 }, { x: -12, duration: 1.4, ease: 'sine.inOut', immediateRender: false }, 28.3);
   // the box shares the same pivot so the whole card pushes as one
   tl.fromTo(box, { scale: 1 }, { scale: 0.96, duration: 0.45, ease: E.move, transformOrigin: `${PIV.x - BOX.x}px ${PIV.y - BOX.y}px`, immediateRender: false }, 26.3);
   tl.fromTo(box, { scale: 0.96 }, { scale: 1, duration: 3.25, ease: 'power1.out', transformOrigin: `${PIV.x - BOX.x}px ${PIV.y - BOX.y}px`, immediateRender: false }, 26.75);

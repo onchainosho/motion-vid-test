@@ -1,0 +1,28 @@
+score score-raw.wav: music-only -16.9 LUFS (chain gain -0.4 dB); mix -16.8 LUFS, LRA 3.2, true peak -4.2 dBFS; 27 effects
+  1.55 whoosh         band   328-  657 Hz  target +3  in-band lift  +3.6 dB  body  +2.0 dB  2-8k lift  -0.0 dB  gain 0.2867  wall collapses into the point
+  3.15 whoosh         band   328-  657 Hz  target +3  in-band lift  +4.5 dB  body  +1.1 dB  2-8k lift  +0.2 dB  gain 0.2152  ring travels to the logo
+  3.50 click          band   710- 2701 Hz  target +-1  in-band lift  -0.0 dB  body  +1.7 dB  2-8k lift  +2.0 dB  gain 0.5760  letters lock around the ring
+  5.20 whoosh         band   328-  657 Hz  target +3  in-band lift  +3.7 dB  body  +0.8 dB  2-8k lift  +0.0 dB  gain 0.3611  push through the ring
+  5.95 click          band   710- 2701 Hz  target +-1  in-band lift  +0.0 dB  body  +1.0 dB  2-8k lift  +1.2 dB  gain 0.3751  Documents selected
+  6.30 whoosh         band   328-  657 Hz  target +2  in-band lift  +2.8 dB  body  +0.7 dB  2-8k lift  +0.1 dB  gain 0.2767  camera follows the pulse down
+  7.75 pop            band   537- 1075 Hz  target +3  in-band lift  +3.0 dB  body  +3.1 dB  2-8k lift  -0.0 dB  gain 0.4600  Semantic Search ticks
+  8.15 whoosh         band   328-  657 Hz  target +3  in-band lift  +5.1 dB  body  +1.7 dB  2-8k lift  +0.0 dB  gain 0.2916  outputs burst
+  9.50 click          band   710- 2701 Hz  target +-1  in-band lift  -0.0 dB  body  +1.5 dB  2-8k lift  +1.6 dB  gain 0.7246  AI Agents switches on
+  9.62 pop            band   537- 1075 Hz  target +2  in-band lift  +4.1 dB  body  +3.5 dB  2-8k lift  -0.0 dB  gain 0.4641  check lands
+ 10.18 whoosh         band   328-  657 Hz  target +3  in-band lift  +5.5 dB  body  +0.8 dB  2-8k lift  +0.0 dB  gain 0.3274  Build once flies forward
+ 13.25 whoosh         band   328-  657 Hz  target +3  in-band lift  +3.4 dB  body  +1.0 dB  2-8k lift  +0.0 dB  gain 0.3633  3D to path
+ 13.85 click          band   710- 2701 Hz  target +-1  in-band lift  +0.0 dB  body  +0.1 dB  2-8k lift  +1.5 dB  gain 0.1956  step 01
+ 14.35 click          band   710- 2701 Hz  target +-1  in-band lift  +1.2 dB  body  +0.9 dB  2-8k lift  +1.5 dB  gain 0.6071  step 04
+ 14.85 click          band   710- 2701 Hz  target +-1  in-band lift  +0.0 dB  body  +0.2 dB  2-8k lift  +1.7 dB  gain 0.2618  step 06
+ 15.30 pop            band   537- 1075 Hz  target +3  in-band lift  +5.5 dB  body  +3.7 dB  2-8k lift  -0.0 dB  gain 0.2765  useful output
+ 15.42 whoosh         band   328-  657 Hz  target +3  in-band lift  +3.9 dB  body  +0.6 dB  2-8k lift  -0.0 dB  gain 0.1278  purple field expands
+ 16.40 ping           band  2345- 4690 Hz  target +-1  in-band lift  +0.0 dB  body  +0.0 dB  2-8k lift  +0.9 dB  gain 0.6903  shield tick
+ 17.45 whoosh         band   328-  657 Hz  target +3  in-band lift  +3.3 dB  body  +2.4 dB  2-8k lift  +0.0 dB  gain 0.2948  field contracts to boundary
+ 19.20 pop            band   537- 1075 Hz  target +2  in-band lift  +3.7 dB  body  +2.3 dB  2-8k lift  +0.0 dB  gain 0.3646  private model lights
+ 19.38 click          band   710- 2701 Hz  target +-1  in-band lift  +0.9 dB  body  +0.8 dB  2-8k lift  +1.6 dB  gain 0.5181  chip 1
+ 19.58 click          band   710- 2701 Hz  target +-1  in-band lift  +0.0 dB  body  +0.5 dB  2-8k lift  +1.1 dB  gain 0.2993  chip 2
+ 19.78 click          band   710- 2701 Hz  target +-1  in-band lift  +0.0 dB  body  +0.1 dB  2-8k lift  +1.8 dB  gain 0.1879  chip 3
+ 20.28 whoosh         band   328-  657 Hz  target +3  in-band lift  +3.5 dB  body  +1.2 dB  2-8k lift  +0.0 dB  gain 0.3800  lines exit, ring lifts
+ 23.20 whoosh         band   328-  657 Hz  target +3  in-band lift  +5.8 dB  body  +0.2 dB  2-8k lift  +0.0 dB  gain 0.2371  lines exit to end card
+ 24.10 click          band   710- 2701 Hz  target +-1  in-band lift  +0.8 dB  body  +0.5 dB  2-8k lift  +1.6 dB  gain 0.4761  logo locks
+ 25.00 click          band   710- 2701 Hz  target +-1  in-band lift  +0.5 dB  body  +0.5 dB  2-8k lift  +2.0 dB  gain 0.4464  CTA press

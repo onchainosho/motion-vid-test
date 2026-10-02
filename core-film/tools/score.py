@@ -169,6 +169,10 @@ pad_tail = pad.copy(); pad_tail[:i0] = 0; pad_tail[i1:] = 0
 # soft cymbal swell on the resolve (24.0): high-passed noise, slow decay
 cn = int(2.4 * SR); tt = np.arange(cn) / SR; cym = hp(rng.standard_normal(cn), 5000, 2) * np.exp(-tt * 1.6) * 0.05
 place(drums, cym, 24.0, 1.0, -0.2); place(drums, cym[::-1][-int(0.5 * SR):] * 0.6, 23.5, 1.0, 0.2)
+# pilot section lift (+~2 LU) from 20.6 to the resolve, then a fuller downbeat at 24.0
+lift = np.ones(N); i0, i1 = int(20.6 * SR), int(23.95 * SR); lift[i0:i1] = 1.3; lift[i0:i0 + int(.3 * SR)] = np.linspace(1, 1.3, int(.3 * SR))
+bed *= lift[:, None]; drums *= lift[:, None]
+place(drums, kick(), 24.0, 0.45); place(drums, cym, 24.0, 0.8, 0.25)
 mix = bed + drums + bell + pad_tail * 0.25
 
 # ---- space: short seeded plate-ish reverb on arp/bell/pad bus

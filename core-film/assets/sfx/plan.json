@@ -14,7 +14,7 @@
 [
 "click",
 3.5,
-1,
+-1,
 "letters lock around the ring"
 ],
 [
@@ -26,7 +26,7 @@
 [
 "click",
 5.95,
-1,
+-1,
 "Documents selected"
 ],
 [
@@ -43,14 +43,14 @@
 ],
 [
 "whoosh",
-8.45,
+8.15,
 3,
 "outputs burst"
 ],
 [
 "click",
 9.5,
-1,
+-1,
 "AI Agents switches on"
 ],
 [
@@ -74,19 +74,19 @@
 [
 "click",
 13.85,
-1,
+-1,
 "step 01"
 ],
 [
 "click",
 14.35,
-1,
+-1,
 "step 04"
 ],
 [
 "click",
 14.85,
-1,
+-1,
 "step 06"
 ],
 [
@@ -97,19 +97,19 @@
 ],
 [
 "whoosh",
-15.55,
+15.42,
 3,
 "purple field expands"
 ],
 [
 "ping",
 16.4,
-1,
+-1,
 "shield tick"
 ],
 [
 "whoosh",
-17.62,
+17.45,
 3,
 "field contracts to boundary"
 ],
@@ -122,19 +122,19 @@
 [
 "click",
 19.38,
-1,
+-1,
 "chip 1"
 ],
 [
 "click",
 19.58,
-1,
+-1,
 "chip 2"
 ],
 [
 "click",
 19.78,
-1,
+-1,
 "chip 3"
 ],
 [
@@ -151,14 +151,14 @@
 ],
 [
 "click",
-24.05,
-1,
+24.1,
+-1,
 "logo locks"
 ],
 [
 "click",
 25.0,
-1,
+-1,
 "CTA press"
 ]
 ]

@@ -64,6 +64,10 @@ export function build({ tl, layer, s, e, box, boxText }) {
     tl.fromTo(c, { scaleY: 0.82 }, { scaleY: 1, duration: 0.22, ease: 'back.out(3)' }, t);
   });
 
+  // a second beat of life at 1.5: the good frame lifts toward camera as the last coin lands
+  tl.to(good.f, { scale: 1.06, rotation: -1, duration: 0.45, ease: E.land2 }, 1.5);
+  frames.forEach(({ f }, i) => tl.to(f, { x: '-=' + (12 + i * 6), duration: 0.45, ease: E.land2 }, 1.5));
+
   // --- exit: lines split, visuals fall, the box flies through the camera ---
   linesOut(tl, lines, 1.95);
   tl.to(sub, { y: 60, opacity: 0, duration: 0.25, ease: E.leave }, 1.95);

@@ -62,7 +62,7 @@ export function build(ctx) {
   [3.25, 3.5, 3.75].forEach((t, i) => tl.to(ticks[i], { strokeDashoffset: 0, duration: 0.16, ease: 'power2.out' }, t));
 
   // final stamp
-  const stamp = el('div', '', { position: 'absolute', right: '34px', bottom: '34px', width: '84px', height: '84px', background: '#111', borderRadius: '10px', zIndex: 3, opacity: 0 }, pol);
+  const stamp = el('div', '', { position: 'absolute', right: '150px', bottom: '40px', width: '84px', height: '84px', background: '#111', borderRadius: '10px', zIndex: 3, opacity: 0 }, pol);
   const st = tick(stamp, { x: 10, y: 12, s: 0.72, width: 13 }); st.style.strokeDasharray = '120 122';
   tl.fromTo(stamp, { opacity: 0, scale: 1.8 }, { opacity: 1, scale: 1, duration: 0.26, ease: E.pop, immediateRender: false }, 4.12);
   tl.fromTo(st, { strokeDashoffset: 120 }, { strokeDashoffset: 0, duration: 0.18, immediateRender: false }, 4.18);

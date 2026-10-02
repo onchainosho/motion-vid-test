@@ -25,7 +25,7 @@ def pk(y): h = int(.05 * SR); return max(10 * np.log10((y[i:i + h] ** 2).mean() 
 # music chain: gentle presence lift, glue compression
 raw = P / 'renders/_music_chain.wav'
 subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', str(P / 'assets/audio/music.wav'), '-af',
-                'highshelf=f=3000:g=2,acompressor=threshold=-20dB:ratio=2:attack=8:release=160:knee=6', '-ar', str(SR), '-ac', '2', str(raw)], check=True)
+                'highshelf=f=3000:g=2,acompressor=threshold=-18dB:ratio=1.4:attack=10:release=200:knee=6', '-ar', str(SR), '-ac', '2', str(raw)], check=True)
 mus = load(raw)[:N]; mus = np.pad(mus, ((0, N - len(mus)), (0, 0)))
 mg = 10 ** ((target_lufs - lufs(mus)[0]) / 20); mus *= mg; mono_m = mus.mean(1)
 fx = np.zeros_like(mus); rep = []
@@ -48,8 +48,11 @@ for ev in plan:
     k0 = min(len(m1), len(seg_m) - SR // 2); mloc = 20 * np.log10(np.abs(seg_m[SR // 2:SR // 2 + W]).max() + 1e-9)
     while 20 * np.log10(g * np.abs(m1[:k0]).max() + 1e-9) > mloc + pkc and g > 1e-4: g *= .9
     # consistency: repeated sounds sit at one fixed sample-peak level per type (kit audio rule 3), always under the local music peak
+    mloc_pre = 20 * np.log10(np.abs(seg_m[SR // 2:SR // 2 + W]).max() + 1e-9)
     if name in FIXED: g = 10 ** ((FIXED[name] - 20 * np.log10(np.abs(m1).max() + 1e-9)) / 20) * (10 ** ((target - 3.0) / 20)); hl = hf_lift(g)
     while name in FIXED and hl > HF_CAP + 1 and g > 1e-4: g *= .9; hl = hf_lift(g)
+    # never louder than the music: the effect's sample peak stays ≥2 dB under the local music peak
+    while 20 * np.log10(g * np.abs(m1).max() + 1e-9) > mloc_pre - 2 and g > 1e-4: g *= .9
     j = min(N, i + len(s)); fx[i:j] += g * s[:j - i]
     e = np.zeros_like(seg_m); k = min(len(m1), len(seg_m) - SR // 2); e[SR // 2:SR // 2 + k] = g * m1[:k]
     inb = pk(sosfilt(sos, seg_m + e)[SR // 2:SR // 2 + W]) - pk(sosfilt(sos, seg_m)[SR // 2:SR // 2 + W])

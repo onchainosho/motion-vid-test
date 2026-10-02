@@ -11,7 +11,7 @@ export function build({ tl, layer, s, e }) {
   const L = ['BEFORE YOU SPEND', 'THE CREDITS...'];
   const size = Math.min(132, Math.floor(132 * 952 / Math.max(...L.map(l => measure(l, 132)))));
   const lines = headline(layer, L, { x: 64, y: 220 + (132 - size) * 0.86, size });
-  linesIn(tl, lines, s - 0.06);
+  linesIn(tl, lines, 22.38);
   linesOut(tl, lines, 26.15);
 
   // group that pushes slowly and slides down on exit
@@ -40,7 +40,7 @@ export function build({ tl, layer, s, e }) {
   ROWS.forEach((label, i) => {
     const y = top + i * pitch;
     const row = el('div', '', { position: 'absolute', left: 0, top: y + 'px', width: N.w + 'px', height: pitch + 'px' }, note);
-    const num = el('div', 'disp abs', { left: '72px', top: '12px', fontSize: '60px', color: '#C24E17' }, row, String(i + 1).padStart(2, '0'));
+    const num = el('div', 'disp abs', { left: '72px', top: '12px', fontSize: '60px', color: '#A8411A' }, row, String(i + 1).padStart(2, '0'));
     // ink checkbox (slightly wobbly)
     const bx = el('div', 'abs', { left: '170px', top: '15px', width: '48px', height: '48px' }, row);
     const bs = svg(bx, { x: 0, y: 0, w: 48, h: 48, vb: '0 0 48 48' });
@@ -85,8 +85,8 @@ export function build({ tl, layer, s, e }) {
   tl.fromTo(ul, { strokeDashoffset: uL }, { strokeDashoffset: 0, duration: 0.32, ease: 'power2.inOut', immediateRender: true }, 25.58);
 
   // ---- 25.6–26.15: punch-in on THEN GENERATE. (type-impact close); the list falls back
-  tl.fromTo(tgw, { scale: 1 }, { scale: 1.12, duration: 0.55, ease: 'power2.inOut', immediateRender: false }, 25.6);
-  tl.to(note, { opacity: 0.55, y: 18, duration: 0.5, ease: 'power2.out' }, 25.65);
+  tl.fromTo(tgw, { scale: 1 }, { scale: 1.18, duration: 0.5, ease: 'power3.out', immediateRender: false }, 25.6);
+  tl.to(note, { y: 26, scale: 0.97, duration: 0.5, ease: 'power2.out' }, 25.65); // no fade: numbers keep their contrast
 
   // ---- exit: the paper slides down
   tl.to(g, { y: 1400, duration: 0.42, ease: E.fast }, 26.08);

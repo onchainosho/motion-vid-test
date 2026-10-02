@@ -84,9 +84,13 @@ export function build({ tl, layer, s, box }) {
   // a soft light shimmer crosses the FOLLOW box (27.75, 29.25)
   const shim = el('div', '', { position: 'absolute', top: '-20%', height: '140%', width: '160px', left: '-200px', background: 'linear-gradient(90deg,rgba(255,240,220,0),rgba(255,240,220,.38),rgba(255,240,220,0))', transform: 'skewX(-18deg)', pointerEvents: 'none', zIndex: 3 }, box);
   [27.75, 29.25].forEach(t => tl.fromTo(shim, { x: 0 }, { x: BOX.w + 400, duration: 0.6, ease: 'power1.inOut', immediateRender: false }, t));
-  tl.fromTo(g, { scale: 0.96 }, { scale: 1, duration: 3.25, ease: 'sine.inOut', immediateRender: true }, 26.75);
+  tl.fromTo(g, { scale: 0.96 }, { scale: 1, duration: 3.25, ease: 'power1.out', immediateRender: true }, 26.75);
+  // headline lines counter-drift through the hold so the big type is never still
+  tl.fromTo(lines[0], { x: 0 }, { x: -18, duration: 2.6, ease: 'none', immediateRender: false }, 27.4);
+  tl.fromTo(lines[1], { x: 0 }, { x: 18, duration: 2.6, ease: 'none', immediateRender: false }, 27.4);
+  tl.fromTo(sub, { x: 0 }, { x: 10, duration: 2.6, ease: 'none', immediateRender: false }, 27.4);
   tl.fromTo(wm, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: E.land, immediateRender: true }, 27.25);
   // the box shares the same pivot so the whole card pushes as one
   tl.fromTo(box, { scale: 1 }, { scale: 0.96, duration: 0.45, ease: E.move, transformOrigin: `${PIV.x - BOX.x}px ${PIV.y - BOX.y}px`, immediateRender: false }, 26.3);
-  tl.fromTo(box, { scale: 0.96 }, { scale: 1, duration: 3.25, ease: 'sine.inOut', transformOrigin: `${PIV.x - BOX.x}px ${PIV.y - BOX.y}px`, immediateRender: false }, 26.75);
+  tl.fromTo(box, { scale: 0.96 }, { scale: 1, duration: 3.25, ease: 'power1.out', transformOrigin: `${PIV.x - BOX.x}px ${PIV.y - BOX.y}px`, immediateRender: false }, 26.75);
 }

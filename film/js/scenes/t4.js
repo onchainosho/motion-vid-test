@@ -7,8 +7,8 @@ import { E, el, place, polaroid, tape, hand, svg, path, arrow, rng, tipHeadline 
 export const meta = { box: { lines: ['DEFINE THE', 'PHYSICS.'] } };
 
 // ---- layout ----
-const PW = 320, PH = 350, COLS = [64, 620], ROWS = [792, 1210];
-const NOTE = { w: 214, h: 128, cx: 502, cy: 1176 };
+const PW = 340, PH = 360, COLS = [64, 600], ROWS = [790, 1200];
+const NOTE = { w: 214, h: 128, cx: 502, cy: 1175 };
 const NOTE_TOP = NOTE.cy - NOTE.h / 2;
 const R = 54;
 const YC = NOTE_TOP - R + 4;            // ball centre when resting on the note
@@ -28,7 +28,7 @@ for (let i = 0; i < CONTACTS.length - 1; i++) {
   FLIGHTS.push([lift, T, v]); CONTACTS[i + 1][2] = v;
 }
 const T_REST = CONTACTS[2][0] + CONTACTS[2][1];
-const T_OUT = 11.85, OUT_D = 0.36;
+const T_OUT = 12.0, OUT_D = 0.34;
 const outE = gsap.parseEase('expo.in');
 const exitY = t => (t <= T_OUT ? 0 : 1100 * outE(Math.min(1, (t - T_OUT) / OUT_D)));
 

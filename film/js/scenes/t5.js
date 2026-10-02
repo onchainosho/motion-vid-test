@@ -6,8 +6,8 @@ import { E, el, place, polaroid, tag, svg, path, rng, tipHeadline } from '../cor
 
 export const meta = { box: { lines: ['PROMPT IT TOO.'] } };
 
-const LINE_Y = 1400;                     // shared with t6 (literal there too)
-const X1 = 64, X2 = 1000, N = 47, STEP = 20, BW = 12;
+const LINE_Y = 1410;                     // shared with t6 (literal there too)
+const X1 = 64, X2 = 940, N = 44, STEP = 20, BW = 12;
 const TAGS = [['DIALOGUE', 252, -3, 13.25], ['AMBIENCE', 772, 2.5, 14.0]]; // text, centre x, rot, light-up time (beats)
 const P0 = 13.0, P1 = 14.25;
 
@@ -38,14 +38,14 @@ export function build(ctx) {
   tipHeadline(ctx, ['USING SEEDANCE', 'AUDIO?']);
 
   // ---- station polaroid (inside x 64–940 even at full push) ----
-  const P = { x: 112, y: 640, w: 784, h: 566 };
+  const P = { x: 140, y: 708, w: 760, h: 540 };
   const pol = polaroid(layer, { ...P, src: 'station', rot: -1.5, tapeRot: 3 });
   tl.fromTo(pol.root, { opacity: 0, y: 220, rotation: 5, scale: 0.9 }, { opacity: 1, y: 0, rotation: -1.5, scale: 1, duration: 0.6, ease: E.land, immediateRender: true }, 12.45);
   tl.to(pol.root, { scale: 1.035, rotation: -0.5, duration: 1.45, ease: E.soft }, 13.05); // slow push
   tl.to(pol.img, { scale: 1.06, duration: 1.5, ease: E.soft }, 13.0);
 
   // speaker sticker on the photo (≤ x 860)
-  const spk = el('div', 'abs', { left: '574px', top: '36px', width: '150px', height: '150px', borderRadius: '50%', background: '#F6F1E8', boxShadow: '0 10px 22px -8px rgba(40,25,10,.45)', opacity: 0 }, pol.root);
+  const spk = el('div', 'abs', { left: '560px', top: '34px', width: '150px', height: '150px', borderRadius: '50%', background: '#F6F1E8', boxShadow: '0 10px 22px -8px rgba(40,25,10,.45)', opacity: 0 }, pol.root);
   const ss = svg(spk, { x: 0, y: 0, w: 150, h: 150, vb: '0 0 150 150' });
   path(ss, 'M30 60 H52 L80 36 V114 L52 90 H30 Z', { stroke: '#111', width: 7, fill: '#111' });
   const wv = [path(ss, 'M94 58 Q106 75 94 92', { stroke: 'var(--orange)', width: 8 }), path(ss, 'M108 44 Q130 75 108 106', { stroke: 'var(--orange)', width: 8 })];
@@ -83,7 +83,7 @@ export function build(ctx) {
   tl.set(line, { opacity: 0 }, 15.0); // tip 6 draws the identical line from 15.0
 
   // ---- playhead (driven per frame by phX) ----
-  const ph = el('div', 'abs', { left: '0px', top: (LINE_Y - 128) + 'px', width: '6px', height: '256px', background: '#111', borderRadius: '3px', transformOrigin: '50% 50%' }, layer);
+  const ph = el('div', 'abs', { left: '0px', top: (LINE_Y - 118) + 'px', width: '6px', height: '236px', background: '#111', borderRadius: '3px', transformOrigin: '50% 50%' }, layer);
   const knob = svg(ph, { x: -13, y: -24, w: 32, h: 28, vb: '0 0 32 28' });
   path(knob, 'M2 2 H30 L16 26 Z', { stroke: '#111', width: 3, fill: 'var(--orange)' });
   tl.fromTo(ph, { scaleY: 0, opacity: 0 }, { scaleY: 1, opacity: 1, duration: 0.25, ease: E.land, immediateRender: true }, 12.78);
@@ -96,14 +96,13 @@ export function build(ctx) {
     const t = tag(w, txt, { x: 0, y: 0, size: 60, rot: 0 });
     t.style.boxShadow = 'none'; t.style.padding = '16px 28px'; t.style.position = 'relative'; torn(t, 77 + i);
     const tw = t.offsetWidth;
-    place(w, { x: cx - tw / 2, y: 1172 + i * 6 });
+    place(w, { x: cx - tw / 2, y: 1196 + i * 6 });
     gsap.set(w, { rotation: rot, transformOrigin: '50% 50%' });
     const txtEl = t.firstChild;
     tl.fromTo(w, { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.4, ease: E.land, immediateRender: true }, 12.7 + i * 0.1);
-    gsap.set(txtEl, { opacity: 0.4 });
     // lights up in one frame: paper -> orange, ink -> cream, then a pulse to 1.15
     tl.set(t, { backgroundColor: '#EC6327' }, at);
-    tl.set(txtEl, { opacity: 1, color: '#F7F0E6' }, at);
+    tl.set(txtEl, { color: '#F7F0E6' }, at);
     tl.to(w, { scale: 1.15, duration: 0.1, ease: 'power2.out' }, at);
     tl.to(w, { scale: 1, duration: 0.32, ease: 'back.out(2)' }, at + 0.1);
     return w;

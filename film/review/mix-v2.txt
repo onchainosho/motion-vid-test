@@ -1,0 +1,39 @@
+music-only -14.3 LUFS; mix -14.1 LUFS, LRA 2.4 LU, peak -1.6 dBFS; 38 effects
+  0.50 click-soft   band   749- 4284 Hz  in-band lift  +0.0 dB  2-8k lift  +3.9 dB  fx peak  -13.0 dBFS vs music peak   -7.1  cover tick stamps
+  1.00 pop          band   529- 1058 Hz  in-band lift +10.7 dB  2-8k lift  -0.0 dB  fx peak   -9.0 dBFS vs music peak  -10.1  coin lands
+  1.50 pop          band   529- 1058 Hz  in-band lift  +3.0 dB  2-8k lift  +0.0 dB  fx peak   -9.0 dBFS vs music peak   -6.1  coin lands
+  2.33 whoosh-short band   327-  654 Hz  in-band lift +12.9 dB  2-8k lift  -0.0 dB  fx peak  -11.0 dBFS vs music peak   -3.1  cover→t1 fly-through
+  3.25 click-soft   band   749- 4284 Hz  in-band lift  +0.0 dB  2-8k lift  +0.0 dB  fx peak  -13.0 dBFS vs music peak   -4.5  check: framing
+  3.50 click-soft   band   749- 4284 Hz  in-band lift  +0.0 dB  2-8k lift  +0.0 dB  fx peak  -14.0 dBFS vs music peak   -4.5  check: motion
+  3.75 click-soft   band   749- 4284 Hz  in-band lift  -0.0 dB  2-8k lift  +0.1 dB  fx peak  -14.0 dBFS vs music peak   -5.2  check: position
+  4.12 pop          band   529- 1058 Hz  in-band lift  +0.9 dB  2-8k lift  +0.0 dB  fx peak   -9.0 dBFS vs music peak   -3.4  final render stamp
+  4.88 whoosh-short band   327-  654 Hz  in-band lift  +2.4 dB  2-8k lift  -0.0 dB  fx peak  -11.0 dBFS vs music peak   -7.7  t1→t2
+  5.50 pop          band   529- 1058 Hz  in-band lift  +1.7 dB  2-8k lift  +0.0 dB  fx peak   -9.0 dBFS vs music peak   -3.0  last photo lands
+  6.00 click-soft   band   749- 4284 Hz  in-band lift  +0.4 dB  2-8k lift  -0.0 dB  fx peak  -13.0 dBFS vs music peak   -5.5  pack snaps
+  6.25 pop          band   529- 1058 Hz  in-band lift  +6.6 dB  2-8k lift  -0.0 dB  fx peak   -9.0 dBFS vs music peak   -3.9  tags
+  7.38 whoosh-short band   327-  654 Hz  in-band lift  +3.4 dB  2-8k lift  +0.0 dB  fx peak  -11.0 dBFS vs music peak   -4.3  t2→t3
+  8.00 click-soft   band   749- 4284 Hz  in-band lift  +0.6 dB  2-8k lift  +0.0 dB  fx peak  -13.0 dBFS vs music peak   -4.8  CAMERA tag
+  8.25 click-soft   band   749- 4284 Hz  in-band lift  +0.0 dB  2-8k lift  +0.0 dB  fx peak  -13.0 dBFS vs music peak   -4.3  PATH tag
+  8.84 whoosh-short band   327-  654 Hz  in-band lift  -0.0 dB  2-8k lift  -0.0 dB  fx peak  -11.0 dBFS vs music peak   -7.6  3D→photo wipe
+  9.88 whoosh-short band   327-  654 Hz  in-band lift  +2.3 dB  2-8k lift  +0.8 dB  fx peak  -11.0 dBFS vs music peak   -4.7  t3→t4
+ 10.50 pop          band   529- 1058 Hz  in-band lift  +0.0 dB  2-8k lift  +0.0 dB  fx peak   -9.0 dBFS vs music peak   -4.3  ball hits WEIGHT
+ 11.00 pop          band   529- 1058 Hz  in-band lift +10.3 dB  2-8k lift  -0.0 dB  fx peak   -9.0 dBFS vs music peak   -7.9  2nd bounce
+ 12.38 whoosh-short band   327-  654 Hz  in-band lift +11.2 dB  2-8k lift  +0.0 dB  fx peak  -11.0 dBFS vs music peak   -2.6  t4→t5
+ 13.25 click-soft   band   749- 4284 Hz  in-band lift  +0.0 dB  2-8k lift  +0.0 dB  fx peak  -13.0 dBFS vs music peak   -2.7  DIALOGUE lights
+ 13.50 pop          band   529- 1058 Hz  in-band lift  +1.0 dB  2-8k lift  +0.0 dB  fx peak   -9.0 dBFS vs music peak   -2.7  speaker
+ 14.00 click-soft   band   749- 4284 Hz  in-band lift  +0.3 dB  2-8k lift  -0.0 dB  fx peak  -13.0 dBFS vs music peak   -4.4  AMBIENCE lights
+ 14.88 whoosh-short band   327-  654 Hz  in-band lift  +0.2 dB  2-8k lift  +0.0 dB  fx peak  -11.0 dBFS vs music peak   -6.0  t5→t6
+ 15.95 pop          band   529- 1058 Hz  in-band lift  +3.2 dB  2-8k lift  -0.0 dB  fx peak   -9.0 dBFS vs music peak   -3.6  tag → prompt sheet
+ 17.38 whoosh-short band   327-  654 Hz  in-band lift  +2.7 dB  2-8k lift  +0.0 dB  fx peak  -11.0 dBFS vs music peak   -2.3  t6→t7
+ 18.00 pop          band   529- 1058 Hz  in-band lift  +1.9 dB  2-8k lift  +0.0 dB  fx peak   -9.0 dBFS vs music peak   -3.7  TEST 01 drops
+ 18.50 click-soft   band   749- 4284 Hz  in-band lift  +0.0 dB  2-8k lift  +0.0 dB  fx peak  -13.0 dBFS vs music peak   -2.8  check stamp
+ 18.75 pop          band   529- 1058 Hz  in-band lift  +2.0 dB  2-8k lift  +0.0 dB  fx peak   -9.0 dBFS vs music peak   -4.1  slots fill
+ 19.88 whoosh-short band   327-  654 Hz  in-band lift  +2.7 dB  2-8k lift  +0.1 dB  fx peak  -11.0 dBFS vs music peak   -3.8  t7→t8
+ 20.50 click-soft   band   749- 4284 Hz  in-band lift  +0.0 dB  2-8k lift  -0.0 dB  fx peak  -13.0 dBFS vs music peak   -3.0  rough frame 1
+ 20.75 click-soft   band   749- 4284 Hz  in-band lift  +0.2 dB  2-8k lift  +0.0 dB  fx peak  -14.0 dBFS vs music peak   -3.0  rough frame 2
+ 21.00 click-soft   band   749- 4284 Hz  in-band lift  -0.0 dB  2-8k lift  -0.0 dB  fx peak  -14.0 dBFS vs music peak   -6.3  rough frame 3
+ 21.20 pop          band   529- 1058 Hz  in-band lift  +0.0 dB  2-8k lift  +0.0 dB  fx peak   -9.0 dBFS vs music peak   -1.0  SEEDANCE tag
+ 21.50 ping         band  2347- 5398 Hz  in-band lift  +0.0 dB  2-8k lift  -0.0 dB  fx peak  -12.0 dBFS vs music peak   -1.0  styled shot
+ 22.38 whoosh-short band   327-  654 Hz  in-band lift +10.2 dB  2-8k lift  -0.0 dB  fx peak  -11.0 dBFS vs music peak   -7.2  t8→check
+ 25.50 pop          band   529- 1058 Hz  in-band lift  +2.2 dB  2-8k lift  +0.0 dB  fx peak   -9.0 dBFS vs music peak   -5.2  THEN GENERATE. stamp
+ 26.38 whoosh-short band   327-  654 Hz  in-band lift +16.0 dB  2-8k lift  +0.0 dB  fx peak  -11.0 dBFS vs music peak   -2.0  check→cta

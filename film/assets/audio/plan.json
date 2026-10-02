@@ -1,0 +1,230 @@
+[
+[
+"click-soft",
+0.5,
+3.0,
+"cover tick stamps"
+],
+[
+"pop",
+1.0,
+3.0,
+"coin lands"
+],
+[
+"pop",
+1.5,
+3.0,
+"coin lands"
+],
+[
+"whoosh-short",
+2.33,
+3.0,
+"cover\u2192t1 fly-through"
+],
+[
+"click-soft",
+3.25,
+3.0,
+"check: framing"
+],
+[
+"click-soft",
+3.5,
+2.0,
+"check: motion"
+],
+[
+"click-soft",
+3.75,
+2.0,
+"check: position"
+],
+[
+"pop",
+4.12,
+3.0,
+"final render stamp"
+],
+[
+"whoosh-short",
+4.88,
+3.0,
+"t1\u2192t2"
+],
+[
+"pop",
+5.5,
+3.0,
+"last photo lands"
+],
+[
+"click-soft",
+6.0,
+3.0,
+"pack snaps"
+],
+[
+"pop",
+6.25,
+3.0,
+"tags"
+],
+[
+"whoosh-short",
+7.38,
+3.0,
+"t2\u2192t3"
+],
+[
+"click-soft",
+8.0,
+3.0,
+"CAMERA tag"
+],
+[
+"click-soft",
+8.25,
+3.0,
+"PATH tag"
+],
+[
+"whoosh-short",
+8.84,
+3.0,
+"3D\u2192photo wipe"
+],
+[
+"whoosh-short",
+9.88,
+3.0,
+"t3\u2192t4"
+],
+[
+"pop",
+10.5,
+3.0,
+"ball hits WEIGHT"
+],
+[
+"pop",
+11.0,
+3.0,
+"2nd bounce"
+],
+[
+"whoosh-short",
+12.38,
+3.0,
+"t4\u2192t5"
+],
+[
+"click-soft",
+13.25,
+3.0,
+"DIALOGUE lights"
+],
+[
+"pop",
+13.5,
+3.0,
+"speaker"
+],
+[
+"click-soft",
+14.0,
+3.0,
+"AMBIENCE lights"
+],
+[
+"whoosh-short",
+14.88,
+3.0,
+"t5\u2192t6"
+],
+[
+"pop",
+15.95,
+3.0,
+"tag \u2192 prompt sheet"
+],
+[
+"whoosh-short",
+17.38,
+3.0,
+"t6\u2192t7"
+],
+[
+"pop",
+18.0,
+3.0,
+"TEST 01 drops"
+],
+[
+"click-soft",
+18.5,
+3.0,
+"check stamp"
+],
+[
+"pop",
+18.75,
+3.0,
+"slots fill"
+],
+[
+"whoosh-short",
+19.88,
+3.0,
+"t7\u2192t8"
+],
+[
+"click-soft",
+20.5,
+3.0,
+"rough frame 1"
+],
+[
+"click-soft",
+20.75,
+2.0,
+"rough frame 2"
+],
+[
+"click-soft",
+21.0,
+2.0,
+"rough frame 3"
+],
+[
+"pop",
+21.2,
+3.0,
+"SEEDANCE tag"
+],
+[
+"ping",
+21.5,
+3.0,
+"styled shot"
+],
+[
+"whoosh-short",
+22.38,
+3.0,
+"t8\u2192check"
+],
+[
+"pop",
+25.5,
+3.0,
+"THEN GENERATE. stamp"
+],
+[
+"whoosh-short",
+26.38,
+3.0,
+"check\u2192cta"
+]
+]

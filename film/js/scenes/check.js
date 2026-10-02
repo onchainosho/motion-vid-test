@@ -86,7 +86,7 @@ export function build({ tl, layer, s, e }) {
 
   // ---- 25.6–26.15: punch-in on THEN GENERATE. (type-impact close); the list falls back
   tl.fromTo(tgw, { scale: 1 }, { scale: 1.12, duration: 0.55, ease: 'power2.inOut', immediateRender: false }, 25.6);
-  tl.to(note, { opacity: 0.55, y: 18, duration: 0.5, ease: 'power2.out' }, 25.62);
+  tl.to(note, { opacity: 0.55, y: 18, duration: 0.5, ease: 'power2.out' }, 25.65);
 
   // ---- exit: the paper slides down
   tl.to(g, { y: 1400, duration: 0.42, ease: E.fast }, 26.08);

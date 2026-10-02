@@ -18,3 +18,12 @@ Project: `/home/user/motion-vid-test/film`. A 30 s, 1080×1920, 60 fps Instagram
 - **Motion proof clip:** `lab/mk.sh <name> <start> <end>` creates `lab-<name>.html`. Render it with `npx hyperframes render . -c lab-<name>.html -o renders/lab-<name>.mp4 --quiet` from the film dir (about 15 s of wall time per second of video). Make a dense contact sheet: `ffmpeg -i renders/lab-<name>.mp4 -vf "fps=10,scale=270:-1,tile=6x5" /tmp/<you>/sheet.png`.
 - Check: no text collisions, nothing clipped by mistake, no pops (look for one-frame jumps), and nothing frozen.
 - Don't judge quality yourself beyond fixing obvious bugs. An independent critic will review. Report back with the files changed, the lab clip path, and any known weak spots.
+
+## v2 changes (after full-film critic F1, docs/critic/f1-full.md)
+- **Bigger type:** tip headlines are now up to 176 px (was 132), fitted to 952 px wide. The box moved to **y=544**, so its bottom is **y=676** (1 line) or **y=758** (2 lines). Visuals start about 30 px below the box and may run to y 1560.
+- **The box is never empty:** the old answer rolls up out of the box while the new one rolls in (main.js). Nothing for you to do.
+- **Safe zone (stricter):** below y≈1000, key content (text, faces, the main subject) stays at **x ≤ 940**, because the Reels right-side buttons sit there. Decorative bleed past the edge is fine. Nothing key below y 1560.
+- **Exits never pass through text:** never send a visual up through the headline, box or header. Exit down, sideways, or scale away in place.
+- **No near-still windows:** the paper drift does not count. Every 0.3 s something meaningful moves; a settled hold needs a 3–4% push or secondary motion.
+- **Contrast:** any settled text must be ≥4.5:1 against what is behind it. Orange text on paper fails (3.1:1); use ink, or the darker orange `#C24E17` (4.5:1), for text that must be read.
+- **Vary scale:** each scene should feel like its own composition (close-up / wide / full-bleed / type-impact), not "the same layout with a different picture".

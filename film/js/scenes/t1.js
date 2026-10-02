@@ -1,7 +1,7 @@
 // Tip 1 (2.5–5.0): TEST AT 480p. — the same shot goes from chunky draft to crisp final once the checks tick.
 import { E, el, place, img, tag, hand, svg, path, tick, tipHeadline, HANDOFF } from '../core.js';
 
-export const meta = { pre: 0.04, box: { lines: ['GO HIGHER LATER.'] }, boxTiming: { morph: 0.01, morphShift: 0.19, textShift: 0.16 } };
+export const meta = { pre: 0.04, box: { lines: ['GO HIGHER LATER.'] }, boxTiming: { morph: 0.01, morphShift: 0.19, textShift: 0.2, cut: true } };
 
 // Pixel size of the draft as a function of time: chunky, then resolves in steps on the 4.0 s beat.
 const pixelAt = t => (t < 4.0 ? 20 : t < 4.06 ? 13 : t < 4.12 ? 7 : t < 4.18 ? 3 : 1);

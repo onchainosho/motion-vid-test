@@ -1,6 +1,8 @@
 // Shared pieces for every scene. All motion is a pure function of timeline time.
 export const W = 1080, H = 1920, FPS = 60, BPM = 120, BEAT = 60 / BPM;
 export const M = 72; // left/right content margin
+// Reels UI: key content below y≈1000 stays at x ≤ 940 (right-side buttons); nothing key below y 1560.
+export const SAFE = { right: 940, bottom: 1560 };
 
 // Scene windows (seconds). Every boundary is on a beat.
 export const SCENES = {
@@ -97,7 +99,7 @@ export function linesOut(tl, lines, t, { dist = 1200, dur = 0.24, stagger = 0.03
 }
 
 // ---- Fixed text block for tips 1–8 (storyboard v2) ----------------------
-export const TIP = { x: 64, y: 220, size: 132, maxW: 936, boxY: 472, boxH1: 132, boxH2: 214, boxFs1: 100, boxFs2: 92, boxPad: 30 };
+export const TIP = { x: 64, y: 220, size: 176, maxW: 952, boxY: 544, boxH1: 132, boxH2: 214, boxFs1: 100, boxFs2: 92, boxPad: 30 };
 // Measure rendered width of display text at a size.
 export function measure(text, size, stretch = 78) {
   const s = el('span', 'disp', { position: 'absolute', visibility: 'hidden', fontSize: size + 'px', fontStretch: stretch + '%' }, document.body, text);

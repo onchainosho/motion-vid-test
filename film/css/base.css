@@ -1,0 +1,47 @@
+/* Possible Labs · shared tokens and pieces. Every scene uses these; no scene redefines a colour or font. */
+@font-face{font-family:'Archivo PL';src:url(../fonts/archivo-wdth.woff2) format('woff2-variations');font-weight:100 900;font-stretch:62% 125%}
+@font-face{font-family:'Inter Tight PL';src:url(../fonts/inter-tight.woff2) format('woff2-variations');font-weight:100 900}
+@font-face{font-family:'Kalam PL';src:url(../fonts/kalam-700.woff2) format('woff2');font-weight:700}
+
+:root{
+  --paper:#EFE8DB; --paper-hi:#F4EEE7; --ink:#000000; --orange:#EC6327; --cream:#F7F0E6;
+  --tape:#E3D6BE; --line:rgba(0,0,0,.55);
+  --display:'Archivo PL',sans-serif; --sans:'Inter Tight PL',sans-serif; --hand:'Kalam PL',cursive;
+}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:var(--paper)}
+#root{position:relative;width:1080px;height:1920px;overflow:hidden;background:var(--paper)}
+#paper{position:absolute;left:-60px;top:-60px;width:1200px;height:2040px;background:url(../assets/tex/paper.jpg);will-change:transform}
+.layer{position:absolute;inset:0;visibility:hidden}
+.abs{position:absolute}
+
+/* type */
+.disp{font-family:var(--display);font-weight:900;font-stretch:78%;line-height:.86;letter-spacing:-.01em;color:var(--ink);white-space:nowrap}
+.disp .ln{display:block;will-change:transform}
+.sans{font-family:var(--sans);font-weight:700;letter-spacing:-.025em;line-height:1.02;color:var(--ink)}
+.hand{font-family:var(--hand);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1;white-space:nowrap}
+.hand.ul{background:linear-gradient(var(--orange),var(--orange)) 0 100%/var(--ul,100%) 5px no-repeat;padding-bottom:8px}
+.label{font-family:var(--sans);font-weight:600;font-size:22px;letter-spacing:.2em;color:var(--ink);text-transform:uppercase;white-space:nowrap}
+
+/* the persistent orange answer box */
+#box{position:absolute;background:var(--orange);border:5px solid var(--ink);border-radius:18px;box-sizing:border-box;overflow:hidden;z-index:50;will-change:transform}
+#box .bt{position:absolute;left:0;top:0;right:0;bottom:0;display:flex;flex-direction:column;justify-content:center;
+  font-family:var(--display);font-weight:900;font-stretch:78%;line-height:.88;letter-spacing:-.005em;color:var(--cream);white-space:nowrap;padding:0 30px}
+
+/* chrome */
+#chrome{position:absolute;inset:0;z-index:80;pointer-events:none}
+.crop{position:absolute;width:26px;height:26px;border-color:var(--line);border-style:solid;border-width:0}
+.hdr{position:absolute;top:150px;height:30px;overflow:hidden}
+.hdr .roll{position:relative}
+.hdr .roll div{height:30px;line-height:30px}
+.rule{position:absolute;height:2px;background:var(--line)}
+
+/* paper pieces */
+.polaroid{position:absolute;background:#F6F1E8;padding:16px 16px 16px;box-sizing:border-box;box-shadow:0 2px 0 rgba(0,0,0,.05),0 18px 36px -12px rgba(40,25,10,.35),0 4px 10px rgba(40,25,10,.12)}
+.polaroid .ph{position:relative;width:100%;height:100%;overflow:hidden;background:#222}
+.polaroid .ph img,.polaroid .ph canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.card{position:absolute;background:#F1EADD;box-sizing:border-box;box-shadow:0 14px 30px -12px rgba(40,25,10,.35),0 3px 8px rgba(40,25,10,.1)}
+.tape{position:absolute;width:150px;height:42px;background:url(../assets/tex/tape.png) center/cover;opacity:.92;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.tag{position:absolute;background:#ECE2D0;padding:14px 22px;box-shadow:0 8px 18px -8px rgba(40,25,10,.4)}
+.strip{position:absolute;top:0;bottom:0;width:44px;background:#141414}
+.strip i{position:absolute;left:12px;width:20px;height:26px;background:#EFE8DB;border-radius:3px}
+svg.draw path,svg.draw line,svg.draw polyline,svg.draw circle{fill:none;stroke-linecap:round;stroke-linejoin:round}

@@ -53,7 +53,7 @@ for m in (38, 45, 50, 57):
 # mid shimmer pad 1.85 - 2.7 so phone speakers (which drop the lows) keep hearing music under the climax
 n = int(0.85 * SR); tt = np.arange(n) / SR
 for m, pan in ((62, -.3), (66, .3), (69, 0), (74, 0)):
-    x = lp(saw(mf(m), tt) + saw(mf(m) * 1.006, tt), 2600) * np.sin(np.pi * tt / tt[-1]) ** 1.0 * .016; place(mix, x, 1.85, 1, pan); place(verb, x, 1.85, .5)
+    x = lp(saw(mf(m), tt) + saw(mf(m) * 1.006, tt), 2600) * np.minimum(1, tt / .06) * np.minimum(1, (tt[-1] - tt) / .35) * .021; place(mix, x, 1.85, 1, pan); place(verb, x, 1.85, .5)
 # logo reveals: soft bell swells under CORE (3.15) and ADAM (3.45), pad swell from 2.6
 for t0, chord in ((3.3, (74, 78, 81)), (3.6, (76, 81, 86)), (5.1, (81, 86, 90))):
     for j, m in enumerate(chord): x = bell(mf(m), 2.6); place(mix, x, t0 + j * .04, .04, -.3 + j * .3); place(verb, x, t0 + j * .04, .05)

@@ -5,7 +5,7 @@
 - **Action at the end:** feel the greeting and remember the brands (no hard CTA).
 - **Length and size:** 10s, 1080×1920 (9:16), 60fps.
 - **Brand:**
-  - Logo files supplied for CORE (navy and blue-violet ring), ADAM (navy and cyan) and Softlabs Group (red and navy). No Ainfinite AI logo was supplied, so it is set as a text wordmark in Manrope; swap in the real logo when available.
+  - Logo files supplied for CORE (navy and blue-violet ring), ADAM (navy and cyan) and Softlabs Group (red and navy). The Ainfinite AI logo file was supplied later and replaces the earlier text wordmark.
   - Diwali look: a deep indigo night sky, warm gold sparks and diya light, then a warm ivory page so the logos keep their true colours.
   - Type: Playfair Display for the greeting and Manrope for small text.
 - **Copy (facts file):** only the client's lines, verbatim.

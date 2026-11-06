@@ -32,10 +32,10 @@ canvas{position:absolute;left:0;top:0;width:1080px;height:1920px}
 #hd{top:800px;font-family:Playfair;font-weight:700;font-size:150px;line-height:1;letter-spacing:-.01em;background:linear-gradient(180deg,#D98A12 0%,#A3590A 70%,#8A4A08 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 6px 18px rgba(214,140,30,.28))}
 #bigDiya{position:absolute;left:465px;top:1035px;width:150px;height:150px}
 #from{top:1365px;font-size:38px;font-weight:600;color:var(--muted);letter-spacing:.01em}
-#row{position:absolute;left:0;right:0;top:1440px;display:flex;align-items:center;justify-content:center;gap:26px}
-#row img{height:80px;display:block}
+#row{position:absolute;left:0;right:0;top:1445px;display:flex;align-items:center;justify-content:center;gap:24px}
+#row img{height:64px;display:block}
 #row .amp{font-family:Playfair;font-style:italic;font-weight:500;font-size:64px;color:var(--goldDeep);line-height:1}
-#row .ai{font-weight:800;font-size:62px;letter-spacing:-.02em;color:var(--navy);line-height:1}
+#row img.ai{height:44px}
 #rangoli{position:absolute;left:90px;top:520px;width:900px;height:900px}
 </style>
 </head>
@@ -60,7 +60,7 @@ canvas{position:absolute;left:0;top:0;width:1080px;height:1920px}
   <h1 class="h" id="hd">Happy Diwali</h1>
   <svg id="bigDiya" viewBox="0 0 150 150"></svg>
   <div class="h" id="from">From all of us at</div>
-  <div id="row"><img src="./assets/logos/softlabs.png" alt="Softlabs Group"><span class="amp">&amp;</span><span class="ai">Ainfinite AI</span></div>
+  <div id="row"><img src="./assets/logos/softlabs.png" alt="Softlabs Group"><span class="amp">&amp;</span><img class="ai" src="./assets/logos/ainfinite.png" alt="Ainfinite AI"></div>
 </div>
 <script type="module" src="./reel.js"></script>
 </body></html>

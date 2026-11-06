@@ -110,9 +110,9 @@ function frame(t) {
   // S1 text
   const t1o = P(t, 1.7, 2.05, 'power2.in'); const t1 = $('#t1'); t1.style.opacity = 1 - t1o; t1.style.transform = `translate3d(0,${(-30 * t1o).toFixed(2)}px,0) scale(${(1 + 0.025 * P(t, 0, 1.7, 'sine.out')).toFixed(4)})`; vis(t1, t < 2.1);
   // S4 logos
-  const on4 = t > 2.9 && t < 5.32; ['#t2', '#lCore', '#lAdam', '#divider'].forEach(s => vis($(s), on4));
+  const on4 = t > 2.9 && t < 5.14; ['#t2', '#lCore', '#lAdam', '#divider'].forEach(s => vis($(s), on4));
   if (on4) {
-    const out = P(t, 5.0, 5.3, 'power2.in');
+    const out = P(t, 4.88, 5.12, 'power2.in');
     reveal($('#t2a'), P(t, 3.0, 3.5, 'expo.out'), out); reveal($('#t2b'), P(t, 3.12, 3.62, 'expo.out'), out);
     [['#lCore', 3.15], ['#lAdam', 3.45]].forEach(([s, a], i) => { const k = P(t, a, a + 0.6, 'expo.out'); const el = $(s);
       const wk = P(t, a, a + 0.55, 'power2.inOut'); el.style.clipPath = `inset(-10% ${((1 - wk) * 100).toFixed(2)}% -10% -2%)`;
@@ -135,7 +135,7 @@ function frame(t) {
     $('#g1').style.transform = `scale(${push})`; $('#g1').style.transformOrigin = '540px 160px';
     const hk = P(t, 5.95, 6.5, 'expo.out'); const hd = $('#hd');
     hd.style.backgroundPosition = `${L(130, -30, P(t, 7.6, 8.8, 'power2.inOut')).toFixed(2)}% 0, 0 0`; hd.style.opacity = Math.min(1, hk * 1.4); hd.style.transform = `translate3d(0,${(30 * (1 - hk)).toFixed(2)}px,0) scale(${(L(0.9, 1, hk) * push).toFixed(4)})`;
-    const bd = $('#bigDiya'), bk = P(t, 5.12, 5.42, 'expo.out'); bd.style.opacity = bk; bd.style.transform = `translate3d(0,${(20 * (1 - bk)).toFixed(2)}px,0) scale(${(1.6 * push).toFixed(4)})`;
+    const bd = $('#bigDiya'), bk = P(t, 5.16, 5.42, 'expo.out'); bd.style.opacity = bk; bd.style.transform = `translate3d(0,${(20 * (1 - bk)).toFixed(2)}px,0) scale(${(1.6 * push).toFixed(4)})`;
     flicker(BIG, t, 0.9, P(t, 5.44, 5.6, 'back.out(2.5)'));
     const fk = P(t, 6.55, 7.05, 'expo.out'); $('#from').style.opacity = fk; $('#from').style.transform = `translate3d(0,${(24 * (1 - fk)).toFixed(2)}px,0)`;
     const rk = P(t, 6.7, 7.25, 'expo.out'); $('#row').style.opacity = rk; $('#row').style.transform = `translate3d(0,${(30 * (1 - rk)).toFixed(2)}px,0) scale(${(L(0.96, 1, rk) * L(1, 1.02, P(t, 7.1, 10, 'sine.inOut'))).toFixed(4)})`;

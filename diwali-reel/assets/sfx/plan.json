@@ -10,7 +10,7 @@
 ],
 [
 "pop",
-1.9,
+1.88,
 3,
 "burst 1",
 -50,
@@ -24,7 +24,7 @@
 "burst 1 glitter",
 -50,
 10,
--4.2
+-10.2
 ],
 [
 "pop",
@@ -51,7 +51,7 @@
 "CORE lit by the sweep",
 -50,
 6,
--8.6
+-13.6
 ],
 [
 "chime",
@@ -60,11 +60,11 @@
 "ADAM lit by the sweep",
 -50,
 6,
--2.2
+-7.2
 ],
 [
 "whoosh",
-5.05,
+4.9,
 3,
 "logos lift, spark falls",
 -50,

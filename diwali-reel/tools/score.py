@@ -46,6 +46,10 @@ for k, (t0, i) in enumerate([(0.0, 0), (0.5, 2), (0.875, 3), (1.125, 4), (1.375,
 # bursts: bell shimmer chords
 for t0, chord, g in ((2.45, (74, 78, 81, 86), .05), (2.62, (76, 81, 83, 88), .04)):
     for j, m in enumerate(chord): x = bell(mf(m)); place(mix, x, t0 + j * 0.03, g, -.4 + j * .27); place(verb, x, t0 + j * .03, g * .8)
+# climax bed: low warm swell 1.8 - 2.9 under the bursts (kept below ~450 Hz so the pops and sparkles stay clear)
+n = int(1.1 * SR); tt = np.arange(n) / SR
+for m in (38, 45, 50, 57):
+    x = lp(saw(mf(m), tt) + saw(mf(m) * 1.005, tt), 450, 4) * np.sin(np.pi * tt / tt[-1]) ** 1.2 * .06; place(mix, x, 1.8, 1); place(verb, x, 1.8, .3)
 # logo reveals: soft bell swells under CORE (3.15) and ADAM (3.45), pad swell from 2.6
 for t0, chord in ((3.3, (74, 78, 81)), (3.6, (76, 81, 86)), (5.1, (81, 86, 90))):
     for j, m in enumerate(chord): x = bell(mf(m), 2.6); place(mix, x, t0 + j * .04, .04, -.3 + j * .3); place(verb, x, t0 + j * .04, .05)

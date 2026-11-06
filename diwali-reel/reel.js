@@ -100,19 +100,19 @@ function frame(t) {
   const d2 = $('#diyas2'); d2.style.opacity = P(t, 3.0, 3.6, 'power1.out'); vis(d2, t > 2.95);
   // burst glow and light flood
   const gl = P(t, 1.9, 2.6, 'power2.out');
-  $('#burstGlow').style.background = `radial-gradient(circle at 360px 760px, rgba(255,175,70,${(0.55 * gl).toFixed(3)}), rgba(255,160,60,0) ${L(200, 900, gl).toFixed(0)}px), radial-gradient(circle at 720px 640px, rgba(255,185,80,${(0.55 * P(t, 2.15, 2.7, 'power2.out')).toFixed(3)}), rgba(255,160,60,0) ${L(200, 900, P(t, 2.15, 2.7, 'power2.out')).toFixed(0)}px)`;
+  $('#burstGlow').style.background = `radial-gradient(circle at 360px 760px, rgba(255,205,110,${(0.28 * gl).toFixed(3)}), rgba(255,180,80,0) ${L(140, 520, gl).toFixed(0)}px), radial-gradient(circle at 720px 640px, rgba(255,210,120,${(0.28 * P(t, 2.15, 2.7, 'power2.out')).toFixed(3)}), rgba(255,180,80,0) ${L(140, 520, P(t, 2.15, 2.7, 'power2.out')).toFixed(0)}px)`;
   const soft = 260, fr = L(-soft, 1900, P(t, 2.6, 3.4, 'power2.in')), fr2 = L(-soft, 1900, P(t, 2.72, 3.45, 'power2.in'));
   const gm = `radial-gradient(circle at 360px 760px, #000 ${Math.max(0, fr + 320).toFixed(0)}px, transparent ${(fr + 320 + soft).toFixed(0)}px), radial-gradient(circle at 720px 640px, #000 ${Math.max(0, fr2 + 320).toFixed(0)}px, transparent ${(fr2 + 320 + soft).toFixed(0)}px)`;
   const gf = $('#goldFlood'); gf.style.webkitMaskImage = gm; gf.style.maskImage = gm; vis(gf, t > 2.55 && t < 3.6);
   const m = `radial-gradient(circle at 360px 760px, #000 ${Math.max(0, fr).toFixed(0)}px, transparent ${(fr + soft).toFixed(0)}px), radial-gradient(circle at 720px 640px, #000 ${Math.max(0, fr2).toFixed(0)}px, transparent ${(fr2 + soft).toFixed(0)}px)`;
   const iv = $('#ivory'); iv.style.webkitMaskImage = m; iv.style.maskImage = m; vis(iv, t > 2.6);
-  drawGlitter(t, P(t, 2.8, 3.4, 'none') * (t > 4.85 ? L(1, 0.7, P(t, 4.85, 5.4)) : 1));
+  drawGlitter(t, P(t, 2.8, 3.4, 'none') * (t > 5.1 ? L(1, 0.7, P(t, 5.1, 5.6)) : 1));
   // S1 text
   const t1o = P(t, 1.7, 2.05, 'power2.in'); const t1 = $('#t1'); t1.style.opacity = 1 - t1o; t1.style.transform = `translate3d(0,${(-30 * t1o).toFixed(2)}px,0) scale(${(1 + 0.025 * P(t, 0, 1.7, 'sine.out')).toFixed(4)})`; vis(t1, t < 2.1);
   // S4 logos
-  const on4 = t > 2.9 && t < 5.05; ['#t2', '#lCore', '#lAdam', '#divider'].forEach(s => vis($(s), on4));
+  const on4 = t > 2.9 && t < 5.32; ['#t2', '#lCore', '#lAdam', '#divider'].forEach(s => vis($(s), on4));
   if (on4) {
-    const out = P(t, 4.68, 5.02, 'power2.in');
+    const out = P(t, 5.0, 5.3, 'power2.in');
     reveal($('#t2a'), P(t, 3.0, 3.5, 'expo.out'), out); reveal($('#t2b'), P(t, 3.12, 3.62, 'expo.out'), out);
     [['#lCore', 3.15], ['#lAdam', 3.45]].forEach(([s, a], i) => { const k = P(t, a, a + 0.6, 'expo.out'); const el = $(s);
       const wk = P(t, a, a + 0.55, 'power2.inOut'); el.style.clipPath = `inset(-10% ${((1 - wk) * 100).toFixed(2)}% -10% -2%)`;
@@ -122,22 +122,22 @@ function frame(t) {
   }
   // falling spark that becomes the diya flame
   // (drawn on the glitter canvas, above ivory)
-  if (t > 4.85 && t < 5.5) { const k = P(t, 4.85, 5.45, 'power2.in'), x = 540 + 30 * Math.sin(k * 3), y = L(140, 1010, k);
-    for (let j = 0; j < 8; j++) { const kk = P(t - j * 0.018, 4.85, 5.45, 'power2.in'); const yy = L(140, 1010, kk), xx = 540 + 30 * Math.sin(kk * 3);
+  if (t > 5.1 && t < 5.7) { const k = P(t, 5.1, 5.65, 'power2.in'), x = 540 + 30 * Math.sin(k * 3), y = L(140, 1010, k);
+    for (let j = 0; j < 8; j++) { const kk = P(t - j * 0.018, 5.1, 5.65, 'power2.in'); const yy = L(140, 1010, kk), xx = 540 + 30 * Math.sin(kk * 3);
       gc.fillStyle = `rgba(232,150,30,${(0.9 * (1 - j / 8)).toFixed(3)})`; gc.beginPath(); gc.arc(xx, yy, 7 - j * 0.6, 0, 6.283); gc.fill(); }
     const g = gc.createRadialGradient(x, y, 0, x, y, 40); g.addColorStop(0, 'rgba(255,200,90,.9)'); g.addColorStop(1, 'rgba(255,170,60,0)'); gc.fillStyle = g; gc.beginPath(); gc.arc(x, y, 40, 0, 6.283); gc.fill(); }
   // S5 greeting
-  const on5 = t > 4.85; ['#g1', '#hd', '#bigDiya', '#from', '#row', '#rangoli'].forEach(s => vis($(s), on5));
+  const on5 = t > 5.1; ['#g1', '#hd', '#bigDiya', '#from', '#row', '#rangoli'].forEach(s => vis($(s), on5));
   if (on5) {
-    const push = L(1, 1.035, P(t, 5.6, 10, 'sine.inOut'));
-    const rg = $('#rangoli'); rg.style.opacity = (0.32 * P(t, 4.85, 5.6, 'power1.out')).toFixed(3); rg.style.transform = `rotate(${(t * 6).toFixed(2)}deg) scale(${(L(0.9, 1, P(t, 5.1, 6.2, 'expo.out')) * push).toFixed(4)})`;
-    reveal($('#g1a'), P(t, 5.45, 5.95, 'expo.out')); reveal($('#g1b'), P(t, 5.6, 6.1, 'expo.out')); reveal($('#g1c'), P(t, 5.75, 6.25, 'expo.out'));
+    const push = L(1, 1.035, P(t, 5.8, 10, 'sine.inOut'));
+    const rg = $('#rangoli'); rg.style.opacity = (0.32 * P(t, 5.1, 5.8, 'power1.out')).toFixed(3); rg.style.transform = `rotate(${(t * 6).toFixed(2)}deg) scale(${(L(0.9, 1, P(t, 5.1, 6.2, 'expo.out')) * push).toFixed(4)})`;
+    reveal($('#g1a'), P(t, 5.62, 6.1, 'expo.out')); reveal($('#g1b'), P(t, 5.76, 6.24, 'expo.out')); reveal($('#g1c'), P(t, 5.9, 6.38, 'expo.out'));
     $('#g1').style.transform = `scale(${push})`; $('#g1').style.transformOrigin = '540px 160px';
-    const hk = P(t, 5.95, 6.55, 'expo.out'); const hd = $('#hd'); hd.style.opacity = Math.min(1, hk * 1.4); hd.style.transform = `translate3d(0,${(30 * (1 - hk)).toFixed(2)}px,0) scale(${(L(0.9, 1, hk) * push).toFixed(4)})`;
-    const bd = $('#bigDiya'), bk = P(t, 5.02, 5.36, 'expo.out'); bd.style.opacity = bk; bd.style.transform = `translate3d(0,${(20 * (1 - bk)).toFixed(2)}px,0) scale(${(1.6 * push).toFixed(4)})`;
-    flicker(BIG, t, 0.9, P(t, 5.42, 5.6, 'back.out(2.5)'));
-    const fk = P(t, 6.5, 7.0, 'expo.out'); $('#from').style.opacity = fk; $('#from').style.transform = `translate3d(0,${(24 * (1 - fk)).toFixed(2)}px,0)`;
-    const rk = P(t, 6.65, 7.2, 'expo.out'); $('#row').style.opacity = rk; $('#row').style.transform = `translate3d(0,${(30 * (1 - rk)).toFixed(2)}px,0) scale(${(L(0.96, 1, rk) * L(1, 1.02, P(t, 7.1, 10, 'sine.inOut'))).toFixed(4)})`;
+    const hk = P(t, 6.05, 6.6, 'expo.out'); const hd = $('#hd'); hd.style.opacity = Math.min(1, hk * 1.4); hd.style.transform = `translate3d(0,${(30 * (1 - hk)).toFixed(2)}px,0) scale(${(L(0.9, 1, hk) * push).toFixed(4)})`;
+    const bd = $('#bigDiya'), bk = P(t, 5.28, 5.6, 'expo.out'); bd.style.opacity = bk; bd.style.transform = `translate3d(0,${(20 * (1 - bk)).toFixed(2)}px,0) scale(${(1.6 * push).toFixed(4)})`;
+    flicker(BIG, t, 0.9, P(t, 5.62, 5.8, 'back.out(2.5)'));
+    const fk = P(t, 6.55, 7.05, 'expo.out'); $('#from').style.opacity = fk; $('#from').style.transform = `translate3d(0,${(24 * (1 - fk)).toFixed(2)}px,0)`;
+    const rk = P(t, 6.7, 7.25, 'expo.out'); $('#row').style.opacity = rk; $('#row').style.transform = `translate3d(0,${(30 * (1 - rk)).toFixed(2)}px,0) scale(${(L(0.96, 1, rk) * L(1, 1.02, P(t, 7.1, 10, 'sine.inOut'))).toFixed(4)})`;
   }
 }
 

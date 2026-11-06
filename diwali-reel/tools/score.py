@@ -47,7 +47,7 @@ for k, (t0, i) in enumerate([(0.0, 0), (0.5, 2), (0.875, 3), (1.125, 4), (1.375,
 for t0, chord, g in ((1.9, (74, 78, 81, 86), .05), (2.15, (76, 81, 83, 88), .045)):
     for j, m in enumerate(chord): x = bell(mf(m)); place(mix, x, t0 + j * 0.03, g, -.4 + j * .27); place(verb, x, t0 + j * .03, g * .8)
 # logo reveals: soft bell swells under CORE (3.15) and ADAM (3.45), pad swell from 2.6
-for t0, chord in ((3.15, (74, 78, 81)), (3.45, (76, 81, 86))):
+for t0, chord in ((3.15, (74, 78, 81)), (3.45, (76, 81, 86)), (5.1, (81, 86, 90))):
     for j, m in enumerate(chord): x = bell(mf(m), 2.6); place(mix, x, t0 + j * .04, .04, -.3 + j * .3); place(verb, x, t0 + j * .04, .05)
 n = int(2.6 * SR); tt = np.arange(n) / SR
 for m in (62, 66, 69):

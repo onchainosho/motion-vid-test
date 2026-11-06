@@ -1,0 +1,12 @@
+time  sound   body(own band,150ms)  2-8kHz(10ms)  >8kHz(10ms)   dB over music at the same instant
+  0.05 whoosh   +3.1  +1.0  +1.6  trim -15.8
+  1.90 pop      +2.9  +3.2  +7.3  trim -2.3
+  1.95 sparkle  +3.2  +3.2  +6.9  trim -9.2
+  2.15 pop      +2.6  +3.2  +7.4  trim -4.3
+  2.20 sparkle  +1.9  +2.3 +10.3  trim -17.2
+  2.50 whoosh   +0.0  +1.5 +10.3  trim -42.4
+  3.20 chime    +1.2  +4.2  +0.4  trim -14.6
+  3.50 chime    +0.9  +4.0  +0.4  trim -5.2
+  4.85 whoosh   +2.5  +1.5  +4.0  trim -1.8
+  5.42 tap      +0.3  +4.1  +1.5  trim -6.2
+  6.60 tap      +0.8  +4.1  +1.2  trim -7.8

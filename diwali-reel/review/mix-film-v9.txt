@@ -1,0 +1,11 @@
+score score-raw.wav: music-only -17.0 LUFS (chain gain +0.1 dB); mix -16.9 LUFS, LRA 2.7, true peak -3.2 dBFS; 10 effects
+  0.05 whoosh         band   330-  661 Hz  target +3  in-band lift  -0.0 dB  body  +0.2 dB  2-8k lift  +0.0 dB  gain 0.0852  rocket 2 climbing
+  1.88 pop            band   632- 1264 Hz  target +3  in-band lift  +2.9 dB  body  +1.6 dB  2-8k lift  +0.0 dB  gain 0.3726  burst 1
+  1.95 sparkle        band  2104- 4714 Hz  target +3  in-band lift  +0.2 dB  body  +0.9 dB  2-8k lift  +0.9 dB  gain 0.0232  burst 1 glitter
+  2.15 pop            band   632- 1264 Hz  target +3  in-band lift  -0.0 dB  body  +1.6 dB  2-8k lift  +0.0 dB  gain 0.3746  burst 2
+  2.20 sparkle        band  2104- 4714 Hz  target +3  in-band lift  +0.0 dB  body  +0.5 dB  2-8k lift  +3.2 dB  gain 0.0235  burst 2 glitter
+  3.20 chime          band  2342- 4685 Hz  target +3  in-band lift  +0.0 dB  body  +0.7 dB  2-8k lift  +3.0 dB  gain 0.5063  CORE lit by the sweep
+  3.50 chime          band  2342- 4685 Hz  target +3  in-band lift  +0.0 dB  body  +1.5 dB  2-8k lift  +3.9 dB  gain 1.2038  ADAM lit by the sweep
+  4.90 whoosh         band   330-  661 Hz  target +3  in-band lift  +2.2 dB  body  +1.0 dB  2-8k lift  -0.0 dB  gain 0.1361  logos lift, spark falls
+  5.44 tap            band   452-  904 Hz  target +3  in-band lift  +3.7 dB  body  +2.0 dB  2-8k lift  +0.0 dB  gain 1.4227  diya ignites
+  6.70 tap            band   452-  904 Hz  target +3  in-band lift  +2.0 dB  body  +1.3 dB  2-8k lift  +0.0 dB  gain 0.6214  senders appear

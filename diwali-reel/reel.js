@@ -26,6 +26,7 @@ function diya(svg, id) {
 const NS = 'http://www.w3.org/2000/svg';
 const DIYAS = [100, 320, 540, 760, 980].map((x, i) => { const s = document.createElementNS(NS, 'svg'); s.setAttribute('class', 'diya'); s.style.left = (x - 75) + 'px'; s.style.top = (20 + (i % 2) * 18) + 'px'; $('#diyas').appendChild(s); return diya(s, 'd' + i); });
 const BIG = diya($('#bigDiya'), 'big');
+const DIYAS2 = [100, 320, 540, 760, 980].map((x, i) => { const s = document.createElementNS(NS, 'svg'); s.setAttribute('class', 'diya'); s.style.left = (x - 75) + 'px'; s.style.top = (20 + (i % 2) * 18) + 'px'; $('#diyas2').appendChild(s); return diya(s, 'e' + i); });
 const flicker = (d, t, ph, on = 1) => {
   const sx = 1 + 0.06 * Math.sin(13.1 * t + ph) + 0.03 * Math.sin(29.7 * t + ph * 2), sy = 1 + 0.09 * Math.sin(17.3 * t + ph) + 0.04 * Math.sin(37.1 * t + ph);
   d.f.setAttribute('transform', `translate(75 82) scale(${(sx * on).toFixed(4)} ${(sy * on).toFixed(4)}) skewX(${(4 * Math.sin(7.9 * t + ph)).toFixed(3)}) translate(-75 -82)`);
@@ -95,13 +96,16 @@ document.querySelectorAll('.shine').forEach(s => { const src = s.previousElement
 function frame(t) {
   t = clamp(t, 0, D);
   drawNight(t);
-  DIYAS.forEach((d, i) => flicker(d, t, i * 1.7));
+  DIYAS.forEach((d, i) => flicker(d, t, i * 1.7)); DIYAS2.forEach((d, i) => flicker(d, t, i * 1.7 + 0.5));
+  const d2 = $('#diyas2'); d2.style.opacity = P(t, 3.0, 3.6, 'power1.out'); vis(d2, t > 2.95);
   // burst glow and light flood
   const gl = P(t, 1.9, 2.6, 'power2.out');
-  $('#burstGlow').style.background = `radial-gradient(circle at 360px 760px, rgba(255,190,90,${(0.35 * gl).toFixed(3)}), rgba(255,160,60,0) ${L(200, 900, gl).toFixed(0)}px), radial-gradient(circle at 720px 640px, rgba(255,200,110,${(0.35 * P(t, 2.15, 2.7, 'power2.out')).toFixed(3)}), rgba(255,160,60,0) ${L(200, 900, P(t, 2.15, 2.7, 'power2.out')).toFixed(0)}px)`;
-  const soft = 720, fr = L(-soft, 1900, P(t, 2.45, 3.45, 'power1.in')), fr2 = L(-soft, 1900, P(t, 2.6, 3.5, 'power1.in'));
+  $('#burstGlow').style.background = `radial-gradient(circle at 360px 760px, rgba(255,175,70,${(0.55 * gl).toFixed(3)}), rgba(255,160,60,0) ${L(200, 900, gl).toFixed(0)}px), radial-gradient(circle at 720px 640px, rgba(255,185,80,${(0.55 * P(t, 2.15, 2.7, 'power2.out')).toFixed(3)}), rgba(255,160,60,0) ${L(200, 900, P(t, 2.15, 2.7, 'power2.out')).toFixed(0)}px)`;
+  const soft = 260, fr = L(-soft, 1900, P(t, 2.6, 3.4, 'power2.in')), fr2 = L(-soft, 1900, P(t, 2.72, 3.45, 'power2.in'));
+  const gm = `radial-gradient(circle at 360px 760px, #000 ${Math.max(0, fr + 320).toFixed(0)}px, transparent ${(fr + 320 + soft).toFixed(0)}px), radial-gradient(circle at 720px 640px, #000 ${Math.max(0, fr2 + 320).toFixed(0)}px, transparent ${(fr2 + 320 + soft).toFixed(0)}px)`;
+  const gf = $('#goldFlood'); gf.style.webkitMaskImage = gm; gf.style.maskImage = gm; vis(gf, t > 2.55 && t < 3.6);
   const m = `radial-gradient(circle at 360px 760px, #000 ${Math.max(0, fr).toFixed(0)}px, transparent ${(fr + soft).toFixed(0)}px), radial-gradient(circle at 720px 640px, #000 ${Math.max(0, fr2).toFixed(0)}px, transparent ${(fr2 + soft).toFixed(0)}px)`;
-  const iv = $('#ivory'); iv.style.webkitMaskImage = m; iv.style.maskImage = m; vis(iv, t > 2.46);
+  const iv = $('#ivory'); iv.style.webkitMaskImage = m; iv.style.maskImage = m; vis(iv, t > 2.6);
   drawGlitter(t, P(t, 2.8, 3.4, 'none') * (t > 4.85 ? L(1, 0.7, P(t, 4.85, 5.4)) : 1));
   // S1 text
   const t1o = P(t, 1.7, 2.05, 'power2.in'); const t1 = $('#t1'); t1.style.opacity = 1 - t1o; t1.style.transform = `translate3d(0,${(-30 * t1o).toFixed(2)}px,0) scale(${(1 + 0.025 * P(t, 0, 1.7, 'sine.out')).toFixed(4)})`; vis(t1, t < 2.1);
@@ -111,8 +115,9 @@ function frame(t) {
     const out = P(t, 4.68, 5.02, 'power2.in');
     reveal($('#t2a'), P(t, 3.0, 3.5, 'expo.out'), out); reveal($('#t2b'), P(t, 3.12, 3.62, 'expo.out'), out);
     [['#lCore', 3.15], ['#lAdam', 3.45]].forEach(([s, a], i) => { const k = P(t, a, a + 0.6, 'expo.out'); const el = $(s);
-      el.style.opacity = (Math.min(1, k * 1.5) * (1 - out)).toFixed(4); el.style.transform = `translate3d(0,${(46 * (1 - k) - 70 * out).toFixed(2)}px,0) scale(${(L(0.93, 1, k) * L(1, 1.03, P(t, a + 0.6, 4.8, 'sine.inOut'))).toFixed(4)})`;
-      el.querySelector('.shine').style.backgroundPosition = `${L(120, -20, P(t, a + 0.15, a + 1.0, 'power2.inOut')).toFixed(2)}% 0`; });
+      const wk = P(t, a, a + 0.55, 'power2.inOut'); el.style.clipPath = `inset(-10% ${((1 - wk) * 100).toFixed(2)}% -10% -2%)`;
+      el.style.opacity = (1 - out).toFixed(4); el.style.transform = `translate3d(0,${(24 * (1 - k) - 70 * out + 8 * Math.sin((t - a) * 2.2)).toFixed(2)}px,0) scale(${(L(0.97, 1, k) * L(1, 1.05, P(t, a + 0.4, 4.7, 'sine.inOut'))).toFixed(4)})`;
+      el.querySelector('.shine').style.backgroundPosition = `${L(150, -50, P(t, a, a + 0.8, 'power2.inOut')).toFixed(2)}% 0`; });
     const dv = P(t, 3.35, 3.9, 'expo.out'); $('#divider').style.transform = `scaleX(${dv})`; $('#divider').style.opacity = 1 - out;
   }
   // falling spark that becomes the diya flame
@@ -122,17 +127,17 @@ function frame(t) {
       gc.fillStyle = `rgba(232,150,30,${(0.9 * (1 - j / 8)).toFixed(3)})`; gc.beginPath(); gc.arc(xx, yy, 7 - j * 0.6, 0, 6.283); gc.fill(); }
     const g = gc.createRadialGradient(x, y, 0, x, y, 40); g.addColorStop(0, 'rgba(255,200,90,.9)'); g.addColorStop(1, 'rgba(255,170,60,0)'); gc.fillStyle = g; gc.beginPath(); gc.arc(x, y, 40, 0, 6.283); gc.fill(); }
   // S5 greeting
-  const on5 = t > 5.0; ['#g1', '#hd', '#bigDiya', '#from', '#row', '#rangoli'].forEach(s => vis($(s), on5));
+  const on5 = t > 4.85; ['#g1', '#hd', '#bigDiya', '#from', '#row', '#rangoli'].forEach(s => vis($(s), on5));
   if (on5) {
     const push = L(1, 1.035, P(t, 5.6, 10, 'sine.inOut'));
-    const rg = $('#rangoli'); rg.style.opacity = (0.32 * P(t, 5.1, 6.0, 'power1.out')).toFixed(3); rg.style.transform = `rotate(${(t * 6).toFixed(2)}deg) scale(${(L(0.9, 1, P(t, 5.1, 6.2, 'expo.out')) * push).toFixed(4)})`;
-    reveal($('#g1a'), P(t, 5.2, 5.7, 'expo.out')); reveal($('#g1b'), P(t, 5.38, 5.88, 'expo.out')); reveal($('#g1c'), P(t, 5.56, 6.06, 'expo.out'));
+    const rg = $('#rangoli'); rg.style.opacity = (0.32 * P(t, 4.85, 5.6, 'power1.out')).toFixed(3); rg.style.transform = `rotate(${(t * 6).toFixed(2)}deg) scale(${(L(0.9, 1, P(t, 5.1, 6.2, 'expo.out')) * push).toFixed(4)})`;
+    reveal($('#g1a'), P(t, 5.45, 5.95, 'expo.out')); reveal($('#g1b'), P(t, 5.6, 6.1, 'expo.out')); reveal($('#g1c'), P(t, 5.75, 6.25, 'expo.out'));
     $('#g1').style.transform = `scale(${push})`; $('#g1').style.transformOrigin = '540px 160px';
-    const hk = P(t, 5.75, 6.4, 'expo.out'); const hd = $('#hd'); hd.style.opacity = Math.min(1, hk * 1.4); hd.style.transform = `translate3d(0,${(30 * (1 - hk)).toFixed(2)}px,0) scale(${(L(0.9, 1, hk) * push).toFixed(4)})`;
-    const bd = $('#bigDiya'), bk = P(t, 5.08, 5.42, 'expo.out'); bd.style.opacity = bk; bd.style.transform = `translate3d(0,${(20 * (1 - bk)).toFixed(2)}px,0) scale(${(1.6 * push).toFixed(4)})`;
+    const hk = P(t, 5.95, 6.55, 'expo.out'); const hd = $('#hd'); hd.style.opacity = Math.min(1, hk * 1.4); hd.style.transform = `translate3d(0,${(30 * (1 - hk)).toFixed(2)}px,0) scale(${(L(0.9, 1, hk) * push).toFixed(4)})`;
+    const bd = $('#bigDiya'), bk = P(t, 5.02, 5.36, 'expo.out'); bd.style.opacity = bk; bd.style.transform = `translate3d(0,${(20 * (1 - bk)).toFixed(2)}px,0) scale(${(1.6 * push).toFixed(4)})`;
     flicker(BIG, t, 0.9, P(t, 5.42, 5.6, 'back.out(2.5)'));
-    const fk = P(t, 6.35, 6.85, 'expo.out'); $('#from').style.opacity = fk; $('#from').style.transform = `translate3d(0,${(24 * (1 - fk)).toFixed(2)}px,0)`;
-    const rk = P(t, 6.55, 7.1, 'expo.out'); $('#row').style.opacity = rk; $('#row').style.transform = `translate3d(0,${(30 * (1 - rk)).toFixed(2)}px,0) scale(${(L(0.96, 1, rk) * L(1, 1.02, P(t, 7.1, 10, 'sine.inOut'))).toFixed(4)})`;
+    const fk = P(t, 6.5, 7.0, 'expo.out'); $('#from').style.opacity = fk; $('#from').style.transform = `translate3d(0,${(24 * (1 - fk)).toFixed(2)}px,0)`;
+    const rk = P(t, 6.65, 7.2, 'expo.out'); $('#row').style.opacity = rk; $('#row').style.transform = `translate3d(0,${(30 * (1 - rk)).toFixed(2)}px,0) scale(${(L(0.96, 1, rk) * L(1, 1.02, P(t, 7.1, 10, 'sine.inOut'))).toFixed(4)})`;
   }
 }
 

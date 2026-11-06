@@ -131,7 +131,7 @@ function frame(t) {
   if (on5) {
     const push = L(1, 1.035, P(t, 5.8, 10, 'sine.inOut'));
     const rg = $('#rangoli'); rg.style.opacity = (0.32 * P(t, 5.1, 5.8, 'power1.out')).toFixed(3); rg.style.transform = `rotate(${(t * 6).toFixed(2)}deg) scale(${(L(0.9, 1, P(t, 5.1, 6.2, 'expo.out')) * push).toFixed(4)})`;
-    reveal($('#g1a'), P(t, 5.45, 5.93, 'expo.out')); reveal($('#g1b'), P(t, 5.6, 6.08, 'expo.out')); reveal($('#g1c'), P(t, 5.75, 6.23, 'expo.out'));
+    reveal($('#g1a'), P(t, 5.32, 5.8, 'expo.out')); reveal($('#g1b'), P(t, 5.47, 5.95, 'expo.out')); reveal($('#g1c'), P(t, 5.62, 6.1, 'expo.out'));
     $('#g1').style.transform = `scale(${push})`; $('#g1').style.transformOrigin = '540px 160px';
     const hk = P(t, 5.95, 6.5, 'expo.out'); const hd = $('#hd');
     hd.style.backgroundPosition = `${L(130, -30, P(t, 7.6, 8.8, 'power2.inOut')).toFixed(2)}% 0, 0 0`; hd.style.opacity = Math.min(1, hk * 1.4); hd.style.transform = `translate3d(0,${(30 * (1 - hk)).toFixed(2)}px,0) scale(${(L(0.9, 1, hk) * push).toFixed(4)})`;

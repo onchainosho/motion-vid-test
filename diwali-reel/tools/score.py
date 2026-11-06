@@ -44,7 +44,7 @@ PENT = [62, 64, 66, 69, 71, 74, 76, 78, 81, 83, 86]
 for k, (t0, i) in enumerate([(0.0, 0), (0.5, 2), (0.875, 3), (1.125, 4), (1.375, 5), (1.5625, 6), (1.75, 7)]):
     x = pluck(mf(PENT[i])); place(mix, x, t0, .11, -.25 + .08 * k); place(verb, x, t0, .06)
 # bursts: bell shimmer chords
-for t0, chord, g in ((2.02, (74, 78, 81, 86), .05), (2.27, (76, 81, 83, 88), .045)):
+for t0, chord, g in ((2.45, (74, 78, 81, 86), .05), (2.62, (76, 81, 83, 88), .04)):
     for j, m in enumerate(chord): x = bell(mf(m)); place(mix, x, t0 + j * 0.03, g, -.4 + j * .27); place(verb, x, t0 + j * .03, g * .8)
 # logo reveals: soft bell swells under CORE (3.15) and ADAM (3.45), pad swell from 2.6
 for t0, chord in ((3.3, (74, 78, 81)), (3.6, (76, 81, 86)), (5.1, (81, 86, 90))):
